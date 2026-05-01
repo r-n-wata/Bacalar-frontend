@@ -27,12 +27,16 @@
   @include mixins.pill-button;
   width: fit-content;
   padding: 13px 18px;
-  background: var(--teal);
+  background: var(--royal-blue);
+  border: 1px solid rgba(0, 90, 156, 0.18);
   color: #fff;
+  font-weight: 700;
 }
 
 .calloutCard {
   @include mixins.surface-panel(32px, 28px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 238, 216, 0.92));
 }
 
 .plainList {
@@ -58,9 +62,20 @@
   flex-direction: column;
   gap: 10px;
   min-height: 180px;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 126, 167, 0.26);
+    box-shadow: 0 20px 44px rgba(0, 76, 114, 0.14);
+  }
 
   strong {
     font-size: 1.2rem;
+    color: var(--royal-blue);
   }
 
   span {

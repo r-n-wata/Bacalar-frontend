@@ -1,0 +1,14 @@
+@use '../../styles/mixins' as mixins;
+
+.card {
+  @include mixins.surface-panel(32px, 28px);
+}
+
+.warm {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 238, 216, 0.92));
+}
+
+.compact {
+  padding: 22px;
+}

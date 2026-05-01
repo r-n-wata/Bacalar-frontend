@@ -1,3 +1,7 @@
+import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { TextInput } from '../../../components/atoms/TextInput'
+import { FormField } from '../../../components/molecules/FormField'
+import { GuestStepper } from '../../../components/molecules/GuestStepper'
 import type { BookingDraft } from '../types/booking-draft'
 import styles from './BookingDraftCard.module.scss'
 
@@ -15,42 +19,27 @@ export function BookingDraftCard({
   onDecrementGuests,
 }: BookingDraftCardProps) {
   return (
-    <section className={styles.card}>
+    <ContentPanel className={styles.card}>
       <div className={styles.grid}>
-        <label className={styles.field}>
-          <span>Travel date</span>
-          <input
-            className={styles.input}
+        <FormField label="Travel date">
+          <TextInput
             type="date"
             value={draft.travelDate}
             onChange={(event) => onTravelDateChange(event.target.value)}
           />
-        </label>
-        <div className={styles.field}>
-          <span>Guests</span>
-          <div className={styles.guestStepper}>
-            <button
-              className={styles.stepperButton}
-              type="button"
-              onClick={onDecrementGuests}
-            >
-              -
-            </button>
-            <strong>{draft.guests}</strong>
-            <button
-              className={styles.stepperButton}
-              type="button"
-              onClick={onIncrementGuests}
-            >
-              +
-            </button>
-          </div>
-        </div>
+        </FormField>
+        <FormField label="Guests">
+          <GuestStepper
+            value={draft.guests}
+            onDecrement={onDecrementGuests}
+            onIncrement={onIncrementGuests}
+          />
+        </FormField>
       </div>
       <p className={styles.copy}>
         Draft state stays in Zustand here because it is user-entered UI state,
         not API-owned data.
       </p>
-    </section>
+    </ContentPanel>
   )
 }

@@ -1,9 +1,5 @@
 @use '../../styles/mixins' as mixins;
 
-.card {
-  @include mixins.surface-panel(32px, 28px);
-}
-
 .copy {
   display: flex;
   flex-direction: column;
@@ -29,19 +25,6 @@
   @media (max-width: 920px) {
     grid-template-columns: 1fr;
   }
-}
-
-.chip {
-  @include mixins.pill-button;
-  background: var(--surface-strong);
-  border-color: var(--border);
-  color: #17313b;
-  padding: 12px 14px;
-}
-
-.chipActive {
-  background: var(--teal);
-  color: #fff;
 }
 
 .metrics {

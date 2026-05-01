@@ -1,4 +1,4 @@
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { RestaurantList } from '../components/RestaurantList'
 import { useRestaurants } from '../hooks/useRestaurants'
@@ -8,14 +8,11 @@ export function RestaurantsPage() {
 
   return (
     <section className={pageStyles.page}>
-      <div className={pageStyles.intro}>
-        <SectionEyebrow>Restaurants feature</SectionEyebrow>
-        <h1>Restaurant discovery</h1>
-        <p className={pageStyles.copy}>
-          Shared cards and layout stay generic, while restaurant copy and
-          queries remain feature-owned.
-        </p>
-      </div>
+      <PageIntro
+        eyebrow="Restaurants feature"
+        title="Restaurant discovery"
+        description="Shared cards and layout stay generic, while restaurant copy and queries remain feature-owned."
+      />
 
       {isLoading ? (
         <p>Loading restaurants...</p>
