@@ -1,0 +1,76 @@
+@use '../../styles/mixins' as mixins;
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 40px;
+
+  @media (max-width: 920px) {
+    width: min(100% - 20px, 1180px);
+    padding-top: 16px;
+  }
+}
+
+.header,
+.footer {
+  @include mixins.surface-panel;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+
+  @media (max-width: 920px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.brandKicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.brandTitle {
+  margin: 4px 0 0;
+  font-size: 1.1rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.navLink {
+  @include mixins.pill-button;
+  padding: 10px 14px;
+  color: var(--text-muted);
+}
+
+.navLinkActive {
+  background: var(--teal);
+  color: #fff;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer {
+  margin-top: 24px;
+  color: var(--text-muted);
+
+  p {
+    margin: 0;
+  }
+}

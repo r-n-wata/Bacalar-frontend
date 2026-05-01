@@ -1,0 +1,16 @@
+@use '../../styles/mixins' as mixins;
+
+.badge {
+  @include mixins.feature-card;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: var(--text-muted);
+}
+
+.value {
+  font-size: 1.2rem;
+}

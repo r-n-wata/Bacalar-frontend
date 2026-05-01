@@ -1,0 +1,69 @@
+@use '../../../styles/mixins' as mixins;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 920px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leadColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.primaryLink {
+  @include mixins.pill-button;
+  width: fit-content;
+  padding: 13px 18px;
+  background: var(--teal);
+  color: #fff;
+}
+
+.calloutCard {
+  @include mixins.surface-panel(32px, 28px);
+}
+
+.plainList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li {
+    color: var(--text-muted);
+  }
+}
+
+.routeGrid {
+  @include mixins.feature-grid;
+}
+
+.routeCard {
+  @include mixins.feature-card;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+
+  strong {
+    font-size: 1.2rem;
+  }
+
+  span {
+    color: var(--text-muted);
+  }
+}
