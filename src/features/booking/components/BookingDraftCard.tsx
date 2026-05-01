@@ -21,14 +21,22 @@ export function BookingDraftCard({
   return (
     <ContentPanel className={styles.card}>
       <div className={styles.grid}>
-        <FormField label="Travel date">
+        <FormField
+          label="Travel date"
+          hint="Choose the date you want to be on the lagoon."
+        >
           <TextInput
             type="date"
+            placeholder="Select your travel date"
+            aria-label="Select your travel date"
             value={draft.travelDate}
             onChange={(event) => onTravelDateChange(event.target.value)}
           />
         </FormField>
-        <FormField label="Guests">
+        <FormField
+          label="Guests"
+          hint="Start with your expected party size and adjust if needed."
+        >
           <GuestStepper
             value={draft.guests}
             onDecrement={onDecrementGuests}

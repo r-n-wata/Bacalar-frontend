@@ -17,7 +17,9 @@ export function GuestStepper({
       <Button variant="icon" aria-label="Decrease guests" onClick={onDecrement}>
         -
       </Button>
-      <strong className={styles.value}>{value}</strong>
+      <strong className={styles.value}>
+        {value} {value === 1 ? 'guest' : 'guests'}
+      </strong>
       <Button variant="icon" aria-label="Increase guests" onClick={onIncrement}>
         +
       </Button>
