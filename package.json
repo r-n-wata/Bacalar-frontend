@@ -11,6 +11,7 @@
     "test": "npm run test:placeholder",
     "test:placeholder": "node -e \"console.log('No automated frontend tests are configured yet.')\"",
     "ci": "npm run lint && npm run typecheck && npm test && npm run build",
+    "test:ci": "jest --ci --passWithNoTests",
     "preview": "vite preview"
   },
   "dependencies": {
