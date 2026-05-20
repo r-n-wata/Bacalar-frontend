@@ -206,8 +206,8 @@ export function HomePage() {
       <section className={styles.suggestionSection}>
         <PageIntro
           eyebrow="Featured lagoon experiences"
-          title="Start with the water because that is the clearest hero offer"
-          description="These are the kinds of featured picks that belong high on the home page: easy to compare, emotionally strong, and useful for first-time visitors."
+          title="Start with a few strong lagoon experiences"
+          description="Keep the homepage focused on a small number of high-confidence options instead of trying to show everything at once."
         />
 
         <div className={styles.suggestionGrid}>
@@ -229,7 +229,7 @@ export function HomePage() {
         <PageIntro
           eyebrow="Where to eat by moment"
           title="Breakfast, lunch, and dinner picks for Bacalar"
-          description="Instead of a generic restaurant list on the home page, show one strong recommendation for each part of the day."
+          description="Restaurant content works best when it quietly supports the day plan."
         />
 
         <div className={styles.suggestionGrid}>
@@ -252,7 +252,7 @@ export function HomePage() {
         <PageIntro
           eyebrow="This week in Bacalar"
           title="Use events as timely local add-ons"
-          description="Event content should feel current and selective. It works best when it gives travelers one or two good reasons to shape an evening or weekend around what is happening now."
+          description="Keep event coverage selective so it adds texture without competing with the main planning flow."
         />
 
         <div className={styles.suggestionGrid}>
@@ -271,23 +271,10 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className={styles.routeGrid}>
-        {experienceActions.map((experience) => (
-          <Link
-            key={experience.key}
-            className={styles.routeCard}
-            to={spotlightContent[experience.key].route}
-          >
-            <strong>{experience.label}</strong>
-            <span>{spotlightContent[experience.key].description}</span>
-          </Link>
-        ))}
-      </section>
-
       <ContentPanel className={styles.bookingPanel}>
         <div className={styles.bookingCopy}>
           <SectionEyebrow>Ready to book</SectionEyebrow>
-          <h2>Once a guest has chosen the experience, the next step should be obvious.</h2>
+          <h2>Make the next step obvious once someone is ready.</h2>
           <p>
             Keep the final handoff simple: travel date, guest count, and clear
             confirmation expectations. The homepage should end by showing that

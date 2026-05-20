@@ -3,8 +3,8 @@
 .copy {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-bottom: 16px;
 
   h1 {
     @include mixins.section-heading;
@@ -18,9 +18,9 @@
 
 .actions {
   display: grid;
-  gap: 16px;
+  gap: 10px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 
   @media (max-width: 920px) {
     grid-template-columns: 1fr;
@@ -29,4 +29,5 @@
 
 .metrics {
   @include mixins.feature-grid;
+  gap: 12px;
 }

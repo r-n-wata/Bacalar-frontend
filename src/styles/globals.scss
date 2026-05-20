@@ -3,25 +3,23 @@
     'Sora', 'Avenir Next', 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #16384a;
-  background:
-    radial-gradient(circle at top, rgba(96, 201, 216, 0.34), transparent 32%),
-    linear-gradient(180deg, #e6f6fb 0%, #d5edf4 42%, #f6eed8 100%);
+  color: #183340;
+  background: #f6f7f2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --surface: rgba(255, 255, 255, 0.9);
+  --surface: rgba(255, 255, 255, 0.96);
   --surface-strong: #ffffff;
-  --border: rgba(22, 56, 74, 0.12);
-  --text-muted: #5d7481;
-  --teal: #0f8b8d;
-  --teal-soft: #d7f2f0;
-  --lagoon-blue: #007ea7;
-  --royal-blue: #005a9c;
-  --sun-gold: #ffcb47;
-  --sand: #f6eed8;
-  --shadow: 0 24px 80px rgba(0, 76, 114, 0.14);
+  --border: rgba(24, 51, 64, 0.1);
+  --text-muted: #697b84;
+  --teal: #1d7b78;
+  --teal-soft: #e5f1ef;
+  --lagoon-blue: #2b728d;
+  --royal-blue: #183340;
+  --sun-gold: #d6b15c;
+  --sand: #f0eadc;
+  --shadow: 0 10px 30px rgba(24, 51, 64, 0.05);
 }
 
 * {
