@@ -1,3 +1,4 @@
+import { FeatureCard } from '../../../components/molecules/FeatureCard'
 import type { Event } from '../types/event'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
 
@@ -9,12 +10,13 @@ export function EventList({ events }: EventListProps) {
   return (
     <div className={cardStyles.grid}>
       {events.map((event) => (
-        <article key={event.id} className={cardStyles.card}>
-          <p className={cardStyles.tag}>{event.category}</p>
-          <h3>{event.title}</h3>
-          <p>{event.venue}</p>
-          <strong>{event.dateLabel}</strong>
-        </article>
+        <FeatureCard
+          key={event.id}
+          tag={event.category}
+          title={event.title}
+          description={event.venue}
+          meta={event.dateLabel}
+        />
       ))}
     </div>
   )

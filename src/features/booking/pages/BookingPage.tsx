@@ -1,4 +1,5 @@
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { BookingDraftCard } from '../components/BookingDraftCard'
 import { useBookingChecklist } from '../hooks/useBookingChecklist'
@@ -17,15 +18,11 @@ export function BookingPage() {
 
   return (
     <section className={pageStyles.page}>
-      <div className={pageStyles.intro}>
-        <SectionEyebrow>Booking feature</SectionEyebrow>
-        <h1>Booking flow foundation</h1>
-        <p className={pageStyles.copy}>
-          This slice demonstrates the split from the architecture document:
-          server-driven checklist data in React Query, user draft input in
-          Zustand.
-        </p>
-      </div>
+      <PageIntro
+        eyebrow="Booking feature"
+        title="Booking flow foundation"
+        description="This slice demonstrates the split from the architecture document: server-driven checklist data in React Query, user draft input in Zustand."
+      />
 
       <BookingDraftCard
         draft={draft}
@@ -34,14 +31,19 @@ export function BookingPage() {
         onDecrementGuests={decrementGuests}
       />
 
-      <section className={pageStyles.calloutCard}>
-        <SectionEyebrow>Next workflow steps</SectionEyebrow>
+      <ContentPanel className={pageStyles.calloutCard}>
+        <PageIntro
+          eyebrow="Next workflow steps"
+          title="Ready for confirmation"
+          description="These next steps stay close to the booking flow so API-backed checklist updates and local draft state stay easy to reason about."
+          compact
+        />
         <ul className={pageStyles.plainList}>
           {data.map((item) => (
             <li key={item.id}>{item.label}</li>
           ))}
         </ul>
-      </section>
+      </ContentPanel>
     </section>
   )
 }

@@ -3,13 +3,13 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
 }
 
 .heroGrid {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
-  gap: 24px;
+  gap: 18px;
   align-items: start;
 
   @media (max-width: 920px) {
@@ -20,24 +20,64 @@
 .leadColumn {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.2rem, 4vw, 4.2rem);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+    max-width: 12ch;
+    color: var(--royal-blue);
+  }
+
+  p {
+    margin: 0;
+    max-width: 58ch;
+    color: var(--text-muted);
+    font-size: 1.02rem;
+  }
 }
 
 .primaryLink {
   @include mixins.pill-button;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: fit-content;
   padding: 13px 18px;
-  background: var(--teal);
+  background: var(--royal-blue);
+  border: 1px solid var(--royal-blue);
   color: #fff;
+  font-weight: 700;
+}
+
+.secondaryLink {
+  @include mixins.pill-button;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 13px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--royal-blue);
+  font-weight: 700;
 }
 
 .calloutCard {
-  @include mixins.surface-panel(32px, 28px);
+  height: 100%;
 }
 
 .plainList {
-  list-style: none;
-  margin: 12px 0 0;
+  list-style: disc;
+  margin: 0 0 0 18px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -48,22 +88,104 @@
   }
 }
 
-.routeGrid {
+.suggestionSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.suggestionGrid {
   @include mixins.feature-grid;
 }
 
-.routeCard {
+.suggestionCard {
   @include mixins.feature-card;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 180px;
+  min-height: 0;
+
+  small {
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
 
   strong {
-    font-size: 1.2rem;
+    font-size: 1.12rem;
+    color: var(--royal-blue);
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
   }
 
   span {
+    margin-top: auto;
+    font-weight: 700;
+    color: var(--royal-blue);
+  }
+}
+
+.bookingPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: var(--surface-strong);
+  color: var(--royal-blue);
+
+  @media (max-width: 920px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.bookingCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 58ch;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    margin: 0;
     color: var(--text-muted);
+  }
+}
+
+.bookingActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .page {
+    gap: 28px;
+  }
+
+  .heroCopy {
+    h1 {
+      max-width: none;
+      font-size: 2.15rem;
+    }
+
+    p {
+      font-size: 0.96rem;
+    }
+  }
+
+  .suggestionCard {
+    min-height: 0;
   }
 }
