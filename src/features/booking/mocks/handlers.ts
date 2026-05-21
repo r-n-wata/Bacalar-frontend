@@ -1,18 +1,10 @@
 import { http } from 'msw'
-import { jsonSuccess } from '../../../test/msw/core'
-import {
-  bookingChecklistApiPath,
-  type BookingChecklistItem,
-} from '../api/getBookingChecklist'
-
-const checklist: BookingChecklistItem[] = [
-  { id: 'availability', label: 'Confirm live availability' },
-  { id: 'guest-details', label: 'Collect guest and contact details' },
-  { id: 'payment', label: 'Prepare deposit or full-payment handoff' },
-]
+import { jsonSuccess, resolveMockLanguage } from '../../../test/msw/core'
+import { bookingChecklistApiPath } from '../api/getBookingChecklist'
+import { getBookingFixture } from './booking.fixtures'
 
 export const bookingHandlers = [
-  http.get(bookingChecklistApiPath, async () => {
-    return jsonSuccess(checklist)
+  http.get(bookingChecklistApiPath, async ({ request }) => {
+    return jsonSuccess(getBookingFixture(resolveMockLanguage(request)))
   }),
 ]

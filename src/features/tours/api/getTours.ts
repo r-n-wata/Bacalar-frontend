@@ -1,11 +1,13 @@
+import type { AppLanguage } from '../../../app/i18n/config'
 import { queryKeys } from '../../../lib/queryKeys'
 import { getJson } from '../../../services/http'
-import type { Tour } from '../types/tour'
+import type { ToursContent } from '../types/tours-content'
 
 export const toursApiPath = '/api/tours'
 
-export const toursQueryKey = queryKeys.tours.list()
+export const toursQueryKey = (language: AppLanguage) =>
+  queryKeys.tours.list(language)
 
-export function getTours() {
-  return getJson<Tour[]>(toursApiPath)
+export function getTours(language: AppLanguage) {
+  return getJson<ToursContent>(toursApiPath, { language })
 }

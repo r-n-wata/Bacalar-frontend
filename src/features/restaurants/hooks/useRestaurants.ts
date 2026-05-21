@@ -1,12 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
+import { fetchApi } from '../../../app/hooks/fetchApi'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import {
   getRestaurants,
   restaurantsQueryKey,
 } from '../api/getRestaurants'
 
 export function useRestaurants() {
-  return useQuery({
-    queryKey: restaurantsQueryKey,
-    queryFn: getRestaurants,
+  const language = useAppLanguage()
+
+  return fetchApi({
+    queryKey: restaurantsQueryKey(language),
+    queryFn: () => getRestaurants(language),
   })
 }

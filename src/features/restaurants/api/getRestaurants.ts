@@ -1,11 +1,13 @@
+import type { AppLanguage } from '../../../app/i18n/config'
 import { queryKeys } from '../../../lib/queryKeys'
 import { getJson } from '../../../services/http'
-import type { Restaurant } from '../types/restaurant'
+import type { RestaurantsContent } from '../types/restaurants-content'
 
 export const restaurantsApiPath = '/api/restaurants'
 
-export const restaurantsQueryKey = queryKeys.restaurants.list()
+export const restaurantsQueryKey = (language: AppLanguage) =>
+  queryKeys.restaurants.list(language)
 
-export function getRestaurants() {
-  return getJson<Restaurant[]>(restaurantsApiPath)
+export function getRestaurants(language: AppLanguage) {
+  return getJson<RestaurantsContent>(restaurantsApiPath, { language })
 }

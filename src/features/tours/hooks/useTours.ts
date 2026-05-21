@@ -1,9 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
+import { fetchApi } from '../../../app/hooks/fetchApi'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { getTours, toursQueryKey } from '../api/getTours'
 
 export function useTours() {
-  return useQuery({
-    queryKey: toursQueryKey,
-    queryFn: getTours,
+  const language = useAppLanguage()
+
+  return fetchApi({
+    queryKey: toursQueryKey(language),
+    queryFn: () => getTours(language),
   })
 }

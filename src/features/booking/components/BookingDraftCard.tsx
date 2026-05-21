@@ -2,11 +2,13 @@ import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { TextInput } from '../../../components/atoms/TextInput'
 import { FormField } from '../../../components/molecules/FormField'
 import { GuestStepper } from '../../../components/molecules/GuestStepper'
+import type { BookingContent } from '../types/booking-content'
 import type { BookingDraft } from '../types/booking-draft'
 import styles from './BookingDraftCard.module.scss'
 
 type BookingDraftCardProps = {
   draft: BookingDraft
+  content: BookingContent['form']
   onTravelDateChange: (travelDate: string) => void
   onIncrementGuests: () => void
   onDecrementGuests: () => void
@@ -14,6 +16,7 @@ type BookingDraftCardProps = {
 
 export function BookingDraftCard({
   draft,
+  content,
   onTravelDateChange,
   onIncrementGuests,
   onDecrementGuests,
@@ -22,20 +25,20 @@ export function BookingDraftCard({
     <ContentPanel className={styles.card}>
       <div className={styles.grid}>
         <FormField
-          label="Travel date"
-          hint="Choose the date you want to be on the lagoon."
+          label={content.travelDateLabel}
+          hint={content.travelDateHint}
         >
           <TextInput
             type="date"
-            placeholder="Select your travel date"
-            aria-label="Select your travel date"
+            placeholder={content.travelDatePlaceholder}
+            aria-label={content.travelDateAriaLabel}
             value={draft.travelDate}
             onChange={(event) => onTravelDateChange(event.target.value)}
           />
         </FormField>
         <FormField
-          label="Guests"
-          hint="Start with your expected party size and adjust if needed."
+          label={content.guestsLabel}
+          hint={content.guestsHint}
         >
           <GuestStepper
             value={draft.guests}
@@ -44,10 +47,7 @@ export function BookingDraftCard({
           />
         </FormField>
       </div>
-      <p className={styles.copy}>
-        Draft state stays in Zustand here because it is user-entered UI state,
-        not API-owned data.
-      </p>
+      <p className={styles.copy}>{content.draftCopy}</p>
     </ContentPanel>
   )
 }

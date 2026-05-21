@@ -1,12 +1,11 @@
-import { useTranslation } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
+import { fetchApi } from '../../../app/hooks/fetchApi'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { eventsQueryKey, getEvents } from '../api/getEvents'
 
 export function useEvents() {
-  const { i18n } = useTranslation()
-  const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const language = useAppLanguage()
 
-  return useQuery({
+  return fetchApi({
     queryKey: eventsQueryKey(language),
     queryFn: () => getEvents(language),
   })

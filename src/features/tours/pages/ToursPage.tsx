@@ -1,20 +1,26 @@
+import { useTranslation } from 'react-i18next'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { TourList } from '../components/TourList'
 import { useTours } from '../hooks/useTours'
 
 export function ToursPage() {
-  const { data = [], isLoading } = useTours()
+  const { t } = useTranslation()
+  const { data, isLoading, isError } = useTours()
 
   return (
     <section className={pageStyles.page}>
-      <PageIntro
-        eyebrow="Tours feature"
-        title="Boat tours and experience browsing"
-        description="React Query owns live availability-ready tour data, while future compare and filter state can stay client-side."
-      />
+      {data ? (
+        <PageIntro
+          eyebrow={data.eyebrow}
+          title={data.title}
+          description={data.description}
+        />
+      ) : null}
 
-      {isLoading ? <p>Loading tours...</p> : <TourList tours={data} />}
+      {isLoading ? <p>{t('tours.loading')}</p> : null}
+      {isError ? <p role="alert">{t('common.error')}</p> : null}
+      {data && !isLoading && !isError ? <TourList tours={data.items} /> : null}
     </section>
   )
 }

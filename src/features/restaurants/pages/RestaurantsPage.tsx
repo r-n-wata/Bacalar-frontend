@@ -1,24 +1,28 @@
+import { useTranslation } from 'react-i18next'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { RestaurantList } from '../components/RestaurantList'
 import { useRestaurants } from '../hooks/useRestaurants'
 
 export function RestaurantsPage() {
-  const { data = [], isLoading } = useRestaurants()
+  const { t } = useTranslation()
+  const { data, isLoading, isError } = useRestaurants()
 
   return (
     <section className={pageStyles.page}>
-      <PageIntro
-        eyebrow="Restaurants feature"
-        title="Restaurant discovery"
-        description="Shared cards and layout stay generic, while restaurant copy and queries remain feature-owned."
-      />
+      {data ? (
+        <PageIntro
+          eyebrow={data.eyebrow}
+          title={data.title}
+          description={data.description}
+        />
+      ) : null}
 
-      {isLoading ? (
-        <p>Loading restaurants...</p>
-      ) : (
-        <RestaurantList restaurants={data} />
-      )}
+      {isLoading ? <p>{t('restaurants.loading')}</p> : null}
+      {isError ? <p role="alert">{t('common.error')}</p> : null}
+      {data && !isLoading && !isError ? (
+        <RestaurantList restaurants={data.items} />
+      ) : null}
     </section>
   )
 }

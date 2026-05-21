@@ -6,19 +6,21 @@ import { useEvents } from '../hooks/useEvents'
 
 export function EventsPage() {
   const { t } = useTranslation()
-  const { data = [], isLoading, isError } = useEvents()
+  const { data, isLoading, isError } = useEvents()
 
   return (
     <section className={pageStyles.page}>
-      <PageIntro
-        eyebrow={t('events.eyebrow')}
-        title={t('events.title')}
-        description={t('events.description')}
-      />
+      {data ? (
+        <PageIntro
+          eyebrow={data.eyebrow}
+          title={data.title}
+          description={data.description}
+        />
+      ) : null}
 
       {isLoading ? <p>{t('events.loading')}</p> : null}
       {isError ? <p role="alert">{t('events.error')}</p> : null}
-      {!isLoading && !isError ? <EventList events={data} /> : null}
+      {data && !isLoading && !isError ? <EventList events={data.items} /> : null}
     </section>
   )
 }

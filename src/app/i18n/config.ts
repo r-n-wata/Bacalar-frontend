@@ -25,14 +25,23 @@ export const resources = {
         loading: 'Loading...',
         error: 'Something went wrong. Please try again.',
       },
+      home: {
+        loading: 'Loading homepage...',
+        error: 'We could not load the homepage right now. Please try again.',
+      },
       events: {
-        eyebrow: 'Events feature',
-        title: 'Recent and upcoming events',
-        description:
-          'This feature owns event queries, event-specific UI, and future filters without pushing server data into global state.',
         loading: 'Loading events...',
         error:
           'We could not load events right now. Please refresh or try another language.',
+      },
+      restaurants: {
+        loading: 'Loading restaurants...',
+      },
+      tours: {
+        loading: 'Loading tours...',
+      },
+      booking: {
+        loading: 'Loading booking details...',
       },
     },
   },
@@ -60,14 +69,24 @@ export const resources = {
         loading: 'Cargando...',
         error: 'Algo salio mal. Intentalo de nuevo.',
       },
+      home: {
+        loading: 'Cargando inicio...',
+        error:
+          'No pudimos cargar la pagina principal en este momento. Intentalo de nuevo.',
+      },
       events: {
-        eyebrow: 'Funcionalidad de eventos',
-        title: 'Eventos recientes y proximos',
-        description:
-          'Esta funcionalidad controla las consultas de eventos, la UI especifica del dominio y futuros filtros sin mover datos remotos al estado global.',
         loading: 'Cargando eventos...',
         error:
           'No pudimos cargar los eventos en este momento. Actualiza o prueba otro idioma.',
+      },
+      restaurants: {
+        loading: 'Cargando restaurantes...',
+      },
+      tours: {
+        loading: 'Cargando tours...',
+      },
+      booking: {
+        loading: 'Cargando detalles de la reserva...',
       },
     },
   },
