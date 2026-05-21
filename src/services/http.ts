@@ -21,8 +21,14 @@ function getCurrentLanguage() {
   return activeLanguage === 'es' ? 'es' : defaultLanguage
 }
 
-function createApiUrl(path: string, language: AppLanguage) {
-  const url = new URL(path, window.location.origin)
+export function getApiBaseUrl() {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim()
+
+  return baseUrl && baseUrl.length > 0 ? baseUrl : window.location.origin
+}
+
+export function createApiUrl(path: string, language: AppLanguage) {
+  const url = new URL(path, getApiBaseUrl())
   url.searchParams.set('lang', language)
 
   return url
