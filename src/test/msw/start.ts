@@ -1,9 +1,17 @@
-export async function startMockServiceWorker() {
+export function isMockServiceWorkerEnabled() {
   if (!import.meta.env.DEV) {
-    return
+    return false
   }
 
   if (import.meta.env.VITE_ENABLE_MSW === 'false') {
+    return false
+  }
+
+  return true
+}
+
+export async function startMockServiceWorker() {
+  if (!isMockServiceWorkerEnabled()) {
     return
   }
 
