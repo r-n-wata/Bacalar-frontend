@@ -2,14 +2,16 @@
 
 ## Overview
 
-This frontend is a feature-based React application for planning a Bacalar trip across four main domains:
+This frontend is a feature-based React application for planning a Bacalar trip across four MVP domains:
 
+- home
 - events
 - restaurants
 - tours
-- booking
 
-The architecture favors keeping business logic close to each feature while centralizing app-wide infrastructure such as routing, providers, server-state configuration, internationalization, and test/mocking utilities.
+Booking is future-only and intentionally excluded from the MVP frontend experience.
+
+The architecture keeps business logic close to each feature while centralizing app-wide infrastructure such as routing, providers, internationalization, shared HTTP helpers, and MSW test/runtime wiring.
 
 ## Stack
 
@@ -30,9 +32,9 @@ The architecture favors keeping business logic close to each feature while centr
 - Feature-first organization: domain code lives under `src/features`.
 - Shared UI stays generic: reusable presentational building blocks live under `src/components`.
 - React Query owns server state: fetched API data should not be duplicated in Zustand.
-- Zustand owns client state: UI and draft state stay local or app-level in stores.
+- Zustand owns lightweight client state: only UI state such as the homepage spotlight selection belongs there.
 - Infrastructure is centralized: routing, providers, i18n, HTTP helpers, and MSW composition live in dedicated app/test layers.
-- Mocking should mirror production usage: features call real `fetch` endpoints and MSW intercepts them in dev and tests.
+- Mocking mirrors production usage: features call real `fetch` endpoints and MSW intercepts them in development and tests.
 
 ## Folder structure
 
@@ -42,6 +44,7 @@ frontend/
     mockServiceWorker.js
   src/
     app/
+      hooks/
       i18n/
       providers/
       router/
@@ -52,14 +55,6 @@ frontend/
       organisms/
       templates/
     features/
-      booking/
-        api/
-        components/
-        hooks/
-        mocks/
-        pages/
-        store/
-        types/
       events/
         api/
         components/
@@ -68,7 +63,11 @@ frontend/
         pages/
         types/
       home/
+        api/
+        hooks/
+        mocks/
         pages/
+        types/
       restaurants/
         api/
         components/
@@ -88,7 +87,6 @@ frontend/
     styles/
     test/
       msw/
-    utils/
 ```
 
 ## Layer responsibilities
@@ -97,7 +95,8 @@ frontend/
 
 Application-level infrastructure.
 
-- `i18n/`: initializes `i18next` resources and default language behavior.
+- `hooks/`: shared app-level hooks such as `useFetchApi`.
+- `i18n/`: initializes translation resources and default language behavior.
 - `providers/`: owns `QueryClientProvider` wiring and app-wide provider setup.
 - `router/`: defines route configuration and route-to-page mapping.
 - `store/`: contains app-wide Zustand state that is not tied to a single feature.
@@ -119,16 +118,15 @@ Each feature owns its domain behavior end to end.
 
 - `api/`: feature-specific network functions and query keys.
 - `components/`: UI only meaningful inside that feature.
-- `hooks/`: React Query hooks or feature-specific composition hooks.
+- `hooks/`: feature-level React Query hooks and composition hooks.
 - `mocks/`: feature-local MSW handlers and fixtures.
 - `pages/`: route-level entry points.
-- `store/`: feature-local Zustand state when needed.
 - `types/`: feature-owned TypeScript types.
 
 Examples:
 
+- `features/home` owns the homepage API contract, localized fixtures, and homepage rendering.
 - `features/events` owns event fetching, localized event mocks, and the events page.
-- `features/booking` demonstrates the split between server state in React Query and draft state in Zustand.
 
 ### `src/services`
 
@@ -167,10 +165,28 @@ React Query owns caching, request lifecycle, refetching, and loading/error state
 Zustand is reserved for client-only state such as:
 
 - the homepage spotlight selection
-- booking draft input
 - future UI state that does not come from the server
 
 Avoid copying fetched collections like events or restaurants into Zustand.
+
+## Caching strategy
+
+The shared request hook is `src/app/hooks/fetchApi.ts`, exported as `useFetchApi`.
+
+Responsibilities:
+
+- standardize typed query usage around `ApiError`
+- accept per-feature React Query options
+- keep request policy shared without absorbing feature business logic
+
+Cache policy lives in feature hooks, not in pages:
+
+- `useHomeContent`: longest freshness window
+- `useRestaurants`: long freshness window
+- `useTours`: medium freshness window
+- `useEvents`: shortest freshness window among MVP features
+
+Localized query keys remain the cache identity mechanism, so English and Spanish responses stay isolated in React Query.
 
 ## Routing
 
@@ -180,9 +196,8 @@ The app uses a single shared shell with nested routes.
 - `/events` renders events
 - `/restaurants` renders restaurants
 - `/tours` renders tours
-- `/booking` renders booking
 
-Route configuration lives in `src/app/router` and should remain the only place where top-level URL structure is defined.
+Top-level route configuration lives in `src/app/router` and is the only place where URL structure should be defined.
 
 ## Internationalization
 
@@ -191,11 +206,11 @@ App-wide translations are initialized in `src/app/i18n/config.ts`.
 Current language concerns:
 
 - shell copy is translated centrally
-- event requests are locale-aware
-- the active language is included in the events query key to keep React Query caches correct per locale
+- feature requests are locale-aware
+- the active language is included in every localized query key
 - requests send both `Accept-Language` and `?lang=...`
 
-When a feature becomes localized, keep UI strings in i18n resources and keep any locale-dependent mock fixtures inside that feature's `mocks/` directory.
+When a feature becomes localized, keep UI strings in i18n resources and keep locale-dependent mock fixtures inside that feature's `mocks/` directory.
 
 ## Mocking strategy
 
@@ -207,7 +222,7 @@ The frontend uses an opinionated shared-plus-local MSW model.
 - Browser mocking starts from `src/main.tsx`.
 - Test mocking starts from `src/test/setup.ts`.
 
-This setup keeps infrastructure centralized while leaving payload shape and domain scenarios close to the owning feature.
+This keeps infrastructure centralized while leaving payload shape and domain scenarios close to the owning feature.
 
 ## Testing strategy
 
@@ -217,40 +232,27 @@ Tests should prefer behavior over implementation details.
 - Use MSW for network behavior instead of mocking hooks directly.
 - Use `renderWithProviders(...)` to get a fresh React Query client and language-aware render path.
 - Override handlers with `server.use(...)` for feature-specific test scenarios.
+- Keep cache behavior assertions close to the shared hook and feature hooks.
 
-The current reference example is the events page flow, which covers:
+Current reference examples cover:
 
-- successful query rendering
-- language-driven refetch
-- translated error states
-
-## Styling
-
-Styling uses Sass modules and shared global styles.
-
-- feature or component styles should stay close to the owning file
-- cross-cutting tokens and mixins belong in `src/styles`
-- layout and component classes should remain explicit rather than overly utility-driven
+- homepage rendering and locale refetching
+- events rendering and localized error handling
+- shared query hook success, error, and cache reuse behavior
 
 ## Validation and CI
 
-The frontend should remain safe for the existing CI shape:
+The frontend should remain safe for the current CI shape:
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test:ci`
-- `npm run build`
+```bash
+npm run lint
+npm run typecheck
+npm run test:ci
+npm run build
+```
 
 When MSW is upgraded, regenerate the worker file with:
 
 ```bash
 npm run msw:init
 ```
-
-## Extension guidelines
-
-- Add new domains as new folders under `src/features`.
-- Prefer feature-local handlers and fixtures over one large global mock directory.
-- Keep shared abstractions small and earned; do not centralize feature business logic prematurely.
-- If a pattern is only used by one feature, keep it inside that feature until reuse is real.
-- Extend i18n feature by feature instead of partially translating shared components without end-to-end behavior.

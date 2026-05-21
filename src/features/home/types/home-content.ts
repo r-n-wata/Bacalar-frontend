@@ -32,11 +32,6 @@ export type HomeSuggestionCard = {
   route: string
 }
 
-export type HomeBookingAction = {
-  label: string
-  route: string
-}
-
 export type HomeContent = {
   hero: {
     eyebrow: string
@@ -61,12 +56,5 @@ export type HomeContent = {
   weeklyHappenings: {
     intro: HomeSectionIntro
     items: HomeSuggestionCard[]
-  }
-  bookingCta: {
-    eyebrow: string
-    title: string
-    description: string
-    primaryAction: HomeBookingAction
-    secondaryAction: HomeBookingAction
   }
 }

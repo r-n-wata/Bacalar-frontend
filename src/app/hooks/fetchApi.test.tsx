@@ -1,16 +1,19 @@
+import type { ReactNode } from 'react'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { getJson } from '../../services/http'
+import { createTestQueryClient } from '../../test/createTestQueryClient'
 import { server } from '../../test/msw/server'
 import { TestProviders } from '../../test/TestProviders'
-import { fetchApi } from './fetchApi'
+import { useFetchApi } from './fetchApi'
 
-describe('fetchApi', () => {
+describe('useFetchApi', () => {
   it('returns typed data for a successful request', async () => {
     const { result } = renderHook(
       () =>
-        fetchApi({
+        useFetchApi({
           queryKey: ['health', 'success'],
           queryFn: () => getJson<{ status: string }>('/api/health'),
         }),
@@ -40,7 +43,7 @@ describe('fetchApi', () => {
 
     const { result } = renderHook(
       () =>
-        fetchApi({
+        useFetchApi({
           queryKey: ['health', 'error'],
           queryFn: () => getJson<{ status: string }>('/api/health'),
         }),
@@ -71,7 +74,7 @@ describe('fetchApi', () => {
 
     const { result } = renderHook(
       () =>
-        fetchApi({
+        useFetchApi({
           queryKey: ['health', 'es'],
           queryFn: () =>
             getJson<{ status: string }>('/api/health', {
@@ -88,5 +91,49 @@ describe('fetchApi', () => {
     })
 
     expect(result.current.data).toEqual({ status: 'es:es' })
+  })
+
+  it('honors per-query staleTime and reuses cached results on remount', async () => {
+    const queryClient = createTestQueryClient()
+    const queryFn = vi.fn(async () => ({ status: 'cached' }))
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    )
+
+    const firstRender = renderHook(
+      () =>
+        useFetchApi({
+          queryKey: ['health', 'cached'],
+          queryFn,
+          staleTime: 1000 * 60,
+        }),
+      {
+        wrapper,
+      },
+    )
+
+    await waitFor(() => {
+      expect(firstRender.result.current.isSuccess).toBe(true)
+    })
+
+    firstRender.unmount()
+
+    const secondRender = renderHook(
+      () =>
+        useFetchApi({
+          queryKey: ['health', 'cached'],
+          queryFn,
+          staleTime: 1000 * 60,
+        }),
+      {
+        wrapper,
+      },
+    )
+
+    await waitFor(() => {
+      expect(secondRender.result.current.isSuccess).toBe(true)
+    })
+
+    expect(queryFn).toHaveBeenCalledTimes(1)
   })
 })

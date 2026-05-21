@@ -18,7 +18,6 @@ export const resources = {
           events: 'Events',
           restaurants: 'Restaurants',
           tours: 'Tours',
-          booking: 'Booking',
         },
       },
       common: {
@@ -40,9 +39,6 @@ export const resources = {
       tours: {
         loading: 'Loading tours...',
       },
-      booking: {
-        loading: 'Loading booking details...',
-      },
     },
   },
   es: {
@@ -62,7 +58,6 @@ export const resources = {
           events: 'Eventos',
           restaurants: 'Restaurantes',
           tours: 'Tours',
-          booking: 'Reservas',
         },
       },
       common: {
@@ -84,9 +79,6 @@ export const resources = {
       },
       tours: {
         loading: 'Cargando tours...',
-      },
-      booking: {
-        loading: 'Cargando detalles de la reserva...',
       },
     },
   },

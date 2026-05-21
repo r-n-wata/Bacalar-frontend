@@ -11,7 +11,4 @@ export const queryKeys = {
   tours: {
     list: (language: string) => ['tours', 'list', language] as const,
   },
-  booking: {
-    checklist: (language: string) => ['booking', 'checklist', language] as const,
-  },
 }

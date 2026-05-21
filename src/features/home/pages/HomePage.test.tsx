@@ -42,6 +42,17 @@ describe('HomePage', () => {
       ),
     ).toBeVisible()
 
+    expect(
+      screen.queryByRole('link', {
+        name: 'Booking',
+      }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', {
+        name: 'Booking',
+      }),
+    ).not.toBeInTheDocument()
+
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
     expect(
@@ -49,6 +60,17 @@ describe('HomePage', () => {
         'Ayuda a las personas viajeras a construir un primer plan facil y bonito para Bacalar.',
       ),
     ).toBeVisible()
+
+    expect(
+      screen.queryByRole('link', {
+        name: 'Reservas',
+      }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', {
+        name: 'Reservas',
+      }),
+    ).not.toBeInTheDocument()
   })
 
   it('shows a localized homepage error state when the handler fails', async () => {

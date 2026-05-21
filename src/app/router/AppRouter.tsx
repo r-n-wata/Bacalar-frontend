@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
-import { BookingPage } from '../../features/booking/pages/BookingPage'
 import { EventsPage } from '../../features/events/pages/EventsPage'
 import { HomePage } from '../../features/home/pages/HomePage'
 import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
@@ -26,10 +25,6 @@ const router = createBrowserRouter([
       {
         path: 'tours',
         element: <ToursPage />,
-      },
-      {
-        path: 'booking',
-        element: <BookingPage />,
       },
     ],
   },

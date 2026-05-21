@@ -13,7 +13,7 @@ type FetchApiOptions<TData, TQueryKey extends QueryKey> = Omit<
   queryFn: () => Promise<TData>
 }
 
-function useFetchApi<TData, TQueryKey extends QueryKey>({
+export function useFetchApi<TData, TQueryKey extends QueryKey>({
   queryKey,
   queryFn,
   ...options
@@ -24,5 +24,3 @@ function useFetchApi<TData, TQueryKey extends QueryKey>({
     ...options,
   })
 }
-
-export { useFetchApi as fetchApi }

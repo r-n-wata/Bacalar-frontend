@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUiStore } from '../../../app/store/ui-store'
-import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { ExperienceSpotlight } from '../../../components/organisms/ExperienceSpotlight'
 import { useHomeContent } from '../hooks/useHomeContent'
 import styles from './HomePage.module.scss'
@@ -130,26 +130,6 @@ export function HomePage() {
           ))}
         </div>
       </section>
-
-      <ContentPanel className={styles.bookingPanel}>
-        <div className={styles.bookingCopy}>
-          <SectionEyebrow>{data.bookingCta.eyebrow}</SectionEyebrow>
-          <h2>{data.bookingCta.title}</h2>
-          <p>{data.bookingCta.description}</p>
-        </div>
-
-        <div className={styles.bookingActions}>
-          <Link className={styles.primaryLink} to={data.bookingCta.primaryAction.route}>
-            {data.bookingCta.primaryAction.label}
-          </Link>
-          <Link
-            className={styles.secondaryLink}
-            to={data.bookingCta.secondaryAction.route}
-          >
-            {data.bookingCta.secondaryAction.label}
-          </Link>
-        </div>
-      </ContentPanel>
     </div>
   )
 }

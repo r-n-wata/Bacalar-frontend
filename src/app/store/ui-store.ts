@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ExperienceKey = 'events' | 'restaurants' | 'tours' | 'booking'
+export type ExperienceKey = 'events' | 'restaurants' | 'tours'
 
 type UiState = {
   featuredExperience: ExperienceKey

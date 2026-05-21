@@ -13,7 +13,6 @@ export function AppShell() {
     { to: '/events', label: t('shell.nav.events') },
     { to: '/restaurants', label: t('shell.nav.restaurants') },
     { to: '/tours', label: t('shell.nav.tours') },
-    { to: '/booking', label: t('shell.nav.booking') },
   ]
 
   return (
