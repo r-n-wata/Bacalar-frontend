@@ -1,20 +1,24 @@
+import { useTranslation } from 'react-i18next'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { EventList } from '../components/EventList'
 import { useEvents } from '../hooks/useEvents'
 
 export function EventsPage() {
-  const { data = [], isLoading } = useEvents()
+  const { t } = useTranslation()
+  const { data = [], isLoading, isError } = useEvents()
 
   return (
     <section className={pageStyles.page}>
       <PageIntro
-        eyebrow="Events feature"
-        title="Recent and upcoming events"
-        description="This feature owns event queries, event-specific UI, and future filters without pushing server data into global state."
+        eyebrow={t('events.eyebrow')}
+        title={t('events.title')}
+        description={t('events.description')}
       />
 
-      {isLoading ? <p>Loading events...</p> : <EventList events={data} />}
+      {isLoading ? <p>{t('events.loading')}</p> : null}
+      {isError ? <p role="alert">{t('events.error')}</p> : null}
+      {!isLoading && !isError ? <EventList events={data} /> : null}
     </section>
   )
 }

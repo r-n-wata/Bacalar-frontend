@@ -1,6 +1,6 @@
 export const queryKeys = {
   events: {
-    list: () => ['events', 'list'] as const,
+    list: (language: string) => ['events', 'list', language] as const,
   },
   restaurants: {
     list: () => ['restaurants', 'list'] as const,

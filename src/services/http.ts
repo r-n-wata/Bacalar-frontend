@@ -1,5 +1,49 @@
-export function simulateRequest<T>(payload: T, delay = 180): Promise<T> {
-  return new Promise((resolve) => {
-    window.setTimeout(() => resolve(payload), delay)
+import i18n, { defaultLanguage, type AppLanguage } from '../app/i18n/config'
+
+export class ApiError extends Error {
+  status: number
+
+  constructor(message: string, status: number) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+  }
+}
+
+type JsonRequestOptions = {
+  language?: AppLanguage
+  init?: RequestInit
+}
+
+function getCurrentLanguage() {
+  const activeLanguage = i18n.resolvedLanguage ?? i18n.language
+
+  return activeLanguage === 'es' ? 'es' : defaultLanguage
+}
+
+function createApiUrl(path: string, language: AppLanguage) {
+  const url = new URL(path, window.location.origin)
+  url.searchParams.set('lang', language)
+
+  return url
+}
+
+export async function getJson<T>(
+  path: string,
+  { language = getCurrentLanguage(), init }: JsonRequestOptions = {},
+): Promise<T> {
+  const response = await fetch(createApiUrl(path, language), {
+    ...init,
+    headers: {
+      Accept: 'application/json',
+      'Accept-Language': language,
+      ...init?.headers,
+    },
   })
+
+  if (!response.ok) {
+    throw new ApiError(`Request failed for ${path}`, response.status)
+  }
+
+  return (await response.json()) as T
 }
