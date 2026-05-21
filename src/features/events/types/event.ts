@@ -7,3 +7,10 @@ export type Event = {
   venue: string
   category: EventCategory
 }
+
+export type EventsContent = {
+  eyebrow: string
+  title: string
+  description: string
+  items: Event[]
+}

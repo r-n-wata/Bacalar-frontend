@@ -1,74 +1,77 @@
-# React + TypeScript + Vite
+# Bacalar frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## MVP scope
 
-Currently, two official plugins are available:
+The active frontend MVP includes:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- home
+- events
+- restaurants
+- tours
 
-## React Compiler
+Booking is future-only and intentionally not part of the current frontend routes, navigation, mocks, or cache policy.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## MSW setup
 
-## Expanding the ESLint configuration
+The frontend uses an opinionated Mock Service Worker setup with a shared base layer and feature-local handlers.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Shared MSW runtime lives in `src/test/msw`.
+- Feature handlers stay close to their domain in `src/features/*/mocks`.
+- Shared request plumbing lives in `src/services/http.ts`.
+- App-wide internationalization lives in `src/app/i18n/config.ts`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Browser behavior
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Development runs start MSW automatically from `src/main.tsx`. The worker is enabled by default in development and can be disabled with `VITE_ENABLE_MSW=false`.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+When mock handlers are active:
+
+- unhandled requests fail loudly
+- feature APIs use real `fetch` calls to `/api/*`
+- locale-aware requests append `?lang=en|es`
+
+### Query and cache behavior
+
+The shared request hook is `useFetchApi` in `src/app/hooks/fetchApi.ts`.
+
+Cache policy is set per MVP feature hook:
+
+- `useHomeContent`: longest freshness window
+- `useRestaurants`: long freshness window
+- `useTours`: medium freshness window
+- `useEvents`: shortest freshness window
+
+This keeps route-level components simple while making React Query behavior explicit near the owning feature.
+
+### Test behavior
+
+Vitest uses the same handler graph through `src/test/msw/server.ts` and `src/test/setup.ts`.
+
+Recommended patterns:
+
+- keep handler composition in `src/test/msw/handlers.ts`
+- override only the feature handler needed in a test with `server.use(...)`
+- use `renderWithProviders(...)` so each test gets a fresh React Query client and language
+
+### Example flows
+
+- `src/features/home/pages/HomePage.test.tsx` proves localized homepage rendering without booking in the MVP UI.
+- `src/features/events/pages/EventsPage.test.tsx` proves locale-specific event refetching and translated error handling.
+- `src/app/hooks/fetchApi.test.tsx` proves the shared query hook success, error, and cache reuse behavior.
+
+## Validation
+
+Generate or refresh the worker file after upgrading `msw`:
+
+```bash
+npm run msw:init
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+CI-safe checks:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint
+npm run typecheck
+npm run test:ci
+npm run build
 ```
-# Bacalar-frontend

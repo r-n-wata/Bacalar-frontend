@@ -1,18 +1,19 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Button } from '../atoms/Button'
 import styles from './AppShell.module.scss'
 
-const navigation = [
-  { to: '/', label: 'Overview', end: true },
-  { to: '/events', label: 'Events' },
-  { to: '/restaurants', label: 'Restaurants' },
-  { to: '/tours', label: 'Tours' },
-  { to: '/booking', label: 'Booking' },
-]
-
 export function AppShell() {
+  const { t, i18n } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const activeLanguage = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const navigation = [
+    { to: '/', label: t('shell.nav.overview'), end: true },
+    { to: '/events', label: t('shell.nav.events') },
+    { to: '/restaurants', label: t('shell.nav.restaurants') },
+    { to: '/tours', label: t('shell.nav.tours') },
+  ]
 
   return (
     <div className={styles.shell}>
@@ -23,8 +24,8 @@ export function AppShell() {
               B
             </div>
             <div>
-              <p className={styles.brandKicker}>Bacalar</p>
-              <h1 className={styles.brandTitle}>Plan your lagoon stay with confidence</h1>
+              <p className={styles.brandKicker}>{t('shell.brandKicker')}</p>
+              <h1 className={styles.brandTitle}>{t('shell.brandTitle')}</h1>
             </div>
           </div>
 
@@ -35,7 +36,7 @@ export function AppShell() {
             aria-controls="primary-navigation"
             onClick={() => setIsMenuOpen((current) => !current)}
           >
-            <span className={styles.menuToggleLabel}>Menu</span>
+            <span className={styles.menuToggleLabel}>{t('shell.menu')}</span>
             <span className={styles.menuToggleIcon} aria-hidden="true">
               <span />
               <span />
@@ -45,14 +46,29 @@ export function AppShell() {
         </div>
 
         <div className={styles.headerMeta}>
-          <p className={styles.headerSummary}>
-            Discover stays, food, tours, and timely local picks built around the
-            colors and calm of Bacalar.
-          </p>
+          <p className={styles.headerSummary}>{t('shell.summary')}</p>
 
           <a className={styles.headerCta} href="#content">
-            Start exploring
+            {t('shell.startExploring')}
           </a>
+        </div>
+
+        <div className={styles.languageRow}>
+          <span className={styles.languageLabel}>{t('shell.languageLabel')}</span>
+          <div className={styles.languageActions}>
+            <Button
+              variant={activeLanguage === 'en' ? 'chipActive' : 'chip'}
+              onClick={() => void i18n.changeLanguage('en')}
+            >
+              EN
+            </Button>
+            <Button
+              variant={activeLanguage === 'es' ? 'chipActive' : 'chip'}
+              onClick={() => void i18n.changeLanguage('es')}
+            >
+              ES
+            </Button>
+          </div>
         </div>
 
         <nav
@@ -85,7 +101,7 @@ export function AppShell() {
       </main>
 
       <footer className={styles.footer}>
-        <p>Frontend foundation aligned to the feature-based architecture.</p>
+        <p>{t('shell.footer')}</p>
       </footer>
     </div>
   )

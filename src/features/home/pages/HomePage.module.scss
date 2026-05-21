@@ -58,19 +58,6 @@
   font-weight: 700;
 }
 
-.secondaryLink {
-  @include mixins.pill-button;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 13px 18px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--royal-blue);
-  font-weight: 700;
-}
-
 .calloutCard {
   height: 100%;
 }
@@ -128,45 +115,6 @@
     font-weight: 700;
     color: var(--royal-blue);
   }
-}
-
-.bookingPanel {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  background: var(--surface-strong);
-  color: var(--royal-blue);
-
-  @media (max-width: 920px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.bookingCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 58ch;
-
-  h2 {
-    margin: 0;
-    font-size: clamp(1.8rem, 3vw, 2.7rem);
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-  }
-
-  p {
-    margin: 0;
-    color: var(--text-muted);
-  }
-}
-
-.bookingActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
 @media (max-width: 560px) {

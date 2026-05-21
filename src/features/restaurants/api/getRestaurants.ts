@@ -1,33 +1,13 @@
+import type { AppLanguage } from '../../../app/i18n/config'
 import { queryKeys } from '../../../lib/queryKeys'
-import { simulateRequest } from '../../../services/http'
-import type { Restaurant } from '../types/restaurant'
+import { getJson } from '../../../services/http'
+import type { RestaurantsContent } from '../types/restaurants-content'
 
-const restaurants: Restaurant[] = [
-  {
-    id: 'rest-naao',
-    name: 'Nao',
-    cuisine: 'Seafood',
-    vibe: 'Lagoon-facing dinner',
-    priceBand: '$$$',
-  },
-  {
-    id: 'rest-ixchel',
-    name: 'Ixchel Cocina',
-    cuisine: 'Regional Mexican',
-    vibe: 'Casual local favorite',
-    priceBand: '$$',
-  },
-  {
-    id: 'rest-cielo',
-    name: 'Cielo de Maiz',
-    cuisine: 'Vegetarian',
-    vibe: 'Garden breakfast',
-    priceBand: '$$',
-  },
-]
+export const restaurantsApiPath = '/api/restaurants'
 
-export const restaurantsQueryKey = queryKeys.restaurants.list()
+export const restaurantsQueryKey = (language: AppLanguage) =>
+  queryKeys.restaurants.list(language)
 
-export function getRestaurants() {
-  return simulateRequest(restaurants)
+export function getRestaurants(language: AppLanguage) {
+  return getJson<RestaurantsContent>(restaurantsApiPath, { language })
 }

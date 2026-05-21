@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
+    "msw:init": "msw init public --save",
     "test": "vitest run",
     "test:watch": "vitest",
     "ci": "npm run lint && npm run typecheck && npm run test:ci && npm run build",
@@ -16,8 +17,11 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.6",
+    "i18next": "^26.2.0",
+    "msw": "^2.14.6",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-i18next": "^17.0.8",
     "react-router-dom": "^7.14.2",
     "zustand": "^5.0.12"
   },
@@ -25,6 +29,7 @@
     "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -39,5 +44,10 @@
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
     "vitest": "^4.1.6"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

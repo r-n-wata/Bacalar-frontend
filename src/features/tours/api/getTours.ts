@@ -1,33 +1,13 @@
+import type { AppLanguage } from '../../../app/i18n/config'
 import { queryKeys } from '../../../lib/queryKeys'
-import { simulateRequest } from '../../../services/http'
-import type { Tour } from '../types/tour'
+import { getJson } from '../../../services/http'
+import type { ToursContent } from '../types/tours-content'
 
-const tours: Tour[] = [
-  {
-    id: 'tour-sailing',
-    name: 'Private Sailing at Sunrise',
-    category: 'Premium',
-    durationHours: 4,
-    priceFrom: 2100,
-  },
-  {
-    id: 'tour-pontoon',
-    name: 'Family Pontoon Loop',
-    category: 'Group',
-    durationHours: 3,
-    priceFrom: 1450,
-  },
-  {
-    id: 'tour-kayak',
-    name: 'Guided Mangrove Kayak',
-    category: 'Adventure',
-    durationHours: 2,
-    priceFrom: 680,
-  },
-]
+export const toursApiPath = '/api/tours'
 
-export const toursQueryKey = queryKeys.tours.list()
+export const toursQueryKey = (language: AppLanguage) =>
+  queryKeys.tours.list(language)
 
-export function getTours() {
-  return simulateRequest(tours)
+export function getTours(language: AppLanguage) {
+  return getJson<ToursContent>(toursApiPath, { language })
 }

@@ -126,6 +126,34 @@
   }
 }
 
+.languageRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+
+  @media (max-width: 560px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+.languageLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.languageActions {
+  display: inline-flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .menuToggle {
   display: none;
   gap: 12px;
