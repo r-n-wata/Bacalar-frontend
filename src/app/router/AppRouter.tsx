@@ -1,9 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
 import { EventsPage } from '../../features/events/pages/EventsPage'
+import { EventDetailPage } from '../../features/events/pages/EventDetailPage'
 import { HomePage } from '../../features/home/pages/HomePage'
 import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
+import { RestaurantDetailPage } from '../../features/restaurants/pages/RestaurantDetailPage'
 import { ToursPage } from '../../features/tours/pages/ToursPage'
+import { TourDetailPage } from '../../features/tours/pages/TourDetailPage'
 
 const router = createBrowserRouter([
   {
@@ -19,12 +22,24 @@ const router = createBrowserRouter([
         element: <EventsPage />,
       },
       {
+        path: 'events/:id',
+        element: <EventDetailPage />,
+      },
+      {
         path: 'restaurants',
         element: <RestaurantsPage />,
       },
       {
+        path: 'restaurants/:id',
+        element: <RestaurantDetailPage />,
+      },
+      {
         path: 'tours',
         element: <ToursPage />,
+      },
+      {
+        path: 'tours/:id',
+        element: <TourDetailPage />,
       },
     ],
   },

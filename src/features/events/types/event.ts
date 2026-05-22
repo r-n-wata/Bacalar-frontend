@@ -6,6 +6,7 @@ export type Event = {
   dateLabel: string
   venue: string
   category: EventCategory
+  route: string
 }
 
 export type EventsContent = {
@@ -13,4 +14,18 @@ export type EventsContent = {
   title: string
   description: string
   items: Event[]
+}
+
+export type EventDetail = {
+  id: string
+  title: string
+  category: EventCategory
+  dateLabel: string
+  venue: string
+  description: string
+  route: string
+  image?: {
+    src: string
+    alt: string
+  }
 }

@@ -17,6 +17,7 @@ export function TourList({ tours }: TourListProps) {
           title={tour.name}
           description={`${tour.durationHours} hours on the water`}
           meta={`From ${formatCurrency(tour.priceFrom)}`}
+          to={tour.route}
         />
       ))}
     </div>

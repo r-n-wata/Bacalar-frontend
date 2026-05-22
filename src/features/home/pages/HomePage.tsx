@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUiStore } from '../../../app/store/ui-store'
-import { PageIntro } from '../../../components/molecules/PageIntro'
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { ExperienceSpotlight } from '../../../components/organisms/ExperienceSpotlight'
+import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { HomeHero } from '../components/HomeHero'
+import { HomeSection } from '../components/HomeSection'
+import { HomeSpotlight } from '../components/HomeSpotlight'
 import { useHomeContent } from '../hooks/useHomeContent'
 import styles from './HomePage.module.scss'
 
@@ -28,108 +28,55 @@ export function HomePage() {
 
   return (
     <div className={styles.page}>
-      <section className={styles.heroGrid}>
-        <div className={styles.leadColumn}>
-          <SectionEyebrow>{data.hero.eyebrow}</SectionEyebrow>
-          <div className={styles.heroCopy}>
-            <h1>{data.hero.title}</h1>
-            <p>{data.hero.description}</p>
-          </div>
-          <ExperienceSpotlight
-            title={activeExperience.title}
-            description={activeExperience.description}
-            metrics={activeExperience.metrics}
-            actions={data.spotlight.actions}
-            selectedAction={featuredExperience}
-            onSelectAction={setFeaturedExperience}
-          />
-          <Link className={styles.primaryLink} to={activeExperience.route}>
-            {activeExperience.cta}
-          </Link>
-        </div>
+      <HomeHero
+        eyebrow={data.hero.eyebrow}
+        title={data.hero.title}
+        description={data.hero.description}
+        image={activeExperience.image}
+        ctaLabel={t('home.toursCta')}
+      />
 
-        <ContentPanel as="aside" className={styles.calloutCard} tone="warm">
-          <PageIntro
-            eyebrow={data.planningCallout.eyebrow}
-            title={data.planningCallout.title}
-            description={data.planningCallout.description}
-            compact
-          />
-          <ul className={styles.plainList}>
-            {data.planningCallout.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </ContentPanel>
-      </section>
+      <HomeSpotlight
+        eyebrow={t('home.spotlightEyebrow')}
+        title={t('home.spotlightTitle')}
+        description={t('home.spotlightDescription')}
+        actions={data.spotlight.actions}
+        entry={activeExperience}
+        selectedAction={featuredExperience}
+        onSelectAction={setFeaturedExperience}
+      />
 
-      <section className={styles.suggestionSection}>
-        <PageIntro
-          eyebrow={data.featuredExperiences.intro.eyebrow}
-          title={data.featuredExperiences.intro.title}
-          description={data.featuredExperiences.intro.description}
-        />
-
-        <div className={styles.suggestionGrid}>
-          {data.featuredExperiences.items.map((item) => (
-            <Link
-              key={item.title}
-              className={styles.suggestionCard}
-              to={item.route}
-            >
-              <strong>{item.title}</strong>
-              <p>{item.description}</p>
-              <span>{item.meta}</span>
-            </Link>
+      <ContentPanel as="aside" className={styles.calloutCard} tone="warm">
+        <SectionEyebrow>{data.planningCallout.eyebrow}</SectionEyebrow>
+        <h2>{data.planningCallout.title}</h2>
+        <p>{data.planningCallout.description}</p>
+        <ul className={styles.plainList}>
+          {data.planningCallout.items.map((item) => (
+            <li key={item}>{item}</li>
           ))}
-        </div>
-      </section>
+        </ul>
+      </ContentPanel>
 
-      <section className={styles.suggestionSection}>
-        <PageIntro
-          eyebrow={data.diningMoments.intro.eyebrow}
-          title={data.diningMoments.intro.title}
-          description={data.diningMoments.intro.description}
-        />
+      <HomeSection
+        intro={data.featuredExperiences.intro}
+        items={data.featuredExperiences.items}
+        ctaLabel={t('home.toursCta')}
+        ctaTo="/tours"
+      />
 
-        <div className={styles.suggestionGrid}>
-          {data.diningMoments.items.map((item) => (
-            <Link
-              key={item.title}
-              className={styles.suggestionCard}
-              to={item.route}
-            >
-              {item.label ? <small>{item.label}</small> : null}
-              <strong>{item.title}</strong>
-              <p>{item.description}</p>
-              <span>{item.meta}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <HomeSection
+        intro={data.diningMoments.intro}
+        items={data.diningMoments.items}
+        ctaLabel={t('home.restaurantsCta')}
+        ctaTo="/restaurants"
+      />
 
-      <section className={styles.suggestionSection}>
-        <PageIntro
-          eyebrow={data.weeklyHappenings.intro.eyebrow}
-          title={data.weeklyHappenings.intro.title}
-          description={data.weeklyHappenings.intro.description}
-        />
-
-        <div className={styles.suggestionGrid}>
-          {data.weeklyHappenings.items.map((item) => (
-            <Link
-              key={item.title}
-              className={styles.suggestionCard}
-              to={item.route}
-            >
-              {item.label ? <small>{item.label}</small> : null}
-              <strong>{item.title}</strong>
-              <p>{item.description}</p>
-              <span>{item.meta}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <HomeSection
+        intro={data.weeklyHappenings.intro}
+        items={data.weeklyHappenings.items}
+        ctaLabel={t('home.eventsCta')}
+        ctaTo="/events"
+      />
     </div>
   )
 }

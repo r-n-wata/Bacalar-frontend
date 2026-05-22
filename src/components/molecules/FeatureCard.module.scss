@@ -1,3 +1,20 @@
+.cardLink {
+  display: block;
+  border-radius: 24px;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 4px;
+  }
+}
+
 .content {
   display: flex;
   flex-direction: column;

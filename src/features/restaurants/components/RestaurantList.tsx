@@ -16,6 +16,7 @@ export function RestaurantList({ restaurants }: RestaurantListProps) {
           title={restaurant.name}
           description={restaurant.vibe}
           meta={restaurant.priceBand}
+          to={restaurant.route}
         />
       ))}
     </div>

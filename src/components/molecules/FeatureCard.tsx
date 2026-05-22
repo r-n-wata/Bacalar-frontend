@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ContentPanel } from '../atoms/ContentPanel'
 import styles from './FeatureCard.module.scss'
 
@@ -6,6 +7,7 @@ type FeatureCardProps = {
   title: string
   description: string
   meta: string
+  to?: string
 }
 
 export function FeatureCard({
@@ -13,8 +15,9 @@ export function FeatureCard({
   title,
   description,
   meta,
+  to,
 }: FeatureCardProps) {
-  return (
+  const card = (
     <ContentPanel as="article" compact>
       <div className={styles.content}>
         <p className={styles.tag}>{tag}</p>
@@ -23,5 +26,15 @@ export function FeatureCard({
         <strong>{meta}</strong>
       </div>
     </ContentPanel>
+  )
+
+  if (!to) {
+    return card
+  }
+
+  return (
+    <Link className={styles.cardLink} to={to}>
+      {card}
+    </Link>
   )
 }

@@ -4,11 +4,17 @@ export const queryKeys = {
   },
   events: {
     list: (language: string) => ['events', 'list', language] as const,
+    detail: (id: string, language: string) =>
+      ['events', 'detail', id, language] as const,
   },
   restaurants: {
     list: (language: string) => ['restaurants', 'list', language] as const,
+    detail: (id: string, language: string) =>
+      ['restaurants', 'detail', id, language] as const,
   },
   tours: {
     list: (language: string) => ['tours', 'list', language] as const,
+    detail: (id: string, language: string) =>
+      ['tours', 'detail', id, language] as const,
   },
 }
