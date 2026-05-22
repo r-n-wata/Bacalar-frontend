@@ -141,6 +141,7 @@ describe('HomePage', () => {
               {
                 id: 'tour-kayak',
                 title: 'Guided Mangrove Kayak',
+                subtitle: 'Fallback lagoon route',
                 description: 'Text only card',
                 meta: '2 hours',
                 route: '/tours/tour-kayak',
@@ -169,7 +170,20 @@ describe('HomePage', () => {
 
     await renderHomeRoute()
 
-    expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
+    expect(await screen.findByText('Image-optional homepage')).toBeVisible()
+    expect(screen.getByText('Text only card')).toBeVisible()
+  })
+
+  it('renders the denser card anatomy for all homepage groups', async () => {
+    await renderHomeRoute()
+
+    expect(await screen.findByText('Lagoon, Bacalar')).toBeVisible()
+    expect(screen.getByText('Garden breakfast spot')).toBeVisible()
+    expect(screen.getByText('Casa Laguna Deck')).toBeVisible()
+    expect(
+      screen.getByText('Private crew, sunrise light, slower pace.'),
+    ).toBeVisible()
+    expect(screen.getByText('Vegetarian · $$')).toBeVisible()
   })
 
   it('shows a localized homepage error state when the handler fails', async () => {
