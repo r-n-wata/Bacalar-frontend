@@ -16,6 +16,7 @@ export function EventList({ events }: EventListProps) {
           title={event.title}
           description={event.venue}
           meta={event.dateLabel}
+          to={event.route}
         />
       ))}
     </div>

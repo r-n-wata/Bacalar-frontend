@@ -5,12 +5,18 @@ export type HomeSpotlightMetric = {
   value: string
 }
 
+export type HomeImage = {
+  src: string
+  alt: string
+}
+
 export type HomeSpotlightEntry = {
   title: string
   description: string
   route: string
   cta: string
   metrics: HomeSpotlightMetric[]
+  image?: HomeImage
 }
 
 export type HomeSpotlightAction = {
@@ -25,11 +31,13 @@ export type HomeSectionIntro = {
 }
 
 export type HomeSuggestionCard = {
+  id: string
   label?: string
   title: string
   description: string
   meta: string
   route: string
+  image?: HomeImage
 }
 
 export type HomeContent = {
