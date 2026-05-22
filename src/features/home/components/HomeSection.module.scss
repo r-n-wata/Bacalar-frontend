@@ -33,6 +33,22 @@
 }
 
 .grid {
-  @include mixins.feature-grid;
+  display: grid;
+  gap: 16px;
   align-items: stretch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  @media (max-width: 920px) {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(260px, 78vw);
+    grid-template-columns: none;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }

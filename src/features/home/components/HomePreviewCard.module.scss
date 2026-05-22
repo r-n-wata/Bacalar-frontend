@@ -1,11 +1,9 @@
-@use '../../../styles/mixins' as mixins;
-
 .card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  border-radius: 28px;
+  border-radius: 26px;
   border: 1px solid var(--border-strong);
   background: var(--surface-strong);
   box-shadow: var(--shadow-soft);
@@ -27,7 +25,7 @@
 .media,
 .mediaFallback {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
 }
 
 .media {
@@ -46,7 +44,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(6, 48, 58, 0.02), rgba(6, 48, 58, 0.16)),
+    linear-gradient(180deg, rgba(6, 48, 58, 0.04), rgba(6, 48, 58, 0.1)),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
 }
 
@@ -56,34 +54,83 @@
     var(--surface-subtle);
 }
 
-.body {
+.mediaRow {
+  position: absolute;
+  inset: 14px 14px auto 14px;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  padding: 18px;
-  min-height: 220px;
-
-  strong {
-    font-size: 1.15rem;
-    color: var(--text-strong);
-  }
-
-  p {
-    margin: 0;
-    color: var(--text-muted);
-  }
 }
 
 .label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(239, 247, 243, 0.94);
+  color: var(--text-strong);
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  font-size: 0.64rem;
   font-weight: 700;
+}
+
+.utilityBadge {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text-strong);
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(16, 48, 58, 0.12);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 18px;
+  min-height: 170px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.kicker {
   color: var(--text-soft);
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.body strong {
+  display: block;
+  font-size: 1.28rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--text-strong);
+}
+
+.detail {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.42;
 }
 
 .meta {
   margin-top: auto;
   color: var(--text-strong);
+  font-size: 0.9rem;
   font-weight: 700;
 }

@@ -34,6 +34,7 @@ export type HomeSuggestionCard = {
   id: string
   label?: string
   title: string
+  subtitle: string
   description: string
   meta: string
   route: string
