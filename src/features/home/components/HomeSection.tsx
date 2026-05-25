@@ -20,8 +20,10 @@ export function HomeSection({
   ctaLabel,
   ctaTo,
 }: HomeSectionProps) {
+  const visibleItems = items.slice(0, 10)
+
   return (
-    <section className={styles.section}>
+    <section className={styles.section} aria-label={intro.title}>
       <div className={styles.header}>
         <PageIntro
           eyebrow={intro.eyebrow}
@@ -34,7 +36,7 @@ export function HomeSection({
       </div>
 
       <div className={styles.grid}>
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <HomePreviewCard key={item.id} item={item} />
         ))}
       </div>

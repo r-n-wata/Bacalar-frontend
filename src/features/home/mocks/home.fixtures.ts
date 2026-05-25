@@ -92,17 +92,7 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
         },
       },
     },
-    planningCallout: {
-      eyebrow: 'How to use this page',
-      title: 'A few strong options beat an overloaded travel homepage',
-      description:
-        'Pick the water plan first, pair it with the right meal, then add one timely event if it fits.',
-      items: [
-        'Start with one tour that sets the rhythm of the day.',
-        'Use restaurants to support the itinerary, not distract from it.',
-        'Treat events as selective upgrades for guests who want something current.',
-      ],
-    },
+
     featuredExperiences: {
       intro: {
         eyebrow: 'Top tours',
@@ -283,17 +273,7 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
         },
       },
     },
-    planningCallout: {
-      eyebrow: 'Como usar esta pagina',
-      title: 'Unas pocas opciones fuertes funcionan mejor que una portada saturada',
-      description:
-        'Elige primero el plan de agua, acompanalo con la comida adecuada y agrega un evento solo si encaja.',
-      items: [
-        'Empieza con un tour que marque el ritmo del dia.',
-        'Usa restaurantes para apoyar el itinerario, no para distraerlo.',
-        'Trata los eventos como mejoras selectivas para quien quiere algo actual.',
-      ],
-    },
+
     featuredExperiences: {
       intro: {
         eyebrow: 'Tours top',

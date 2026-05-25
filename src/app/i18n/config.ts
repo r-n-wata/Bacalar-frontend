@@ -11,7 +11,16 @@ export const resources = {
           'Discover stays, food, tours, and timely local picks built around the colors and calm of Bacalar.',
         startExploring: 'Start exploring',
         menu: 'Menu',
-        footer: 'Frontend foundation aligned to the feature-based architecture.',
+        footer: {
+          brandTitle: 'Bacalar',
+          brandCopy:
+            'Curated lagoon experiences, food, and timely local plans for a calmer Bacalar trip.',
+          navTitle: 'Explore',
+          supportTitle: 'Plan with confidence',
+          location: 'Bacalar, Quintana Roo',
+          contact: 'Planning support available daily',
+          legal: 'Curated Bacalar guide for browsing and trip planning.',
+        },
         languageLabel: 'Language',
         nav: {
           overview: 'Overview',
@@ -27,14 +36,13 @@ export const resources = {
       home: {
         loading: 'Loading homepage...',
         error: 'We could not load the homepage right now. Please try again.',
-        spotlightEyebrow: 'Start here',
+        spotlightEyebrow: 'Browse quickly',
         spotlightTitle: 'Pick the next right move',
         spotlightDescription:
           'A compact way to shift between lagoon plans, food, and timely local updates.',
         toursCta: 'See all tours',
         restaurantsCta: 'See all restaurants',
         eventsCta: 'See all events',
-        planningEyebrow: 'Use it well',
       },
       events: {
         loading: 'Loading events...',
@@ -84,8 +92,16 @@ export const resources = {
           'Descubre hospedajes, comida, tours y planes locales pensados alrededor del color y la calma de Bacalar.',
         startExploring: 'Comenzar a explorar',
         menu: 'Menu',
-        footer:
-          'Base frontend alineada con la arquitectura orientada por funcionalidades.',
+        footer: {
+          brandTitle: 'Bacalar',
+          brandCopy:
+            'Experiencias curadas de laguna, comida y planes locales para un viaje a Bacalar mas claro.',
+          navTitle: 'Explorar',
+          supportTitle: 'Planea con confianza',
+          location: 'Bacalar, Quintana Roo',
+          contact: 'Apoyo de planeacion disponible todos los dias',
+          legal: 'Guia curada de Bacalar para explorar y planear el viaje.',
+        },
         languageLabel: 'Idioma',
         nav: {
           overview: 'Inicio',
@@ -102,14 +118,13 @@ export const resources = {
         loading: 'Cargando inicio...',
         error:
           'No pudimos cargar la pagina principal en este momento. Intentalo de nuevo.',
-        spotlightEyebrow: 'Empieza aqui',
+        spotlightEyebrow: 'Explora rapido',
         spotlightTitle: 'Elige el siguiente mejor paso',
         spotlightDescription:
           'Una forma compacta de cambiar entre laguna, comida y planes locales del momento.',
         toursCta: 'Ver todos los tours',
         restaurantsCta: 'Ver todos los restaurantes',
         eventsCta: 'Ver todos los eventos',
-        planningEyebrow: 'Como usarla',
       },
       events: {
         loading: 'Cargando eventos...',
