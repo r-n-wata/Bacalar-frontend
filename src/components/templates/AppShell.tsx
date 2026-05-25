@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router-dom'
+import logoDark from '../../assets/logo-dark.svg'
+import logoLight from '../../assets/logo-light.svg'
 import { Button } from '../atoms/Button'
 import styles from './AppShell.module.scss'
 
@@ -23,9 +25,12 @@ export function AppShell() {
     <div className={styles.shell}>
       <header className={styles.header}>
         <div className={styles.headerBar}>
-          <h1 className={styles.brandTitle}>{t('shell.brandKicker')}</h1>
+          <img className={styles.headerLogo} src={logoLight} alt="Bacalar" />
 
-          <div className={styles.languageActions} aria-label={t('shell.languageLabel')}>
+          <div
+            className={styles.languageActions}
+            aria-label={t('shell.languageLabel')}
+          >
             <Button
               className={styles.languageButton}
               variant={activeLanguage === 'en' ? 'secondary' : 'inverse'}
@@ -68,8 +73,7 @@ export function AppShell() {
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <section className={styles.footerBrand}>
-            <p className={styles.footerKicker}>{t('shell.brandKicker')}</p>
-            <h2 className={styles.footerTitle}>{t('shell.footer.brandTitle')}</h2>
+            <img className={styles.footerLogo} src={logoDark} alt="Bacalar" />
             <p className={styles.footerCopy}>{t('shell.footer.brandCopy')}</p>
           </section>
 
