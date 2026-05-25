@@ -48,13 +48,42 @@ export const resources = {
         loading: 'Loading events...',
         error:
           'We could not load events right now. Please refresh or try another language.',
+        categoryNavLabel: 'Event categories',
         detailEyebrow: 'Featured event',
+        thisWeekNote:
+          'This week in Bacalar: timely picks first, with room to browse more when you need it.',
+        loadMore: 'Load more events',
+        loadingMore: 'Loading more events...',
+        emptyTitle: 'No events in this category right now.',
+        emptyDescription:
+          'Try another category or come back later for more {{category}} plans.',
         backToList: 'See all events',
         backHome: 'Back to homepage',
+        categories: {
+          all: 'All',
+          music: 'Music',
+          food: 'Food',
+          wellness: 'Wellness',
+        },
+        badges: {
+          featured: 'Featured',
+          upcoming: 'Upcoming',
+          thisWeek: 'This week',
+        },
+        moods: {
+          music: 'Sunset music',
+          food: 'Town food',
+          wellness: 'Quiet wellness',
+        },
+        detailNote: {
+          upcoming: 'One of the next timely moments to layer into the week.',
+          thisWeek: 'A current Bacalar pick that works best as a lighter add-on to the trip.',
+        },
         meta: {
           when: 'When',
           where: 'Where',
           type: 'Type',
+          mood: 'Mood',
         },
       },
       restaurants: {
@@ -130,13 +159,42 @@ export const resources = {
         loading: 'Cargando eventos...',
         error:
           'No pudimos cargar los eventos en este momento. Actualiza o prueba otro idioma.',
+        categoryNavLabel: 'Categorias de eventos',
         detailEyebrow: 'Evento destacado',
+        thisWeekNote:
+          'Esta semana en Bacalar: primero los planes oportunos, con espacio para seguir explorando si hace falta.',
+        loadMore: 'Cargar mas eventos',
+        loadingMore: 'Cargando mas eventos...',
+        emptyTitle: 'No hay eventos en esta categoria por ahora.',
+        emptyDescription:
+          'Prueba otra categoria o vuelve mas tarde para ver mas planes de {{category}}.',
         backToList: 'Ver todos los eventos',
         backHome: 'Volver a inicio',
+        categories: {
+          all: 'Todos',
+          music: 'Musica',
+          food: 'Comida',
+          wellness: 'Bienestar',
+        },
+        badges: {
+          featured: 'Destacado',
+          upcoming: 'Proximo',
+          thisWeek: 'Esta semana',
+        },
+        moods: {
+          music: 'Musica al atardecer',
+          food: 'Sabores del centro',
+          wellness: 'Bienestar tranquilo',
+        },
+        detailNote: {
+          upcoming: 'Uno de los siguientes momentos oportunos para sumar a la semana.',
+          thisWeek: 'Un plan actual de Bacalar que funciona mejor como extra ligero del viaje.',
+        },
         meta: {
           when: 'Cuando',
           where: 'Donde',
           type: 'Tipo',
+          mood: 'Ambiente',
         },
       },
       restaurants: {
