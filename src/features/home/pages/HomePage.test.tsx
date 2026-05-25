@@ -1,8 +1,8 @@
-import { screen } from '@testing-library/react'
+import { cleanup, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http } from 'msw'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { EventsPage } from '../../events/pages/EventsPage'
 import { EventDetailPage } from '../../events/pages/EventDetailPage'
@@ -14,7 +14,13 @@ import { renderWithProviders } from '../../../test/renderWithProviders'
 import { ToursPage } from '../../tours/pages/ToursPage'
 import { TourDetailPage } from '../../tours/pages/TourDetailPage'
 import { homeErrorHandler } from '../mocks/handlers'
+import { getHomeFixture } from '../mocks/home.fixtures'
 import { HomePage } from './HomePage'
+
+
+afterEach(() => {
+  cleanup()
+})
 
 describe('HomePage', () => {
   function renderHomeRoute(language?: 'en' | 'es') {
@@ -99,9 +105,7 @@ describe('HomePage', () => {
         name: 'Private Sailing at Sunrise',
       }),
     ).toBeVisible()
-    expect(screen.getAllByRole('link', { name: 'See all tours' })).toHaveLength(
-      3,
-    )
+    expect(screen.getAllByRole('link', { name: 'See all tours' })).toHaveLength(1)
   })
 
   it('renders cards even when image metadata is missing', async () => {
@@ -124,12 +128,6 @@ describe('HomePage', () => {
                 metrics: [{ label: 'Best for', value: 'Fallback' }],
               },
             },
-          },
-          planningCallout: {
-            eyebrow: 'Fallback',
-            title: 'Still structured',
-            description: 'No image should not break the homepage.',
-            items: ['One item'],
           },
           featuredExperiences: {
             intro: {
@@ -184,6 +182,59 @@ describe('HomePage', () => {
       screen.getByText('Private crew, sunrise light, slower pace.'),
     ).toBeVisible()
     expect(screen.getByText('Vegetarian · $$')).toBeVisible()
+  })
+
+  it('removes the browse-quickly section, keeps navigation visible, and renders the footer', async () => {
+    await renderHomeRoute()
+
+    expect(
+      await screen.findByText(
+        'Start with the water, then layer in food and what is happening this week.',
+      ),
+    ).toBeVisible()
+    expect(screen.queryByText('Browse quickly')).not.toBeInTheDocument()
+    expect(screen.queryByText('Pick the next right move')).not.toBeInTheDocument()
+    expect(screen.queryByText('How to use this page')).not.toBeInTheDocument()
+    expect(screen.queryByText('Start here')).not.toBeInTheDocument()
+
+    expect(screen.getByRole('navigation', { name: 'Primary' })).toBeVisible()
+    expect(screen.getAllByRole('heading', { name: 'Bacalar' })).toHaveLength(2)
+    expect(screen.getByText('Curated lagoon experiences, food, and timely local plans for a calmer Bacalar trip.')).toBeVisible()
+    expect(screen.getAllByRole('link', { name: 'Overview' })).toHaveLength(2)
+  })
+
+  it('renders at most 10 cards per homepage rail', async () => {
+    const fixture = getHomeFixture('en')
+    const expandedTours = Array.from({ length: 12 }, (_, index) => ({
+      ...fixture.featuredExperiences.items[index % fixture.featuredExperiences.items.length],
+      id: `tour-${index + 1}`,
+      title: `Tour Card ${index + 1}`,
+      route: `/tours/tour-${index + 1}`,
+    }))
+
+    server.use(
+      http.get('/api/home', async () =>
+        jsonSuccess({
+          ...fixture,
+          featuredExperiences: {
+            ...fixture.featuredExperiences,
+            items: expandedTours,
+          },
+        }),
+      ),
+    )
+
+    await renderHomeRoute()
+
+    const toursSection = await screen.findByRole('region', {
+      name: 'A short list of lagoon experiences worth opening first',
+    })
+
+    expect(
+      within(toursSection).getAllByRole('link', { name: /Tour Card/i }),
+    ).toHaveLength(10)
+    expect(screen.queryByRole('link', { name: 'Tour Card 11' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Tour Card 12' })).not.toBeInTheDocument()
   })
 
   it('shows a localized homepage error state when the handler fails', async () => {
