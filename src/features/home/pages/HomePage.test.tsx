@@ -198,7 +198,7 @@ describe('HomePage', () => {
     expect(screen.queryByText('Start here')).not.toBeInTheDocument()
 
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeVisible()
-    expect(screen.getAllByRole('heading', { name: 'Bacalar' })).toHaveLength(2)
+    expect(screen.getAllByRole('img', { name: 'Bacalar' })).toHaveLength(2)
     expect(screen.getByText('Curated lagoon experiences, food, and timely local plans for a calmer Bacalar trip.')).toBeVisible()
     expect(screen.getAllByRole('link', { name: 'Overview' })).toHaveLength(2)
   })

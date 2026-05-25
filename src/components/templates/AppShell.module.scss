@@ -32,12 +32,17 @@
   gap: 12px;
 }
 
-.brandTitle {
-  margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: #fff;
+.headerLogo {
+  display: block;
+  width: clamp(132px, 18vw, 180px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+
+  @media (max-width: 560px) {
+    width: 124px;
+  }
 }
 
 .languageActions {
@@ -129,23 +134,21 @@
 .footerBrand {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.footerKicker {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-soft);
-}
+.footerLogo {
+  display: block;
+  width: clamp(136px, 18vw, 184px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  align-self: flex-start;
 
-.footerTitle {
-  margin: 0;
-  font-size: 1.4rem;
-  line-height: 1.02;
-  color: var(--text-strong);
+  @media (max-width: 560px) {
+    width: 126px;
+  }
 }
 
 .footerCopy {
