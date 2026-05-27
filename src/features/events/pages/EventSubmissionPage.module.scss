@@ -1,0 +1,142 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.select,
+.textarea,
+.fileInput {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(31, 64, 76, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-color);
+  padding: 0.95rem 1rem;
+  font: inherit;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 180px;
+}
+
+.mediaPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mediaHeader,
+.mediaGrid,
+.mediaLists,
+.actions,
+.inlineField {
+  display: flex;
+  gap: 16px;
+}
+
+.mediaHeader,
+.actions {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mediaGrid,
+.mediaLists {
+  flex-wrap: wrap;
+}
+
+.mediaGrid > *,
+.mediaLists > * {
+  flex: 1 1 280px;
+}
+
+.inlineField {
+  align-items: center;
+}
+
+.sectionTitle,
+.listTitle {
+  margin: 0 0 8px;
+}
+
+.sectionDescription,
+.mediaCount,
+.successCopy {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.mediaList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mediaList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.removeButton {
+  border: 0;
+  background: transparent;
+  color: var(--accent-color);
+  cursor: pointer;
+  font: inherit;
+}
+
+.error {
+  color: #a03b2d;
+  font-size: 0.94rem;
+}
+
+.primaryLink,
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.primaryLink {
+  background: var(--accent-color);
+  color: var(--surface-color);
+}
+
+.secondaryLink {
+  border: 1px solid rgba(31, 64, 76, 0.16);
+  color: var(--text-color);
+}
+
+.successCard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+@media (max-width: 720px) {
+  .mediaHeader,
+  .actions,
+  .inlineField {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

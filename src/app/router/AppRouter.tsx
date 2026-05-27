@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
 import { EventsPage } from '../../features/events/pages/EventsPage'
 import { EventDetailPage } from '../../features/events/pages/EventDetailPage'
+import { EventSubmissionPage } from '../../features/events/pages/EventSubmissionPage'
 import { HomePage } from '../../features/home/pages/HomePage'
 import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
 import { RestaurantDetailPage } from '../../features/restaurants/pages/RestaurantDetailPage'
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />,
+      },
+      {
+        path: 'events/submit',
+        element: <EventSubmissionPage />,
       },
       {
         path: 'events/:id',

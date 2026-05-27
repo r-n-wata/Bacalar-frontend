@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
 import { useEventDetail } from '../hooks/useEventDetail'
 
 export function EventDetailPage() {
@@ -17,6 +18,9 @@ export function EventDetailPage() {
     return <p role="alert">{t('events.error')}</p>
   }
 
+  const moodLabel = t(getMoodTranslationKey(data.category))
+  const showUpcoming = isUpcomingEvent(data)
+
   return (
     <section className={pageStyles.page}>
       <article className={pageStyles.hero}>
@@ -30,8 +34,19 @@ export function EventDetailPage() {
         <div className={pageStyles.heroOverlay} />
         <div className={pageStyles.heroBody}>
           <SectionEyebrow>{t('events.detailEyebrow')}</SectionEyebrow>
+          <div className={pageStyles.heroPills}>
+            {showUpcoming ? (
+              <span className={pageStyles.heroPill}>
+                {t('events.badges.upcoming')}
+              </span>
+            ) : null}
+            <span className={pageStyles.heroPill}>{moodLabel}</span>
+          </div>
           <h1 className={pageStyles.title}>{data.title}</h1>
           <p className={pageStyles.summary}>{data.description}</p>
+          <p className={pageStyles.heroMeta}>
+            {data.dateLabel} · {data.venue}
+          </p>
         </div>
       </article>
 
@@ -46,11 +61,18 @@ export function EventDetailPage() {
         </article>
         <article className={pageStyles.metaCard}>
           <span>{t('events.meta.type')}</span>
-          <strong>{data.category}</strong>
+          <strong>{t(`events.categories.${data.category}`)}</strong>
+        </article>
+        <article className={pageStyles.metaCard}>
+          <span>{t('events.meta.mood')}</span>
+          <strong>{moodLabel}</strong>
         </article>
       </div>
 
       <article className={pageStyles.bodyCard}>
+        <p className={pageStyles.bodyLead}>
+          {showUpcoming ? t('events.detailNote.upcoming') : t('events.detailNote.thisWeek')}
+        </p>
         <p className={pageStyles.bodyCopy}>{data.description}</p>
         <div className={pageStyles.actions}>
           <Link className={pageStyles.primaryAction} to="/events">

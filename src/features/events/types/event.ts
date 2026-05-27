@@ -1,4 +1,5 @@
 export type EventCategory = 'music' | 'wellness' | 'food'
+export type EventCategoryFilter = 'all' | EventCategory
 
 export type Event = {
   id: string
@@ -6,7 +7,14 @@ export type Event = {
   dateLabel: string
   venue: string
   category: EventCategory
+  startsAt?: string
+  endsAt?: string
   route: string
+}
+
+export type EventsPagination = {
+  hasMore: boolean
+  nextCursor: string | null
 }
 
 export type EventsContent = {
@@ -14,6 +22,7 @@ export type EventsContent = {
   title: string
   description: string
   items: Event[]
+  pagination: EventsPagination
 }
 
 export type EventDetail = {
@@ -23,6 +32,8 @@ export type EventDetail = {
   dateLabel: string
   venue: string
   description: string
+  startsAt?: string
+  endsAt?: string
   route: string
   image?: {
     src: string

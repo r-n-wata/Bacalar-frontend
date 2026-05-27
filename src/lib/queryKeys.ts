@@ -3,7 +3,8 @@ export const queryKeys = {
     content: (language: string) => ['home', 'content', language] as const,
   },
   events: {
-    list: (language: string) => ['events', 'list', language] as const,
+    list: (language: string, category: string, limit: number) =>
+      ['events', 'list', language, category, limit] as const,
     detail: (id: string, language: string) =>
       ['events', 'detail', id, language] as const,
   },
