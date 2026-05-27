@@ -4,6 +4,7 @@ import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { EventCategoryNav } from '../components/EventCategoryNav'
 import { EventList } from '../components/EventList'
+import { EventSubmitCta } from '../components/EventSubmitCta'
 import { useEvents } from '../hooks/useEvents'
 import type { EventCategoryFilter } from '../types/event'
 
@@ -35,6 +36,8 @@ export function EventsPage() {
           description={firstPage.description}
         />
       ) : null}
+
+      <EventSubmitCta />
 
       <EventCategoryNav
         selectedCategory={selectedCategory}

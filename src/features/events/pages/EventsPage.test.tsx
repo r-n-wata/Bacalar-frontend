@@ -72,6 +72,9 @@ describe('EventsPage', () => {
     await renderEventsRoute()
 
     expect(await screen.findByText('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(
+      screen.getByRole('link', { name: 'Submit an event' }),
+    ).toHaveAttribute('href', '/events/submit')
     expect(screen.getByText('Lagoon Salsa Night')).toBeVisible()
     expect(
       screen.queryByRole('button', { name: 'Load more events' }),

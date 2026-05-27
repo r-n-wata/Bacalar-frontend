@@ -2,17 +2,29 @@ import i18n, { defaultLanguage, type AppLanguage } from '../app/i18n/config'
 
 export class ApiError extends Error {
   status: number
+  code?: string
+  details?: unknown
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, code?: string, details?: unknown) {
     super(message)
     this.name = 'ApiError'
     this.status = status
+    this.code = code
+    this.details = details
   }
 }
 
 type JsonRequestOptions = {
   language?: AppLanguage
   init?: RequestInit
+}
+
+type ApiErrorPayload = {
+  error?: {
+    code?: string
+    message?: string
+    details?: unknown
+  }
 }
 
 function getCurrentLanguage() {
@@ -34,7 +46,7 @@ export function createApiUrl(path: string, language: AppLanguage) {
   return url
 }
 
-export async function getJson<T>(
+async function requestJson<T>(
   path: string,
   { language = getCurrentLanguage(), init }: JsonRequestOptions = {},
 ): Promise<T> {
@@ -48,8 +60,45 @@ export async function getJson<T>(
   })
 
   if (!response.ok) {
-    throw new ApiError(`Request failed for ${path}`, response.status)
+    let errorPayload: ApiErrorPayload | undefined
+
+    try {
+      errorPayload = (await response.json()) as ApiErrorPayload
+    } catch {
+      errorPayload = undefined
+    }
+
+    throw new ApiError(
+      errorPayload?.error?.message ?? `Request failed for ${path}`,
+      response.status,
+      errorPayload?.error?.code,
+      errorPayload?.error?.details,
+    )
   }
 
   return (await response.json()) as T
+}
+
+export async function getJson<T>(
+  path: string,
+  options?: JsonRequestOptions,
+): Promise<T> {
+  return requestJson(path, options)
+}
+
+export async function postJson<TRequest, TResponse>(
+  path: string,
+  body: TRequest,
+  options?: Omit<JsonRequestOptions, 'init'>,
+): Promise<TResponse> {
+  return requestJson<TResponse>(path, {
+    ...options,
+    init: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    },
+  })
 }
