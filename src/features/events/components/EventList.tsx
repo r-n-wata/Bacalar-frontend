@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
-import { isFeaturedEvent } from '../lib/presentation'
 import type { Event } from '../types/event'
 import { EventCard } from './EventCard'
 import styles from './EventList.module.scss'
@@ -14,6 +13,14 @@ type EventListProps = {
   onLoadMore: () => void
 }
 
+function isPageBottomReached() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
+  const viewportBottom = scrollTop + window.innerHeight
+  const pageBottom = document.documentElement.scrollHeight
+
+  return viewportBottom >= pageBottom - 24
+}
+
 export function EventList({
   events,
   hasMore,
@@ -21,55 +28,72 @@ export function EventList({
   onLoadMore,
 }: EventListProps) {
   const { t } = useTranslation()
-  const [showLoadMore, setShowLoadMore] = useState(false)
+  const bottomMarkerRef = useRef<HTMLDivElement | null>(null)
+  const [isBottomMarkerVisible, setIsBottomMarkerVisible] = useState(false)
 
   useEffect(() => {
     if (!hasMore) {
-      setShowLoadMore(false)
       return
     }
 
-    const checkIfBottomReached = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
-      const viewportBottom = scrollTop + window.innerHeight
-      const pageBottom = document.documentElement.scrollHeight
+    if (typeof IntersectionObserver === 'undefined') {
+      const syncFromScrollPosition = () => {
+        setIsBottomMarkerVisible(isPageBottomReached())
+      }
 
-      setShowLoadMore(viewportBottom >= pageBottom - 24)
+      window.addEventListener('scroll', syncFromScrollPosition, { passive: true })
+      window.addEventListener('resize', syncFromScrollPosition)
+      queueMicrotask(syncFromScrollPosition)
+
+      return () => {
+        window.removeEventListener('scroll', syncFromScrollPosition)
+        window.removeEventListener('resize', syncFromScrollPosition)
+      }
     }
 
-    setShowLoadMore(false)
-    checkIfBottomReached()
+    const marker = bottomMarkerRef.current
 
-    window.addEventListener('scroll', checkIfBottomReached, { passive: true })
-    window.addEventListener('resize', checkIfBottomReached)
+    if (!marker) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsBottomMarkerVisible(entry?.isIntersecting ?? false)
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 24px 0px',
+        threshold: 0,
+      },
+    )
+
+    observer.observe(marker)
 
     return () => {
-      window.removeEventListener('scroll', checkIfBottomReached)
-      window.removeEventListener('resize', checkIfBottomReached)
+      observer.disconnect()
     }
   }, [events.length, hasMore])
 
   return (
-    <>
+    <section className={styles.section} aria-label={t('events.listAriaLabel')}>
       <p className={styles.summary}>{t('events.thisWeekNote')}</p>
 
       <div className={cardStyles.grid}>
-        {events.map((event, index) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            featured={isFeaturedEvent(event, index)}
-          />
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
         ))}
       </div>
 
-      {hasMore && showLoadMore ? (
+      {hasMore ? <div ref={bottomMarkerRef} aria-hidden="true" /> : null}
+
+      {hasMore && isBottomMarkerVisible ? (
         <div className={styles.actions}>
           <Button onClick={onLoadMore} disabled={isFetchingMore}>
             {isFetchingMore ? t('events.loadingMore') : t('events.loadMore')}
           </Button>
         </div>
       ) : null}
-    </>
+    </section>
   )
 }

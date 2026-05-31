@@ -112,6 +112,14 @@ export const resources = {
           },
         },
         categoryNavLabel: 'Event categories',
+        listAriaLabel: 'Events list',
+        featured: {
+          ariaLabel: 'Featured events',
+          eyebrow: 'Featured now',
+          title: 'Start with the strongest event picks',
+          description:
+            'A curated row of timely moments worth considering before you filter deeper.',
+        },
         detailEyebrow: 'Featured event',
         thisWeekNote:
           'This week in Bacalar: timely picks first, with room to browse more when you need it.',
@@ -286,6 +294,14 @@ export const resources = {
           },
         },
         categoryNavLabel: 'Categorias de eventos',
+        listAriaLabel: 'Lista de eventos',
+        featured: {
+          ariaLabel: 'Eventos destacados',
+          eyebrow: 'Destacados ahora',
+          title: 'Empieza con los eventos mas fuertes del momento',
+          description:
+            'Una fila curada de planes oportunos que vale la pena revisar antes de filtrar mas.',
+        },
         detailEyebrow: 'Evento destacado',
         thisWeekNote:
           'Esta semana en Bacalar: primero los planes oportunos, con espacio para seguir explorando si hace falta.',
