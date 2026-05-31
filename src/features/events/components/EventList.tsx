@@ -13,6 +13,14 @@ type EventListProps = {
   onLoadMore: () => void
 }
 
+function isPageBottomReached() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
+  const viewportBottom = scrollTop + window.innerHeight
+  const pageBottom = document.documentElement.scrollHeight
+
+  return viewportBottom >= pageBottom - 24
+}
+
 export function EventList({
   events,
   hasMore,
@@ -24,9 +32,28 @@ export function EventList({
   const [isBottomMarkerVisible, setIsBottomMarkerVisible] = useState(false)
 
   useEffect(() => {
+    if (!hasMore) {
+      return
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      const syncFromScrollPosition = () => {
+        setIsBottomMarkerVisible(isPageBottomReached())
+      }
+
+      window.addEventListener('scroll', syncFromScrollPosition, { passive: true })
+      window.addEventListener('resize', syncFromScrollPosition)
+      queueMicrotask(syncFromScrollPosition)
+
+      return () => {
+        window.removeEventListener('scroll', syncFromScrollPosition)
+        window.removeEventListener('resize', syncFromScrollPosition)
+      }
+    }
+
     const marker = bottomMarkerRef.current
 
-    if (!marker || !hasMore) {
+    if (!marker) {
       return
     }
 
