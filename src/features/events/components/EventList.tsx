@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
@@ -20,31 +20,31 @@ export function EventList({
   onLoadMore,
 }: EventListProps) {
   const { t } = useTranslation()
-  const [showLoadMore, setShowLoadMore] = useState(false)
+  const bottomMarkerRef = useRef<HTMLDivElement | null>(null)
+  const [isBottomMarkerVisible, setIsBottomMarkerVisible] = useState(false)
 
   useEffect(() => {
-    if (!hasMore) {
-      setShowLoadMore(false)
+    const marker = bottomMarkerRef.current
+
+    if (!marker || !hasMore) {
       return
     }
 
-    const checkIfBottomReached = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop || 0
-      const viewportBottom = scrollTop + window.innerHeight
-      const pageBottom = document.documentElement.scrollHeight
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsBottomMarkerVisible(entry?.isIntersecting ?? false)
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 24px 0px',
+        threshold: 0,
+      },
+    )
 
-      setShowLoadMore(viewportBottom >= pageBottom - 24)
-    }
-
-    setShowLoadMore(false)
-    checkIfBottomReached()
-
-    window.addEventListener('scroll', checkIfBottomReached, { passive: true })
-    window.addEventListener('resize', checkIfBottomReached)
+    observer.observe(marker)
 
     return () => {
-      window.removeEventListener('scroll', checkIfBottomReached)
-      window.removeEventListener('resize', checkIfBottomReached)
+      observer.disconnect()
     }
   }, [events.length, hasMore])
 
@@ -58,7 +58,9 @@ export function EventList({
         ))}
       </div>
 
-      {hasMore && showLoadMore ? (
+      {hasMore ? <div ref={bottomMarkerRef} aria-hidden="true" /> : null}
+
+      {hasMore && isBottomMarkerVisible ? (
         <div className={styles.actions}>
           <Button onClick={onLoadMore} disabled={isFetchingMore}>
             {isFetchingMore ? t('events.loadingMore') : t('events.loadMore')}
