@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
-import { isFeaturedEvent } from '../lib/presentation'
 import type { Event } from '../types/event'
 import { EventCard } from './EventCard'
 import styles from './EventList.module.scss'
@@ -50,16 +49,12 @@ export function EventList({
   }, [events.length, hasMore])
 
   return (
-    <>
+    <section className={styles.section} aria-label={t('events.listAriaLabel')}>
       <p className={styles.summary}>{t('events.thisWeekNote')}</p>
 
       <div className={cardStyles.grid}>
-        {events.map((event, index) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            featured={isFeaturedEvent(event, index)}
-          />
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
         ))}
       </div>
 
@@ -70,6 +65,6 @@ export function EventList({
           </Button>
         </div>
       ) : null}
-    </>
+    </section>
   )
 }

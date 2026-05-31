@@ -5,6 +5,7 @@ import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { EventCategoryNav } from '../components/EventCategoryNav'
 import { EventList } from '../components/EventList'
 import { EventSubmitCta } from '../components/EventSubmitCta'
+import { FeaturedEventsSection } from '../components/FeaturedEventsSection'
 import { useEvents } from '../hooks/useEvents'
 import type { EventCategoryFilter } from '../types/event'
 
@@ -21,6 +22,7 @@ export function EventsPage() {
     isFetchingNextPage,
   } = useEvents(selectedCategory)
   const firstPage = data?.pages[0]
+  const featuredItems = firstPage?.featuredItems ?? []
   const events = data?.pages.flatMap((page) => page.items) ?? []
   const emptyTitle = t('events.emptyTitle')
   const emptyDescription = t('events.emptyDescription', {
@@ -37,7 +39,7 @@ export function EventsPage() {
         />
       ) : null}
 
-      <EventSubmitCta />
+      {!isLoading && !isError ? <FeaturedEventsSection events={featuredItems} /> : null}
 
       <EventCategoryNav
         selectedCategory={selectedCategory}
@@ -60,6 +62,8 @@ export function EventsPage() {
           <p>{emptyDescription}</p>
         </div>
       ) : null}
+
+      <EventSubmitCta />
     </section>
   )
 }

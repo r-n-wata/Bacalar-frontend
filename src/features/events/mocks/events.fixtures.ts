@@ -9,6 +9,8 @@ import type {
 type EventSeed = {
   item: Event
   detail: EventDetail
+  isFeatured?: boolean
+  featuredOrder?: number
 }
 
 const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
@@ -24,6 +26,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-29T21:00:00-05:00',
         route: '/events/event-sunset-jazz',
       },
+      isFeatured: true,
+      featuredOrder: 0,
       detail: {
         id: 'event-sunset-jazz',
         title: 'Sunset Jazz by the Lagoon',
@@ -52,6 +56,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-30T13:00:00-05:00',
         route: '/events/event-market-brunch',
       },
+      isFeatured: true,
+      featuredOrder: 1,
       detail: {
         id: 'event-market-brunch',
         title: 'Local Market Brunch Crawl',
@@ -80,6 +86,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T09:30:00-05:00',
         route: '/events/event-breathwork',
       },
+      isFeatured: true,
+      featuredOrder: 3,
       detail: {
         id: 'event-breathwork',
         title: 'Lagoon Breathwork Session',
@@ -104,6 +112,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T00:00:00-05:00',
         route: '/events/event-rooftop-dj',
       },
+      isFeatured: true,
+      featuredOrder: 2,
       detail: {
         id: 'event-rooftop-dj',
         title: 'Rooftop DJ Session',
@@ -128,6 +138,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T15:00:00-05:00',
         route: '/events/event-taco-walk',
       },
+      isFeatured: true,
+      featuredOrder: 4,
       detail: {
         id: 'event-taco-walk',
         title: 'Lagoon Taco Walk',
@@ -318,6 +330,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-29T21:00:00-05:00',
         route: '/events/event-sunset-jazz',
       },
+      isFeatured: true,
+      featuredOrder: 0,
       detail: {
         id: 'event-sunset-jazz',
         title: 'Jazz al atardecer junto a la laguna',
@@ -346,6 +360,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-30T13:00:00-05:00',
         route: '/events/event-market-brunch',
       },
+      isFeatured: true,
+      featuredOrder: 1,
       detail: {
         id: 'event-market-brunch',
         title: 'Ruta de brunch por el mercado local',
@@ -374,6 +390,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T09:30:00-05:00',
         route: '/events/event-breathwork',
       },
+      isFeatured: true,
+      featuredOrder: 3,
       detail: {
         id: 'event-breathwork',
         title: 'Sesion de respiracion frente a la laguna',
@@ -398,6 +416,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T00:00:00-05:00',
         route: '/events/event-rooftop-dj',
       },
+      isFeatured: true,
+      featuredOrder: 2,
       detail: {
         id: 'event-rooftop-dj',
         title: 'Sesion DJ en la azotea',
@@ -422,6 +442,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         endsAt: '2026-05-31T15:00:00-05:00',
         route: '/events/event-taco-walk',
       },
+      isFeatured: true,
+      featuredOrder: 4,
       detail: {
         id: 'event-taco-walk',
         title: 'Recorrido de tacos junto a la laguna',
@@ -619,6 +641,8 @@ const pageMetadataByLanguage = {
 
 const DEFAULT_PAGE_SIZE = 10
 
+
+
 function compareStartsAt(left?: string, right?: string) {
   if (!left && !right) {
     return 0
@@ -660,6 +684,34 @@ function getFilteredItems(
   )
 }
 
+function getFeaturedItems(
+  language: AppLanguage,
+  options?: {
+    forceNoFeatured?: boolean
+    featuredCount?: number
+  },
+) {
+  if (options?.forceNoFeatured) {
+    return []
+  }
+
+  return [...eventSeedsByLanguage[language]]
+    .filter((entry) => entry.isFeatured)
+    .sort((left, right) => {
+      const featuredOrderComparison =
+        (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+        (right.featuredOrder ?? Number.MAX_SAFE_INTEGER)
+
+      if (featuredOrderComparison !== 0) {
+        return featuredOrderComparison
+      }
+
+      return left.item.id.localeCompare(right.item.id)
+    })
+    .slice(0, options?.featuredCount ?? 5)
+    .map((entry) => entry.item)
+}
+
 export function getEventsFixture(
   language: AppLanguage,
   options?: {
@@ -667,6 +719,8 @@ export function getEventsFixture(
     cursor?: string | null
     limit?: number
     forceEmpty?: boolean
+    forceNoFeatured?: boolean
+    featuredCount?: number
   },
 ): EventsContent {
   const pageSize = options?.limit ?? DEFAULT_PAGE_SIZE
@@ -674,6 +728,10 @@ export function getEventsFixture(
   const allItems = options?.forceEmpty
     ? []
     : getFilteredItems(language, options?.category)
+  const featuredItems = getFeaturedItems(language, {
+    forceNoFeatured: options?.forceNoFeatured,
+    featuredCount: options?.featuredCount,
+  })
   const startIndex = options?.cursor
     ? allItems.findIndex((event) => event.id === options.cursor) + 1
     : 0
@@ -683,6 +741,7 @@ export function getEventsFixture(
 
   return {
     ...content,
+    featuredItems,
     items,
     pagination: {
       hasMore: safeStartIndex + items.length < allItems.length,

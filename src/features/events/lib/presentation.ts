@@ -1,4 +1,4 @@
-import type { Event, EventCategory, EventDetail } from '../types/event'
+import type { EventCategory, EventDetail } from '../types/event'
 
 const categoryMoodKeyMap: Record<EventCategory, string> = {
   music: 'events.moods.music',
@@ -10,10 +10,6 @@ export function getMoodTranslationKey(category: EventCategory) {
   return categoryMoodKeyMap[category]
 }
 
-export function isFeaturedEvent(event: Event, index: number) {
-  return index === 0 && Boolean(event.startsAt)
-}
-
-export function isUpcomingEvent(event: Event | EventDetail) {
+export function isUpcomingEvent(event: EventDetail) {
   return Boolean(event.startsAt)
 }

@@ -21,6 +21,7 @@ export type EventsContent = {
   eyebrow: string
   title: string
   description: string
+  featuredItems: Event[]
   items: Event[]
   pagination: EventsPagination
 }
