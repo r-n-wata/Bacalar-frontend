@@ -15,7 +15,7 @@ export function TourDetailPage() {
   }
 
   if (isError || !data) {
-    return <p role="alert">{t('common.error')}</p>
+    return <p role="alert">{t('tours.error')}</p>
   }
 
   return (
@@ -39,7 +39,7 @@ export function TourDetailPage() {
       <div className={pageStyles.metaGrid}>
         <article className={pageStyles.metaCard}>
           <span>{t('tours.meta.category')}</span>
-          <strong>{data.category}</strong>
+          <strong>{data.categoryLabel}</strong>
         </article>
         <article className={pageStyles.metaCard}>
           <span>{t('tours.meta.duration')}</span>
