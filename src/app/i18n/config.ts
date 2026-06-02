@@ -258,11 +258,99 @@ export const resources = {
       },
       tours: {
         loading: 'Loading tours...',
+        error:
+          'We could not load tours right now. Please refresh or try another language.',
+        submitCta: {
+          eyebrow: 'Know a great Bacalar tour?',
+          title: 'Submit a tour for review',
+          description:
+            'Share the core experience details, contact info, and optional images so we can review it before it appears in the guide.',
+          action: 'Submit a tour',
+        },
+        submit: {
+          eyebrow: 'Public submission',
+          title: 'Submit a tour',
+          description:
+            'Send us the core listing details, contact info, and optional images. Every submission stays private and pending until reviewed.',
+          action: 'Send submission',
+          submitting: 'Sending submission...',
+          optional: 'Optional',
+          error:
+            'We could not submit your tour right now. Please review the details and try again.',
+          successEyebrow: 'Submission received',
+          successTitle: 'Thanks, we have your tour',
+          successDescription:
+            'Your submission is pending review and has not been published.',
+          successNote:
+            'Our team will review the listing details, media, and fit before deciding whether to promote it into the curated tours guide.',
+          submitAnother: 'Submit another tour',
+          fields: {
+            name: 'Tour name',
+            category: 'Category',
+            durationHours: 'Duration in hours',
+            priceFrom: 'Starting price',
+            description: 'Description',
+            contactName: 'Contact name',
+            contactMethod: 'Primary contact method',
+            instagram: 'Instagram',
+            whatsapp: 'WhatsApp',
+          },
+          placeholders: {
+            contactMethod: 'Email, phone number, or Instagram handle',
+          },
+          media: {
+            title: 'Media',
+            description:
+              'Add up to 6 images total across uploads and external image links.',
+            count: '{{count}} of {{max}} images attached',
+            uploadLabel: 'Upload images',
+            uploadHint: 'JPG, PNG, or WEBP. Up to 5 MB each.',
+            externalUrlLabel: 'External image URLs',
+            externalUrlHint: 'We will verify the link before accepting it.',
+            addUrl: 'Add URL',
+            selectedUploads: 'Selected uploads',
+            selectedLinks: 'Selected image links',
+            remove: 'Remove',
+            none: 'Nothing added yet.',
+          },
+          validation: {
+            required: 'This field is required.',
+            maxImages: 'You can attach up to {{count}} images.',
+            fileType: 'Use JPG, PNG, or WEBP images only.',
+            fileSize: 'Each image must stay under {{maxSize}}.',
+            urlRequired: 'Enter an image URL before adding it.',
+            urlFormat: 'Enter a valid http or https image URL.',
+            urlImageType: 'Use a JPG, PNG, or WEBP image URL.',
+          },
+        },
+        categoryNavLabel: 'Tour categories',
+        listAriaLabel: 'Tours list',
+        listNote:
+          'Start with the strongest lagoon fit, then keep browsing by style and pace.',
+        featured: {
+          ariaLabel: 'Featured tours',
+          eyebrow: 'Featured now',
+          title: 'Start with the strongest tour picks',
+          description:
+            'A quick row of high-confidence lagoon experiences before you narrow the list.',
+        },
         detailEyebrow: 'Featured tour',
+        loadMore: 'Load more tours',
+        loadingMore: 'Loading more tours...',
+        emptyTitle: 'No tours match this category right now.',
+        emptyDescription:
+          'Try another category or come back later for more {{category}} options.',
         backToList: 'See all tours',
         backHome: 'Back to homepage',
+        categories: {
+          all: 'All',
+          premium: 'Premium',
+          group: 'Group',
+          adventure: 'Adventure',
+        },
         hours_one: '{{count}} hour on the water',
         hours_other: '{{count}} hours on the water',
+        priceFrom: 'From {{price}}',
         meta: {
           category: 'Category',
           duration: 'Duration',
@@ -528,11 +616,99 @@ export const resources = {
       },
       tours: {
         loading: 'Cargando tours...',
+        error:
+          'No pudimos cargar los tours en este momento. Actualiza o prueba otro idioma.',
+        submitCta: {
+          eyebrow: 'Conoces un gran tour en Bacalar?',
+          title: 'Envia un tour para revision',
+          description:
+            'Comparte los detalles clave, contacto e imagenes opcionales para revisarlo antes de que aparezca en la guia.',
+          action: 'Enviar un tour',
+        },
+        submit: {
+          eyebrow: 'Envio publico',
+          title: 'Enviar un tour',
+          description:
+            'Mandanos los datos base del tour, contacto e imagenes opcionales. Todo queda privado y pendiente hasta revision.',
+          action: 'Enviar solicitud',
+          submitting: 'Enviando solicitud...',
+          optional: 'Opcional',
+          error:
+            'No pudimos enviar tu tour en este momento. Revisa los datos e intentalo de nuevo.',
+          successEyebrow: 'Solicitud recibida',
+          successTitle: 'Gracias, ya recibimos tu tour',
+          successDescription:
+            'Tu envio quedo pendiente de revision y aun no esta publicado.',
+          successNote:
+            'Nuestro equipo revisara los datos, medios y encaje antes de decidir si lo promueve a la guia curada de tours.',
+          submitAnother: 'Enviar otro tour',
+          fields: {
+            name: 'Nombre del tour',
+            category: 'Categoria',
+            durationHours: 'Duracion en horas',
+            priceFrom: 'Precio desde',
+            description: 'Descripcion',
+            contactName: 'Nombre de contacto',
+            contactMethod: 'Metodo principal de contacto',
+            instagram: 'Instagram',
+            whatsapp: 'WhatsApp',
+          },
+          placeholders: {
+            contactMethod: 'Correo, telefono o usuario de Instagram',
+          },
+          media: {
+            title: 'Medios',
+            description:
+              'Agrega hasta 6 imagenes en total entre archivos subidos y links externos.',
+            count: '{{count}} de {{max}} imagenes adjuntas',
+            uploadLabel: 'Subir imagenes',
+            uploadHint: 'JPG, PNG o WEBP. Maximo 5 MB cada una.',
+            externalUrlLabel: 'URLs externas de imagen',
+            externalUrlHint: 'Verificaremos el enlace antes de aceptarlo.',
+            addUrl: 'Agregar URL',
+            selectedUploads: 'Archivos seleccionados',
+            selectedLinks: 'Links de imagen seleccionados',
+            remove: 'Quitar',
+            none: 'Aun no hay nada agregado.',
+          },
+          validation: {
+            required: 'Este campo es obligatorio.',
+            maxImages: 'Puedes adjuntar hasta {{count}} imagenes.',
+            fileType: 'Usa solo imagenes JPG, PNG o WEBP.',
+            fileSize: 'Cada imagen debe medir menos de {{maxSize}}.',
+            urlRequired: 'Ingresa una URL de imagen antes de agregarla.',
+            urlFormat: 'Ingresa una URL valida de imagen con http o https.',
+            urlImageType: 'Usa una URL de imagen JPG, PNG o WEBP.',
+          },
+        },
+        categoryNavLabel: 'Categorias de tours',
+        listAriaLabel: 'Lista de tours',
+        listNote:
+          'Empieza con el estilo de laguna mas fuerte y luego sigue explorando por ritmo y formato.',
+        featured: {
+          ariaLabel: 'Tours destacados',
+          eyebrow: 'Destacados ahora',
+          title: 'Empieza con los tours mas fuertes',
+          description:
+            'Una fila rapida de experiencias de laguna con alta confianza antes de filtrar la lista.',
+        },
         detailEyebrow: 'Tour destacado',
+        loadMore: 'Cargar mas tours',
+        loadingMore: 'Cargando mas tours...',
+        emptyTitle: 'No hay tours para esta categoria en este momento.',
+        emptyDescription:
+          'Prueba otra categoria o vuelve despues para ver mas opciones de {{category}}.',
         backToList: 'Ver todos los tours',
         backHome: 'Volver a inicio',
+        categories: {
+          all: 'Todos',
+          premium: 'Premium',
+          group: 'Grupo',
+          adventure: 'Aventura',
+        },
         hours_one: '{{count}} hora en el agua',
         hours_other: '{{count}} horas en el agua',
+        priceFrom: 'Desde {{price}}',
         meta: {
           category: 'Categoria',
           duration: 'Duracion',

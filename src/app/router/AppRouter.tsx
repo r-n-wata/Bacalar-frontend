@@ -9,6 +9,7 @@ import { RestaurantDetailPage } from '../../features/restaurants/pages/Restauran
 import { RestaurantSubmissionPage } from '../../features/restaurants/pages/RestaurantSubmissionPage'
 import { ToursPage } from '../../features/tours/pages/ToursPage'
 import { TourDetailPage } from '../../features/tours/pages/TourDetailPage'
+import { TourSubmissionPage } from '../../features/tours/pages/TourSubmissionPage'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'tours',
         element: <ToursPage />,
+      },
+      {
+        path: 'tours/submit',
+        element: <TourSubmissionPage />,
       },
       {
         path: 'tours/:id',
