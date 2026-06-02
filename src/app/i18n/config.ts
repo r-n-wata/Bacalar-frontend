@@ -159,13 +159,101 @@ export const resources = {
       },
       restaurants: {
         loading: 'Loading restaurants...',
+        error:
+          'We could not load restaurants right now. Please refresh or try another language.',
+        submitCta: {
+          eyebrow: 'Know a strong Bacalar table?',
+          title: 'Submit a restaurant for review',
+          description:
+            'Share the basics, contact details, and optional images so we can review it before it appears in the guide.',
+          action: 'Submit a restaurant',
+        },
+        submit: {
+          eyebrow: 'Public submission',
+          title: 'Submit a restaurant',
+          description:
+            'Send us the core listing details, contact info, and optional images. Every submission stays private and pending until reviewed.',
+          action: 'Send submission',
+          submitting: 'Sending submission...',
+          optional: 'Optional',
+          error:
+            'We could not submit your restaurant right now. Please review the details and try again.',
+          successEyebrow: 'Submission received',
+          successTitle: 'Thanks, we have your restaurant',
+          successDescription:
+            'Your submission is pending review and has not been published.',
+          successNote:
+            'Our team will review the listing details, images, and fit before deciding whether to promote it into the curated restaurant guide.',
+          submitAnother: 'Submit another restaurant',
+          fields: {
+            name: 'Restaurant name',
+            cuisine: 'Cuisine',
+            moment: 'Dining moment',
+            priceBand: 'Price band',
+            description: 'Description',
+            contactName: 'Contact name',
+            contactMethod: 'Primary contact method',
+            instagram: 'Instagram',
+            whatsapp: 'WhatsApp',
+          },
+          placeholders: {
+            contactMethod: 'Email, phone number, or Instagram handle',
+          },
+          media: {
+            title: 'Media',
+            description:
+              'Add up to 6 images total across uploads and external image links.',
+            count: '{{count}} of {{max}} images attached',
+            uploadLabel: 'Upload images',
+            uploadHint: 'JPG, PNG, or WEBP. Up to 5 MB each.',
+            externalUrlLabel: 'External image URLs',
+            externalUrlHint: 'We will verify the link before accepting it.',
+            addUrl: 'Add URL',
+            selectedUploads: 'Selected uploads',
+            selectedLinks: 'Selected image links',
+            remove: 'Remove',
+            none: 'Nothing added yet.',
+          },
+          validation: {
+            required: 'This field is required.',
+            maxImages: 'You can attach up to {{count}} images.',
+            fileType: 'Use JPG, PNG, or WEBP images only.',
+            fileSize: 'Each image must stay under {{maxSize}}.',
+            urlRequired: 'Enter an image URL before adding it.',
+            urlFormat: 'Enter a valid http or https image URL.',
+            urlImageType: 'Use a JPG, PNG, or WEBP image URL.',
+          },
+        },
+        categoryNavLabel: 'Restaurant categories',
+        listAriaLabel: 'Restaurants list',
+        listNote:
+          'Start with the strongest dining moment, then keep browsing by pace and timing.',
+        featured: {
+          ariaLabel: 'Featured restaurants',
+          eyebrow: 'Featured now',
+          title: 'Start with the strongest meal picks',
+          description:
+            'A quick row of reliable dining moments before you narrow the list.',
+        },
+        loadMore: 'Load more restaurants',
+        loadingMore: 'Loading more restaurants...',
+        emptyTitle: 'No restaurants match this moment right now.',
+        emptyDescription:
+          'Try another category or come back later for more {{category}} options.',
         detailEyebrow: 'Featured restaurant',
         backToList: 'See all restaurants',
         backHome: 'Back to homepage',
+        categories: {
+          all: 'All',
+          breakfast: 'Breakfast',
+          lunch: 'Lunch',
+          dinner: 'Dinner',
+        },
         meta: {
           cuisine: 'Cuisine',
           vibe: 'Vibe',
           price: 'Price',
+          moment: 'Best for',
         },
       },
       tours: {
@@ -341,13 +429,101 @@ export const resources = {
       },
       restaurants: {
         loading: 'Cargando restaurantes...',
+        error:
+          'No pudimos cargar los restaurantes en este momento. Actualiza o prueba otro idioma.',
+        submitCta: {
+          eyebrow: 'Conoces una buena mesa en Bacalar?',
+          title: 'Envia un restaurante para revision',
+          description:
+            'Comparte los datos base, contacto e imagenes opcionales para revisarlo antes de incluirlo en la guia.',
+          action: 'Enviar un restaurante',
+        },
+        submit: {
+          eyebrow: 'Envio publico',
+          title: 'Enviar un restaurante',
+          description:
+            'Mandanos los datos clave de la ficha, el contacto e imagenes opcionales. Todo queda privado y pendiente hasta revision.',
+          action: 'Enviar solicitud',
+          submitting: 'Enviando solicitud...',
+          optional: 'Opcional',
+          error:
+            'No pudimos enviar tu restaurante en este momento. Revisa los datos e intentalo de nuevo.',
+          successEyebrow: 'Solicitud recibida',
+          successTitle: 'Gracias, ya recibimos tu restaurante',
+          successDescription:
+            'Tu envio quedo pendiente de revision y aun no esta publicado.',
+          successNote:
+            'Nuestro equipo revisara los datos, imagenes y encaje editorial antes de decidir si lo promueve a la guia curada de restaurantes.',
+          submitAnother: 'Enviar otro restaurante',
+          fields: {
+            name: 'Nombre del restaurante',
+            cuisine: 'Cocina',
+            moment: 'Momento de comida',
+            priceBand: 'Rango de precio',
+            description: 'Descripcion',
+            contactName: 'Nombre de contacto',
+            contactMethod: 'Metodo principal de contacto',
+            instagram: 'Instagram',
+            whatsapp: 'WhatsApp',
+          },
+          placeholders: {
+            contactMethod: 'Correo, telefono o usuario de Instagram',
+          },
+          media: {
+            title: 'Medios',
+            description:
+              'Agrega hasta 6 imagenes en total entre archivos y enlaces externos.',
+            count: '{{count}} de {{max}} imagenes adjuntas',
+            uploadLabel: 'Subir imagenes',
+            uploadHint: 'JPG, PNG o WEBP. Hasta 5 MB cada una.',
+            externalUrlLabel: 'URLs externas de imagen',
+            externalUrlHint: 'Verificaremos el enlace antes de aceptarlo.',
+            addUrl: 'Agregar URL',
+            selectedUploads: 'Archivos seleccionados',
+            selectedLinks: 'Enlaces seleccionados',
+            remove: 'Quitar',
+            none: 'Todavia no hay nada agregado.',
+          },
+          validation: {
+            required: 'Este campo es obligatorio.',
+            maxImages: 'Puedes adjuntar hasta {{count}} imagenes.',
+            fileType: 'Usa solo imagenes JPG, PNG o WEBP.',
+            fileSize: 'Cada imagen debe pesar menos de {{maxSize}}.',
+            urlRequired: 'Ingresa una URL de imagen antes de agregarla.',
+            urlFormat: 'Ingresa una URL de imagen valida con http o https.',
+            urlImageType: 'Usa una URL de imagen JPG, PNG o WEBP.',
+          },
+        },
+        categoryNavLabel: 'Categorias de restaurantes',
+        listAriaLabel: 'Lista de restaurantes',
+        listNote:
+          'Empieza con el mejor momento para comer y despues sigue explorando segun el ritmo del dia.',
+        featured: {
+          ariaLabel: 'Restaurantes destacados',
+          eyebrow: 'Destacados',
+          title: 'Empieza con las mejores comidas del momento',
+          description:
+            'Una fila rapida de paradas confiables antes de filtrar mas la lista.',
+        },
+        loadMore: 'Cargar mas restaurantes',
+        loadingMore: 'Cargando mas restaurantes...',
+        emptyTitle: 'No hay restaurantes para este momento ahora mismo.',
+        emptyDescription:
+          'Prueba otra categoria o vuelve despues para ver mas opciones de {{category}}.',
         detailEyebrow: 'Restaurante destacado',
         backToList: 'Ver todos los restaurantes',
         backHome: 'Volver a inicio',
+        categories: {
+          all: 'Todos',
+          breakfast: 'Desayuno',
+          lunch: 'Almuerzo',
+          dinner: 'Cena',
+        },
         meta: {
           cuisine: 'Cocina',
           vibe: 'Ambiente',
           price: 'Precio',
+          moment: 'Mejor para',
         },
       },
       tours: {

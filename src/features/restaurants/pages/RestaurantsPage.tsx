@@ -1,28 +1,71 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import { FeaturedRestaurantsSection } from '../components/FeaturedRestaurantsSection'
+import { RestaurantCategoryNav } from '../components/RestaurantCategoryNav'
 import { RestaurantList } from '../components/RestaurantList'
+import { RestaurantSubmitCta } from '../components/RestaurantSubmitCta'
 import { useRestaurants } from '../hooks/useRestaurants'
+import type { RestaurantCategoryFilter } from '../types/restaurant'
 
 export function RestaurantsPage() {
   const { t } = useTranslation()
-  const { data, isLoading, isError } = useRestaurants()
+  const [selectedCategory, setSelectedCategory] =
+    useState<RestaurantCategoryFilter>('all')
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useRestaurants(selectedCategory)
+  const firstPage = data?.pages[0]
+  const featuredItems = firstPage?.featuredItems ?? []
+  const restaurants = data?.pages.flatMap((page) => page.items) ?? []
+  const emptyTitle = t('restaurants.emptyTitle')
+  const emptyDescription = t('restaurants.emptyDescription', {
+    category: t(`restaurants.categories.${selectedCategory}`),
+  })
 
   return (
     <section className={pageStyles.page}>
-      {data ? (
+      {firstPage ? (
         <PageIntro
-          eyebrow={data.eyebrow}
-          title={data.title}
-          description={data.description}
+          eyebrow={firstPage.eyebrow}
+          title={firstPage.title}
+          description={firstPage.description}
         />
       ) : null}
 
-      {isLoading ? <p>{t('restaurants.loading')}</p> : null}
-      {isError ? <p role="alert">{t('common.error')}</p> : null}
-      {data && !isLoading && !isError ? (
-        <RestaurantList restaurants={data.items} />
+      {!isLoading && !isError ? (
+        <FeaturedRestaurantsSection restaurants={featuredItems} />
       ) : null}
+
+      <RestaurantCategoryNav
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
+
+      {isLoading ? <p>{t('restaurants.loading')}</p> : null}
+      {isError ? <p role="alert">{t('restaurants.error')}</p> : null}
+      {restaurants.length > 0 && !isLoading && !isError ? (
+        <RestaurantList
+          restaurants={restaurants}
+          hasMore={Boolean(hasNextPage)}
+          isFetchingMore={isFetchingNextPage}
+          onLoadMore={() => void fetchNextPage()}
+        />
+      ) : null}
+      {!isLoading && !isError && restaurants.length === 0 ? (
+        <div>
+          <p>{emptyTitle}</p>
+          <p>{emptyDescription}</p>
+        </div>
+      ) : null}
+
+      <RestaurantSubmitCta />
     </section>
   )
 }

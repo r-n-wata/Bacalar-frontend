@@ -9,7 +9,8 @@ export const queryKeys = {
       ['events', 'detail', id, language] as const,
   },
   restaurants: {
-    list: (language: string) => ['restaurants', 'list', language] as const,
+    list: (language: string, category: string, limit: number) =>
+      ['restaurants', 'list', language, category, limit] as const,
     detail: (id: string, language: string) =>
       ['restaurants', 'detail', id, language] as const,
   },
