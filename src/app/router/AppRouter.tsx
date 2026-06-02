@@ -6,6 +6,7 @@ import { EventSubmissionPage } from '../../features/events/pages/EventSubmission
 import { HomePage } from '../../features/home/pages/HomePage'
 import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
 import { RestaurantDetailPage } from '../../features/restaurants/pages/RestaurantDetailPage'
+import { RestaurantSubmissionPage } from '../../features/restaurants/pages/RestaurantSubmissionPage'
 import { ToursPage } from '../../features/tours/pages/ToursPage'
 import { TourDetailPage } from '../../features/tours/pages/TourDetailPage'
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'restaurants',
         element: <RestaurantsPage />,
+      },
+      {
+        path: 'restaurants/submit',
+        element: <RestaurantSubmissionPage />,
       },
       {
         path: 'restaurants/:id',

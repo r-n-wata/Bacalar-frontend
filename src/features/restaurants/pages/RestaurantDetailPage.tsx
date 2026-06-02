@@ -48,6 +48,10 @@ export function RestaurantDetailPage() {
           <span>{t('restaurants.meta.price')}</span>
           <strong>{data.priceBand}</strong>
         </article>
+        <article className={pageStyles.metaCard}>
+          <span>{t('restaurants.meta.moment')}</span>
+          <strong>{t(`restaurants.categories.${data.moment}`)}</strong>
+        </article>
       </div>
 
       <article className={pageStyles.bodyCard}>
