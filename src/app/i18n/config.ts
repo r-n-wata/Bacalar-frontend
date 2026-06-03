@@ -27,11 +27,65 @@ export const resources = {
           events: 'Events',
           restaurants: 'Restaurants',
           tours: 'Tours',
+          admin: 'Admin',
         },
       },
       common: {
         loading: 'Loading...',
         error: 'Something went wrong. Please try again.',
+      },
+      admin: {
+        auth: {
+          checking: 'Checking admin access...',
+        },
+        login: {
+          eyebrow: 'Admin access',
+          title: 'Sign in to review submissions',
+          description:
+            'Use your admin credentials to review pending events, restaurants, and tours before they go live.',
+          action: 'Sign in',
+          submitting: 'Signing in...',
+          error: 'We could not sign you in as an admin. Please try again.',
+          fields: {
+            email: 'Email',
+            password: 'Password',
+          },
+        },
+        dashboard: {
+          eyebrow: 'Admin dashboard',
+          title: 'Pending submissions',
+          description:
+            'Review pending content, confirm the details, and decide what should be published.',
+          loading: 'Loading pending submissions...',
+          error:
+            'We could not load the pending submissions right now. Please try again.',
+          empty: 'There are no pending submissions in this filter right now.',
+          filters: {
+            all: 'All pending',
+            events: 'Events',
+            restaurants: 'Restaurants',
+            tours: 'Tours',
+          },
+          actions: {
+            approve: 'Approve',
+            reject: 'Reject',
+            logout: 'Log out',
+          },
+          meta: {
+            submitted: 'Submitted',
+            locale: 'Locale',
+            contact: 'Contact',
+            contactName: 'Contact name',
+            category: 'Category',
+            startsAt: 'Starts',
+            location: 'Location',
+            cuisine: 'Cuisine',
+            moment: 'Moment',
+            priceBand: 'Price band',
+            duration: 'Duration',
+            priceFrom: 'Price from',
+          },
+        },
       },
       home: {
         loading: 'Loading homepage...',
@@ -384,11 +438,65 @@ export const resources = {
           events: 'Eventos',
           restaurants: 'Restaurantes',
           tours: 'Tours',
+          admin: 'Admin',
         },
       },
       common: {
         loading: 'Cargando...',
         error: 'Algo salio mal. Intentalo de nuevo.',
+      },
+      admin: {
+        auth: {
+          checking: 'Verificando acceso de admin...',
+        },
+        login: {
+          eyebrow: 'Acceso admin',
+          title: 'Entra para revisar envios',
+          description:
+            'Usa tus credenciales de admin para revisar eventos, restaurantes y tours pendientes antes de publicarlos.',
+          action: 'Entrar',
+          submitting: 'Entrando...',
+          error: 'No pudimos iniciarte sesion como admin. Intentalo de nuevo.',
+          fields: {
+            email: 'Correo',
+            password: 'Contrasena',
+          },
+        },
+        dashboard: {
+          eyebrow: 'Panel admin',
+          title: 'Envios pendientes',
+          description:
+            'Revisa el contenido pendiente, confirma los detalles y decide que debe publicarse.',
+          loading: 'Cargando envios pendientes...',
+          error:
+            'No pudimos cargar los envios pendientes en este momento. Intentalo de nuevo.',
+          empty: 'No hay envios pendientes en este filtro por ahora.',
+          filters: {
+            all: 'Todos los pendientes',
+            events: 'Eventos',
+            restaurants: 'Restaurantes',
+            tours: 'Tours',
+          },
+          actions: {
+            approve: 'Aprobar',
+            reject: 'Rechazar',
+            logout: 'Cerrar sesion',
+          },
+          meta: {
+            submitted: 'Enviado',
+            locale: 'Idioma',
+            contact: 'Contacto',
+            contactName: 'Nombre de contacto',
+            category: 'Categoria',
+            startsAt: 'Empieza',
+            location: 'Ubicacion',
+            cuisine: 'Cocina',
+            moment: 'Momento',
+            priceBand: 'Rango de precio',
+            duration: 'Duracion',
+            priceFrom: 'Desde',
+          },
+        },
       },
       home: {
         loading: 'Cargando inicio...',

@@ -1,5 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
+import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage'
+import { AdminLoginPage } from '../../features/admin/pages/AdminLoginPage'
+import { ProtectedAdminRoute } from '../../features/admin/pages/ProtectedAdminRoute'
 import { EventsPage } from '../../features/events/pages/EventsPage'
 import { EventDetailPage } from '../../features/events/pages/EventDetailPage'
 import { EventSubmissionPage } from '../../features/events/pages/EventSubmissionPage'
@@ -31,6 +34,20 @@ const router = createBrowserRouter([
       {
         path: 'events/:id',
         element: <EventDetailPage />,
+      },
+      {
+        path: 'admin/login',
+        element: <AdminLoginPage />,
+      },
+      {
+        path: 'admin',
+        element: <ProtectedAdminRoute />,
+        children: [
+          {
+            path: 'submissions',
+            element: <AdminDashboardPage />,
+          },
+        ],
       },
       {
         path: 'restaurants',

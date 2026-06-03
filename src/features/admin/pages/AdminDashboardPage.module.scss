@@ -1,0 +1,31 @@
+@use '../../../styles/mixins' as mixins;
+
+.page {
+  display: grid;
+  gap: 18px;
+}
+
+.toolbar {
+  @include mixins.surface-panel(24px, 20px);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cards {
+  display: grid;
+  gap: 18px;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text-muted);
+}
