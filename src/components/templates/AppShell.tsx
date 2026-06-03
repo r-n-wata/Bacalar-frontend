@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import logoDark from '../../assets/logo-dark.svg'
-import logoLight from '../../assets/logo-light.svg'
+import suenoBacalarLogo from '../../assets/sueno-bacalar-logo.svg'
 import { useAdminAuth } from '../../features/admin/auth/useAdminAuth'
 import { Button } from '../atoms/Button'
 import styles from './AppShell.module.scss'
@@ -33,7 +32,7 @@ export function AppShell() {
     <div className={styles.shell}>
       <header className={styles.header}>
         <div className={styles.headerBar}>
-          <img className={styles.headerLogo} src={logoLight} alt="Bacalar" />
+          <img className={styles.headerLogo} src={suenoBacalarLogo} alt="Sueno Bacalar" />
 
           <div className={styles.headerActions}>
             {session ? (
@@ -166,7 +165,7 @@ export function AppShell() {
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <section className={styles.footerBrand}>
-            <img className={styles.footerLogo} src={logoDark} alt="Bacalar" />
+            <img className={styles.footerLogo} src={suenoBacalarLogo} alt="Sueno Bacalar" />
             <p className={styles.footerCopy}>{t('shell.footer.brandCopy')}</p>
           </section>
 
