@@ -28,6 +28,7 @@ export const resources = {
           restaurants: 'Restaurants',
           tours: 'Tours',
           admin: 'Admin',
+          logout: 'Log out',
         },
       },
       common: {
@@ -37,6 +38,11 @@ export const resources = {
       admin: {
         auth: {
           checking: 'Checking admin access...',
+        },
+        status: {
+          pending: 'Pending',
+          approved: 'Approved',
+          rejected: 'Rejected',
         },
         login: {
           eyebrow: 'Admin access',
@@ -53,18 +59,33 @@ export const resources = {
         },
         dashboard: {
           eyebrow: 'Admin dashboard',
-          title: 'Pending submissions',
+          title: 'Submission review',
           description:
-            'Review pending content, confirm the details, and decide what should be published.',
-          loading: 'Loading pending submissions...',
+            'Work through new submissions, check past decisions, and keep publication status up to date.',
+          loading: 'Loading submissions...',
           error:
-            'We could not load the pending submissions right now. Please try again.',
-          empty: 'There are no pending submissions in this filter right now.',
-          filters: {
-            all: 'All pending',
+            'We could not load the submissions right now. Please try again.',
+          empty: 'There are no submissions in this filter right now.',
+          openSubmission: 'Open submission {{title}}',
+          labels: {
+            status: 'Status',
+            type: 'Content type',
+          },
+          statusFilters: {
+            all: 'All',
+            pending: 'Pending',
+            approved: 'Approved',
+            rejected: 'Rejected',
+          },
+          typeFilters: {
+            all: 'All types',
             events: 'Events',
             restaurants: 'Restaurants',
             tours: 'Tours',
+          },
+          summary: {
+            status: 'Status: {{status}}',
+            type: 'Type: {{type}}',
           },
           actions: {
             approve: 'Approve',
@@ -72,6 +93,7 @@ export const resources = {
             logout: 'Log out',
           },
           meta: {
+            status: 'Status',
             submitted: 'Submitted',
             locale: 'Locale',
             contact: 'Contact',
@@ -85,6 +107,19 @@ export const resources = {
             duration: 'Duration',
             priceFrom: 'Price from',
           },
+        },
+        detail: {
+          eyebrow: 'Submission detail',
+          title: 'Submission detail',
+          description:
+            'Review the full submission, browse its images, and make a publication decision.',
+          loading: 'Loading submission details...',
+          error: 'We could not load this submission right now. Please try again.',
+          invalidType: 'This submission type is not supported.',
+          backToDashboard: 'Back to dashboard',
+          descriptionLabel: 'Description',
+          galleryTitle: 'Images',
+          additionalContacts: 'Additional contact details',
         },
       },
       home: {
@@ -439,6 +474,7 @@ export const resources = {
           restaurants: 'Restaurantes',
           tours: 'Tours',
           admin: 'Admin',
+          logout: 'Cerrar sesion',
         },
       },
       common: {
@@ -448,6 +484,11 @@ export const resources = {
       admin: {
         auth: {
           checking: 'Verificando acceso de admin...',
+        },
+        status: {
+          pending: 'Pendiente',
+          approved: 'Aprobado',
+          rejected: 'Rechazado',
         },
         login: {
           eyebrow: 'Acceso admin',
@@ -464,18 +505,33 @@ export const resources = {
         },
         dashboard: {
           eyebrow: 'Panel admin',
-          title: 'Envios pendientes',
+          title: 'Revision de envios',
           description:
-            'Revisa el contenido pendiente, confirma los detalles y decide que debe publicarse.',
-          loading: 'Cargando envios pendientes...',
+            'Trabaja los nuevos envios, revisa decisiones previas y manten actualizado el estado de publicacion.',
+          loading: 'Cargando envios...',
           error:
-            'No pudimos cargar los envios pendientes en este momento. Intentalo de nuevo.',
-          empty: 'No hay envios pendientes en este filtro por ahora.',
-          filters: {
-            all: 'Todos los pendientes',
+            'No pudimos cargar los envios en este momento. Intentalo de nuevo.',
+          empty: 'No hay envios en este filtro por ahora.',
+          openSubmission: 'Abrir envio {{title}}',
+          labels: {
+            status: 'Estado',
+            type: 'Tipo de contenido',
+          },
+          statusFilters: {
+            all: 'Todos',
+            pending: 'Pendientes',
+            approved: 'Aprobados',
+            rejected: 'Rechazados',
+          },
+          typeFilters: {
+            all: 'Todos los tipos',
             events: 'Eventos',
             restaurants: 'Restaurantes',
             tours: 'Tours',
+          },
+          summary: {
+            status: 'Estado: {{status}}',
+            type: 'Tipo: {{type}}',
           },
           actions: {
             approve: 'Aprobar',
@@ -483,6 +539,7 @@ export const resources = {
             logout: 'Cerrar sesion',
           },
           meta: {
+            status: 'Estado',
             submitted: 'Enviado',
             locale: 'Idioma',
             contact: 'Contacto',
@@ -496,6 +553,19 @@ export const resources = {
             duration: 'Duracion',
             priceFrom: 'Desde',
           },
+        },
+        detail: {
+          eyebrow: 'Detalle del envio',
+          title: 'Detalle del envio',
+          description:
+            'Revisa toda la informacion del envio, navega sus imagenes y toma una decision de publicacion.',
+          loading: 'Cargando detalle del envio...',
+          error: 'No pudimos cargar este envio en este momento. Intentalo de nuevo.',
+          invalidType: 'Este tipo de envio no es compatible.',
+          backToDashboard: 'Volver al panel',
+          descriptionLabel: 'Descripcion',
+          galleryTitle: 'Imagenes',
+          additionalContacts: 'Datos de contacto adicionales',
         },
       },
       home: {
