@@ -1,34 +1,75 @@
 export type AdminSubmissionFilter = 'all' | 'events' | 'restaurants' | 'tours'
 export type AdminSubmissionType = Exclude<AdminSubmissionFilter, 'all'>
+export type AdminSubmissionStatusFilter =
+  | 'all'
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+export type AdminSubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
 
 export type AdminSession = {
   email: string
   userId: string
 }
 
-type AdminSubmissionBase = {
+export type AdminSubmissionThumbnail = {
+  id: string
+  source: 'UPLOADED' | 'EXTERNAL_URL'
+  url: string
+  objectKey?: string
+  mimeType?: string
+  originalFilename?: string
+  sortOrder: number
+}
+
+type AdminSubmissionListBase = {
   id: string
   type: AdminSubmissionType
-  status: 'PENDING' | 'APPROVED' | 'REJECTED'
+  status: AdminSubmissionStatus
   submittedLocale: 'en' | 'es'
+  createdAt: string
+  updatedAt: string
+  thumbnail?: AdminSubmissionThumbnail
+}
+
+type AdminSubmissionDetailBase = AdminSubmissionListBase & {
   contactName: string
   contactMethod: string
   instagram?: string
   whatsapp?: string
-  createdAt: string
-  updatedAt: string
-  images: Array<{
-    id: string
-    source: 'UPLOADED' | 'EXTERNAL_URL'
-    url: string
-    objectKey?: string
-    mimeType?: string
-    originalFilename?: string
-    sortOrder: number
-  }>
+  images: AdminSubmissionThumbnail[]
 }
 
-export type AdminEventSubmission = AdminSubmissionBase & {
+export type AdminEventSubmissionListItem = AdminSubmissionListBase & {
+  type: 'events'
+  title: string
+  startsAt: string
+  location: string
+  category: 'music' | 'wellness' | 'food'
+}
+
+export type AdminRestaurantSubmissionListItem = AdminSubmissionListBase & {
+  type: 'restaurants'
+  name: string
+  cuisine: string
+  moment: 'breakfast' | 'lunch' | 'dinner'
+  priceBand: '$' | '$$' | '$$$'
+}
+
+export type AdminTourSubmissionListItem = AdminSubmissionListBase & {
+  type: 'tours'
+  name: string
+  category: 'premium' | 'group' | 'adventure'
+  durationHours: number
+  priceFrom: number
+}
+
+export type AdminSubmissionListItem =
+  | AdminEventSubmissionListItem
+  | AdminRestaurantSubmissionListItem
+  | AdminTourSubmissionListItem
+
+export type AdminEventSubmissionDetail = AdminSubmissionDetailBase & {
   type: 'events'
   title: string
   startsAt: string
@@ -37,7 +78,7 @@ export type AdminEventSubmission = AdminSubmissionBase & {
   description: string
 }
 
-export type AdminRestaurantSubmission = AdminSubmissionBase & {
+export type AdminRestaurantSubmissionDetail = AdminSubmissionDetailBase & {
   type: 'restaurants'
   name: string
   cuisine: string
@@ -46,7 +87,7 @@ export type AdminRestaurantSubmission = AdminSubmissionBase & {
   description: string
 }
 
-export type AdminTourSubmission = AdminSubmissionBase & {
+export type AdminTourSubmissionDetail = AdminSubmissionDetailBase & {
   type: 'tours'
   name: string
   category: 'premium' | 'group' | 'adventure'
@@ -55,13 +96,17 @@ export type AdminTourSubmission = AdminSubmissionBase & {
   description: string
 }
 
-export type AdminSubmission =
-  | AdminEventSubmission
-  | AdminRestaurantSubmission
-  | AdminTourSubmission
+export type AdminSubmissionDetail =
+  | AdminEventSubmissionDetail
+  | AdminRestaurantSubmissionDetail
+  | AdminTourSubmissionDetail
 
 export type AdminSubmissionsResponse = {
-  items: AdminSubmission[]
+  items: AdminSubmissionListItem[]
+}
+
+export type AdminSubmissionDetailResponse = {
+  item: AdminSubmissionDetail
 }
 
 export type ModerationResult = {

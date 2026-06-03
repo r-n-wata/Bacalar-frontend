@@ -6,12 +6,22 @@
 }
 
 .toolbar {
-  @include mixins.surface-panel(24px, 20px);
-  display: flex;
+  display: grid;
+  gap: 18px;
+}
+
+.filterGroup {
+  display: grid;
   gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+}
+
+.filterLabel {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .filters {
@@ -20,9 +30,29 @@
   flex-wrap: wrap;
 }
 
+.summaryRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.summaryPill {
+  @include mixins.surface-panel(12px, 10px);
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
 .cards {
   display: grid;
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 920px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .empty {

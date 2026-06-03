@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import type { AdminSubmission } from '../types/admin'
+import type { AdminSubmissionListItem } from '../types/admin'
 import styles from './AdminSubmissionCard.module.scss'
 
 type AdminSubmissionCardProps = {
-  submission: AdminSubmission
+  submission: AdminSubmissionListItem
   isMutating: boolean
   onApprove: () => void
   onReject: () => void
@@ -14,8 +15,11 @@ type AdminSubmissionCardProps = {
 function formatDate(value: string, locale: 'en' | 'es') {
   return new Intl.DateTimeFormat(locale === 'es' ? 'es-MX' : 'en-US', {
     dateStyle: 'medium',
-    timeStyle: 'short',
   }).format(new Date(value))
+}
+
+function getTitle(submission: AdminSubmissionListItem) {
+  return submission.type === 'events' ? submission.title : submission.name
 }
 
 export function AdminSubmissionCard({
@@ -26,118 +30,101 @@ export function AdminSubmissionCard({
 }: AdminSubmissionCardProps) {
   const { t, i18n } = useTranslation()
   const locale = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
-
-  const baseMeta = [
-    {
-      label: t('admin.dashboard.meta.submitted'),
-      value: formatDate(submission.createdAt, locale),
-    },
-    {
-      label: t('admin.dashboard.meta.locale'),
-      value: submission.submittedLocale.toUpperCase(),
-    },
-    {
-      label: t('admin.dashboard.meta.contact'),
-      value: submission.contactMethod,
-    },
-  ]
-
-  const typeSpecificMeta =
+  const title = getTitle(submission)
+  const typeLabel = t(`admin.dashboard.typeFilters.${submission.type}`)
+  const statusLabel = t(`admin.status.${submission.status.toLowerCase()}`)
+  const isActionable = submission.status === 'PENDING'
+  const summaryItems =
     submission.type === 'events'
       ? [
-          {
-            label: t('admin.dashboard.meta.category'),
-            value: t(`events.categories.${submission.category}`),
-          },
-          {
-            label: t('admin.dashboard.meta.startsAt'),
-            value: formatDate(submission.startsAt, locale),
-          },
-          {
-            label: t('admin.dashboard.meta.location'),
-            value: submission.location,
-          },
+          t(`events.categories.${submission.category}`),
+          submission.location,
+          formatDate(submission.startsAt, locale),
         ]
       : submission.type === 'restaurants'
         ? [
-            {
-              label: t('admin.dashboard.meta.cuisine'),
-              value: submission.cuisine,
-            },
-            {
-              label: t('admin.dashboard.meta.moment'),
-              value: t(`restaurants.categories.${submission.moment}`),
-            },
-            {
-              label: t('admin.dashboard.meta.priceBand'),
-              value: submission.priceBand,
-            },
+            submission.cuisine,
+            t(`restaurants.categories.${submission.moment}`),
+            submission.priceBand,
           ]
         : [
-            {
-              label: t('admin.dashboard.meta.category'),
-              value: t(`tours.categories.${submission.category}`),
-            },
-            {
-              label: t('admin.dashboard.meta.duration'),
-              value: t('tours.hours', { count: submission.durationHours }),
-            },
-            {
-              label: t('admin.dashboard.meta.priceFrom'),
-              value: `$${submission.priceFrom}`,
-            },
+            t(`tours.categories.${submission.category}`),
+            t('tours.hours', { count: submission.durationHours }),
+            `$${submission.priceFrom}`,
           ]
-
-  const title =
-    submission.type === 'events'
-      ? submission.title
-      : submission.name
 
   return (
     <ContentPanel className={styles.card}>
-      <header className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>{t(`admin.dashboard.filters.${submission.type}`)}</p>
-          <h2 className={styles.title}>{title}</h2>
-        </div>
-      </header>
-
-      <div className={styles.metaGrid}>
-        {[...baseMeta, ...typeSpecificMeta].map((item) => (
-          <div key={`${submission.id}-${item.label}`} className={styles.metaItem}>
-            <span>{item.label}</span>
-            <strong>{item.value}</strong>
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.metaItem}>
-        <span>{t('admin.dashboard.meta.contactName')}</span>
-        <p>{submission.contactName}</p>
-      </div>
-
-      <p className={styles.description}>{submission.description}</p>
-
-      {submission.images.length > 0 ? (
-        <div className={styles.imageGrid}>
-          {submission.images.map((image) => (
+      <div className={styles.layout}>
+        {submission.thumbnail ? (
+          <Link
+            className={styles.thumbnailLink}
+            to={`/admin/submissions/${submission.type}/${submission.id}`}
+            aria-label={t('admin.dashboard.openSubmission', { title })}
+          >
             <img
-              key={image.id}
-              className={styles.image}
-              src={image.url}
+              className={styles.thumbnail}
+              src={submission.thumbnail.url}
               alt={title}
             />
-          ))}
-        </div>
-      ) : null}
+          </Link>
+        ) : (
+          <Link
+            className={`${styles.thumbnailLink} ${styles.thumbnailFallback}`}
+            to={`/admin/submissions/${submission.type}/${submission.id}`}
+            aria-label={t('admin.dashboard.openSubmission', { title })}
+          >
+            <span>{typeLabel}</span>
+          </Link>
+        )}
 
-      <div className={styles.actions}>
-        <Button variant="accent" disabled={isMutating} onClick={onApprove}>
-          {t('admin.dashboard.actions.approve')}
-        </Button>
-        <Button variant="secondary" disabled={isMutating} onClick={onReject}>
-          {t('admin.dashboard.actions.reject')}
-        </Button>
+        <div className={styles.content}>
+          <Link
+            className={styles.body}
+            to={`/admin/submissions/${submission.type}/${submission.id}`}
+          >
+            <div className={styles.header}>
+              <p className={styles.eyebrow}>{typeLabel}</p>
+              <span
+                className={`${styles.status} ${styles[`status${submission.status}`]}`}
+              >
+                {statusLabel}
+              </span>
+            </div>
+
+            <h2 className={styles.title}>{title}</h2>
+
+            <div className={styles.metaRow}>
+              <span>{t('admin.dashboard.meta.submitted')}</span>
+              <strong>{formatDate(submission.createdAt, locale)}</strong>
+            </div>
+
+            <div className={styles.summaryList}>
+              {summaryItems.map((item) => (
+                <span key={`${submission.id}-${item}`} className={styles.summaryItem}>
+                  {item}
+                </span>
+              ))}
+            </div>
+          </Link>
+
+          <div className={styles.actions}>
+            <Button
+              variant="accent"
+              disabled={isMutating || !isActionable}
+              onClick={onApprove}
+            >
+              {t('admin.dashboard.actions.approve')}
+            </Button>
+            <Button
+              variant="secondary"
+              disabled={isMutating || !isActionable}
+              onClick={onReject}
+            >
+              {t('admin.dashboard.actions.reject')}
+            </Button>
+          </div>
+        </div>
       </div>
     </ContentPanel>
   )

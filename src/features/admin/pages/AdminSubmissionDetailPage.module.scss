@@ -1,0 +1,136 @@
+@use '../../../styles/mixins' as mixins;
+
+.page {
+  display: grid;
+  gap: 18px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.backLink {
+  color: var(--royal-blue);
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.summaryPanel {
+  display: grid;
+  gap: 18px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--lagoon-teal);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 4px 0 0;
+  color: var(--text-strong);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.statusPENDING {
+  background: rgba(255, 196, 93, 0.24);
+  color: #8a5b00;
+}
+
+.statusAPPROVED {
+  background: rgba(31, 164, 122, 0.16);
+  color: #0e6c4c;
+}
+
+.statusREJECTED {
+  background: rgba(201, 68, 88, 0.14);
+  color: #9f2340;
+}
+
+.metaGrid,
+.contactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.metaItem {
+  @include mixins.surface-panel(18px, 16px);
+  box-shadow: none;
+
+  span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  strong {
+    color: var(--text-strong);
+  }
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  color: var(--text-strong);
+  font-size: 1rem;
+}
+
+.description {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.galleryImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+  background: var(--surface-subtle);
+}
+
+.errorText {
+  margin: 0;
+  color: var(--text-muted);
+}

@@ -9,6 +9,7 @@ import { jsonSuccess } from '../../../test/msw/core'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { AdminDashboardPage } from './AdminDashboardPage'
 import { AdminLoginPage } from './AdminLoginPage'
+import { AdminSubmissionDetailPage } from './AdminSubmissionDetailPage'
 import { ProtectedAdminRoute } from './ProtectedAdminRoute'
 
 const getSession = vi.fn()
@@ -55,6 +56,10 @@ function renderAdminRoute(initialEntry: string) {
               {
                 path: 'submissions',
                 element: <AdminDashboardPage />,
+              },
+              {
+                path: 'submissions/:type/:id',
+                element: <AdminSubmissionDetailPage />,
               },
             ],
           },
@@ -103,7 +108,7 @@ describe('admin access flow', () => {
     ).toBeVisible()
   })
 
-  it('signs in and navigates into the admin dashboard for allow-listed admins', async () => {
+  it('shows the header logout action after admin sign-in', async () => {
     signInWithPassword.mockResolvedValue({
       data: {
         session: buildSession(),
@@ -119,9 +124,10 @@ describe('admin access flow', () => {
 
     expect(
       await screen.findByRole('heading', {
-        name: 'Pending submissions',
+        name: 'Submission review',
       }),
     ).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Log out' })).toBeVisible()
   })
 
   it('shows a login error when the admin session validation fails', async () => {
@@ -157,14 +163,14 @@ describe('admin access flow', () => {
     expect(signOut).toHaveBeenCalled()
   })
 
-  it('filters pending submissions and refreshes the list after approval', async () => {
+  it('filters submissions by status and type and refreshes the list after approval', async () => {
     getSession.mockResolvedValue({
       data: {
         session: buildSession(),
       },
     })
 
-    const pendingItems = [
+    const submissions = [
       {
         id: 'event-submission-1',
         type: 'events',
@@ -173,29 +179,33 @@ describe('admin access flow', () => {
         startsAt: '2026-06-03T18:30:00.000Z',
         location: 'Casa del Muelle',
         category: 'music',
-        description: 'A sunset set with local musicians.',
-        contactName: 'Ana',
-        contactMethod: 'ana@example.com',
         submittedLocale: 'en',
         createdAt: '2026-06-02T10:00:00.000Z',
         updatedAt: '2026-06-02T10:00:00.000Z',
-        images: [],
+        thumbnail: {
+          id: 'event-image-1',
+          source: 'EXTERNAL_URL',
+          url: 'https://images.example.com/event-1.jpg',
+          sortOrder: 0,
+        },
       },
       {
         id: 'restaurant-submission-1',
         type: 'restaurants',
-        status: 'PENDING',
+        status: 'APPROVED',
         name: 'Casa de Maiz',
         cuisine: 'Mexican',
         moment: 'dinner',
         priceBand: '$$',
-        description: 'A lagoon-side dinner stop.',
-        contactName: 'Luis',
-        contactMethod: 'luis@example.com',
         submittedLocale: 'es',
         createdAt: '2026-06-02T09:00:00.000Z',
         updatedAt: '2026-06-02T09:00:00.000Z',
-        images: [],
+        thumbnail: {
+          id: 'restaurant-image-1',
+          source: 'EXTERNAL_URL',
+          url: 'https://images.example.com/restaurant-1.jpg',
+          sortOrder: 0,
+        },
       },
     ]
 
@@ -208,25 +218,29 @@ describe('admin access flow', () => {
       ),
       http.get('/api/admin/submissions', async ({ request }) => {
         const url = new URL(request.url)
-        const filter = url.searchParams.get('type')
+        const type = url.searchParams.get('type') ?? 'all'
+        const status = (url.searchParams.get('status') ?? 'pending').toUpperCase()
 
         return jsonSuccess({
-          items: pendingItems.filter((item) =>
-            !filter || filter === 'all' ? true : item.type === filter,
-          ),
+          items: submissions.filter((item) => {
+            const matchesType = type === 'all' ? true : item.type === type
+            const matchesStatus = status === 'ALL' ? true : item.status === status
+
+            return matchesType && matchesStatus
+          }),
         })
       }),
       http.post('/api/admin/submissions/:type/:id/:action', async ({ params }) => {
-        const index = pendingItems.findIndex((item) => item.id === String(params.id))
+        const item = submissions.find((entry) => entry.id === String(params.id))
 
-        if (index >= 0) {
-          pendingItems.splice(index, 1)
+        if (item) {
+          item.status = String(params.action) === 'approve' ? 'APPROVED' : 'REJECTED'
         }
 
         return jsonSuccess({
           id: String(params.id),
           type: String(params.type),
-          status: 'APPROVED',
+          status: String(params.action) === 'approve' ? 'APPROVED' : 'REJECTED',
           reviewedAt: '2026-06-02T12:00:00.000Z',
           reviewedBy: 'admin@bacalar.test',
         })
@@ -237,24 +251,94 @@ describe('admin access flow', () => {
 
     expect(
       await screen.findByRole('heading', {
-        name: 'Pending submissions',
+        name: 'Submission review',
       }),
     ).toBeVisible()
     expect(await screen.findByText('Lagoon Music Night')).toBeVisible()
+    expect(screen.queryByText('Casa de Maiz')).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Restaurants' }))
-
+    await userEvent.click(screen.getByRole('button', { name: 'Approved' }))
     expect(await screen.findByText('Casa de Maiz')).toBeVisible()
     expect(screen.queryByText('Lagoon Music Night')).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByRole('button', { name: 'All pending' }))
-    await userEvent.click(
-      (await screen.findAllByRole('button', { name: 'Approve' }))[0],
-    )
+    await userEvent.click(screen.getByRole('button', { name: 'Pending' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Events' }))
+    expect(await screen.findByText('Lagoon Music Night')).toBeVisible()
+    await userEvent.click(screen.getByRole('button', { name: 'Approve' }))
 
-    expect(await screen.findByText('Casa de Maiz')).toBeVisible()
     await waitFor(() => {
       expect(screen.queryByText('Lagoon Music Night')).not.toBeInTheDocument()
     })
+  })
+
+  it('opens the detail page from a compact submission card', async () => {
+    getSession.mockResolvedValue({
+      data: {
+        session: buildSession(),
+      },
+    })
+
+    server.use(
+      http.get('/api/admin/session', async () =>
+        jsonSuccess({
+          email: 'admin@bacalar.test',
+          userId: 'supabase-user-1',
+        }),
+      ),
+      http.get('/api/admin/submissions/events/event-submission-1', async () =>
+        jsonSuccess({
+          item: {
+            id: 'event-submission-1',
+            type: 'events',
+            status: 'PENDING',
+            title: 'Lagoon Music Night',
+            startsAt: '2026-06-03T18:30:00.000Z',
+            location: 'Casa del Muelle',
+            category: 'music',
+            description: 'A sunset set with local musicians.',
+            contactName: 'Ana',
+            contactMethod: 'ana@example.com',
+            submittedLocale: 'en',
+            createdAt: '2026-06-02T10:00:00.000Z',
+            updatedAt: '2026-06-02T10:00:00.000Z',
+            thumbnail: {
+              id: 'event-image-1',
+              source: 'EXTERNAL_URL',
+              url: 'https://images.example.com/event-1.jpg',
+              sortOrder: 0,
+            },
+            images: [
+              {
+                id: 'event-image-1',
+                source: 'EXTERNAL_URL',
+                url: 'https://images.example.com/event-1.jpg',
+                sortOrder: 0,
+              },
+              {
+                id: 'event-image-2',
+                source: 'EXTERNAL_URL',
+                url: 'https://images.example.com/event-2.jpg',
+                sortOrder: 1,
+              },
+            ],
+          },
+        }),
+      ),
+    )
+
+    await renderAdminRoute('/admin/submissions')
+
+    await userEvent.click(
+      await screen.findByRole('link', { name: 'Open submission Lagoon Music Night' }),
+    )
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Lagoon Music Night',
+        level: 1,
+      }),
+    ).toBeVisible()
+    expect(screen.getByText('Description')).toBeVisible()
+    expect(screen.getAllByRole('img', { name: 'Lagoon Music Night' })).toHaveLength(2)
   })
 })

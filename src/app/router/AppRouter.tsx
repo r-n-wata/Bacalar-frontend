@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
 import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage'
 import { AdminLoginPage } from '../../features/admin/pages/AdminLoginPage'
+import { AdminSubmissionDetailPage } from '../../features/admin/pages/AdminSubmissionDetailPage'
 import { ProtectedAdminRoute } from '../../features/admin/pages/ProtectedAdminRoute'
 import { EventsPage } from '../../features/events/pages/EventsPage'
 import { EventDetailPage } from '../../features/events/pages/EventDetailPage'
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: 'submissions',
             element: <AdminDashboardPage />,
+          },
+          {
+            path: 'submissions/:type/:id',
+            element: <AdminSubmissionDetailPage />,
           },
         ],
       },

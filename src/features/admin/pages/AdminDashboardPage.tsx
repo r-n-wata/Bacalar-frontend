@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { Button } from '../../../components/atoms/Button'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
@@ -10,11 +10,22 @@ import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { moderateSubmission } from '../api/moderateSubmission'
 import { AdminSubmissionCard } from '../components/AdminSubmissionCard'
-import { usePendingSubmissions } from '../hooks/usePendingSubmissions'
-import type { AdminSubmissionFilter, AdminSubmissionType } from '../types/admin'
+import { useAdminSubmissions } from '../hooks/useAdminSubmissions'
+import type {
+  AdminSubmissionFilter,
+  AdminSubmissionStatusFilter,
+  AdminSubmissionType,
+} from '../types/admin'
 import styles from './AdminDashboardPage.module.scss'
 
-const filters: AdminSubmissionFilter[] = [
+const statusFilters: AdminSubmissionStatusFilter[] = [
+  'pending',
+  'all',
+  'approved',
+  'rejected',
+]
+
+const typeFilters: AdminSubmissionFilter[] = [
   'all',
   'events',
   'restaurants',
@@ -24,10 +35,11 @@ const filters: AdminSubmissionFilter[] = [
 export function AdminDashboardPage() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const { session, logout } = useAdminAuth()
-  const [activeFilter, setActiveFilter] = useState<AdminSubmissionFilter>('all')
+  const { session } = useAdminAuth()
   const token = session?.access_token ?? null
-  const submissionsQuery = usePendingSubmissions(activeFilter, token)
+  const [activeStatus, setActiveStatus] = useState<AdminSubmissionStatusFilter>('pending')
+  const [activeType, setActiveType] = useState<AdminSubmissionFilter>('all')
+  const submissionsQuery = useAdminSubmissions(activeStatus, activeType, token)
   const items = submissionsQuery.data?.items ?? []
   const listErrorMessage =
     submissionsQuery.error instanceof ApiError
@@ -44,16 +56,32 @@ export function AdminDashboardPage() {
       submissionId: string
       action: 'approve' | 'reject'
     }) => moderateSubmission(type, submissionId, action, token ?? ''),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.admin.submissionsRoot,
-      })
+    onSuccess: async (_, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.admin.submissionsRoot,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.admin.submissionDetail(
+            variables.type,
+            variables.submissionId,
+          ),
+        }),
+      ])
     },
   })
 
-  async function handleLogout() {
-    await logout()
-  }
+  const toolbarSummary = useMemo(
+    () => [
+      t('admin.dashboard.summary.status', {
+        status: t(`admin.dashboard.statusFilters.${activeStatus}`),
+      }),
+      t('admin.dashboard.summary.type', {
+        type: t(`admin.dashboard.typeFilters.${activeType}`),
+      }),
+    ],
+    [activeStatus, activeType, t],
+  )
 
   return (
     <section className={pageStyles.page}>
@@ -64,23 +92,45 @@ export function AdminDashboardPage() {
       />
 
       <div className={styles.page}>
-        <div className={styles.toolbar}>
-          <div className={styles.filters}>
-            {filters.map((filter) => (
-              <Button
-                key={filter}
-                variant={activeFilter === filter ? 'chipActive' : 'chip'}
-                onClick={() => setActiveFilter(filter)}
-              >
-                {t(`admin.dashboard.filters.${filter}`)}
-              </Button>
-            ))}
+        <ContentPanel className={styles.toolbar}>
+          <div className={styles.filterGroup}>
+            <p className={styles.filterLabel}>{t('admin.dashboard.labels.status')}</p>
+            <div className={styles.filters}>
+              {statusFilters.map((status) => (
+                <Button
+                  key={status}
+                  variant={activeStatus === status ? 'chipActive' : 'chip'}
+                  onClick={() => setActiveStatus(status)}
+                >
+                  {t(`admin.dashboard.statusFilters.${status}`)}
+                </Button>
+              ))}
+            </div>
           </div>
 
-          <Button variant="secondary" onClick={() => void handleLogout()}>
-            {t('admin.dashboard.actions.logout')}
-          </Button>
-        </div>
+          <div className={styles.filterGroup}>
+            <p className={styles.filterLabel}>{t('admin.dashboard.labels.type')}</p>
+            <div className={styles.filters}>
+              {typeFilters.map((type) => (
+                <Button
+                  key={type}
+                  variant={activeType === type ? 'chipActive' : 'chip'}
+                  onClick={() => setActiveType(type)}
+                >
+                  {t(`admin.dashboard.typeFilters.${type}`)}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.summaryRow}>
+            {toolbarSummary.map((item) => (
+              <span key={item} className={styles.summaryPill}>
+                {item}
+              </span>
+            ))}
+          </div>
+        </ContentPanel>
 
         {submissionsQuery.isLoading ? <p>{t('admin.dashboard.loading')}</p> : null}
         {submissionsQuery.isError ? (
@@ -91,9 +141,7 @@ export function AdminDashboardPage() {
           </ContentPanel>
         ) : null}
 
-        {!submissionsQuery.isLoading &&
-        !submissionsQuery.isError &&
-        items.length === 0 ? (
+        {!submissionsQuery.isLoading && !submissionsQuery.isError && items.length === 0 ? (
           <ContentPanel>
             <p className={styles.empty}>{t('admin.dashboard.empty')}</p>
           </ContentPanel>
@@ -102,12 +150,11 @@ export function AdminDashboardPage() {
         {items.length > 0 ? (
           <div className={styles.cards}>
             {items.map((submission) => {
-              const pendingKey = `${submission.type}:${submission.id}`
               const currentMutation = moderationMutation.variables
 
               return (
                 <AdminSubmissionCard
-                  key={pendingKey}
+                  key={`${submission.type}:${submission.id}`}
                   submission={submission}
                   isMutating={
                     moderationMutation.isPending &&
