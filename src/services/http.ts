@@ -89,14 +89,16 @@ export async function getJson<T>(
 export async function postJson<TRequest, TResponse>(
   path: string,
   body: TRequest,
-  options?: Omit<JsonRequestOptions, 'init'>,
+  options?: JsonRequestOptions,
 ): Promise<TResponse> {
   return requestJson<TResponse>(path, {
     ...options,
     init: {
+      ...options?.init,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...options?.init?.headers,
       },
       body: JSON.stringify(body),
     },

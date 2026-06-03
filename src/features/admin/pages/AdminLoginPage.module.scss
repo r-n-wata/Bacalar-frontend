@@ -1,0 +1,28 @@
+@use '../../../styles/mixins' as mixins;
+
+.page {
+  display: grid;
+  gap: 20px;
+}
+
+.panel {
+  max-width: 640px;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.error {
+  margin: 0;
+  color: #8b3b2a;
+}

@@ -1,4 +1,9 @@
 export const queryKeys = {
+  admin: {
+    session: (token: string) => ['admin', 'session', token] as const,
+    submissionsRoot: ['admin', 'submissions'] as const,
+    submissions: (filter: string) => ['admin', 'submissions', filter] as const,
+  },
   home: {
     content: (language: string) => ['home', 'content', language] as const,
   },

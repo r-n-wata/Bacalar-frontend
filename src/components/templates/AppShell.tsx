@@ -27,24 +27,68 @@ export function AppShell() {
         <div className={styles.headerBar}>
           <img className={styles.headerLogo} src={logoLight} alt="Bacalar" />
 
-          <div
-            className={styles.languageActions}
-            aria-label={t('shell.languageLabel')}
-          >
-            <Button
-              className={styles.languageButton}
-              variant={activeLanguage === 'en' ? 'secondary' : 'inverse'}
-              onClick={() => void i18n.changeLanguage('en')}
+          <div className={styles.headerActions}>
+            <NavLink
+              to="/admin/login"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.adminLink} ${styles.adminLinkActive}`
+                  : styles.adminLink
+              }
+              aria-label={t('shell.nav.admin')}
             >
-              EN
-            </Button>
-            <Button
-              className={styles.languageButton}
-              variant={activeLanguage === 'es' ? 'secondary' : 'inverse'}
-              onClick={() => void i18n.changeLanguage('es')}
+              <svg
+                className={styles.adminIcon}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M10 8l4 4-4 4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M14 12H4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>{t('shell.nav.admin')}</span>
+            </NavLink>
+
+            <div
+              className={styles.languageActions}
+              aria-label={t('shell.languageLabel')}
             >
-              ES
-            </Button>
+              <Button
+                className={styles.languageButton}
+                variant={activeLanguage === 'en' ? 'secondary' : 'inverse'}
+                onClick={() => void i18n.changeLanguage('en')}
+              >
+                EN
+              </Button>
+              <Button
+                className={styles.languageButton}
+                variant={activeLanguage === 'es' ? 'secondary' : 'inverse'}
+                onClick={() => void i18n.changeLanguage('es')}
+              >
+                ES
+              </Button>
+            </div>
           </div>
         </div>
 
