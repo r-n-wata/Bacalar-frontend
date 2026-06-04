@@ -9,6 +9,10 @@ export type Tour = {
   durationHours: number
   priceFrom: number
   route: string
+  image?: {
+    src: string
+    alt: string
+  }
 }
 
 export type TourDetail = {

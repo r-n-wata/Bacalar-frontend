@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { FeaturedRestaurantsSection } from '../components/FeaturedRestaurantsSection'
@@ -48,7 +49,7 @@ export function RestaurantsPage() {
         onSelectCategory={setSelectedCategory}
       />
 
-      {isLoading ? <p>{t('restaurants.loading')}</p> : null}
+      {isLoading ? <LoadingSpinner label={t('restaurants.loading')} /> : null}
       {isError ? <p role="alert">{t('restaurants.error')}</p> : null}
       {restaurants.length > 0 && !isLoading && !isError ? (
         <RestaurantList

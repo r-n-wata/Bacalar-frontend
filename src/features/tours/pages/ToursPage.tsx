@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { FeaturedToursSection } from '../components/FeaturedToursSection'
@@ -46,7 +47,7 @@ export function ToursPage() {
         onSelectCategory={setSelectedCategory}
       />
 
-      {isLoading ? <p>{t('tours.loading')}</p> : null}
+      {isLoading ? <LoadingSpinner label={t('tours.loading')} /> : null}
       {isError ? <p role="alert">{t('tours.error')}</p> : null}
       {tours.length > 0 && !isLoading && !isError ? (
         <TourList

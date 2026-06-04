@@ -8,6 +8,11 @@ type FeatureCardProps = {
   description: string
   meta: string
   to?: string
+  image?: {
+    src: string
+    alt: string
+  }
+  placeholderLabel?: string
 }
 
 export function FeatureCard({
@@ -16,9 +21,20 @@ export function FeatureCard({
   description,
   meta,
   to,
+  image,
+  placeholderLabel,
 }: FeatureCardProps) {
   const card = (
     <ContentPanel as="article" compact>
+      {image ? (
+        <div className={styles.media}>
+          <img src={image.src} alt={image.alt} />
+        </div>
+      ) : (
+        <div className={styles.mediaFallback} aria-hidden="true">
+          <span>{placeholderLabel ?? tag}</span>
+        </div>
+      )}
       <div className={styles.content}>
         <p className={styles.tag}>{tag}</p>
         <h3>{title}</h3>

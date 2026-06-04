@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { HomeHero } from '../components/HomeHero'
 import { HomeSection } from '../components/HomeSection'
 import { useHomeContent } from '../hooks/useHomeContent'
@@ -9,7 +10,7 @@ export function HomePage() {
   const { data, isLoading, isError } = useHomeContent()
 
   if (isLoading) {
-    return <p>{t('home.loading')}</p>
+    return <LoadingSpinner label={t('home.loading')} />
   }
 
   if (isError || !data) {

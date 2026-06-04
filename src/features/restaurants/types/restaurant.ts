@@ -9,6 +9,10 @@ export type Restaurant = {
   priceBand: '$' | '$$' | '$$$'
   moment: RestaurantMoment
   route: string
+  image?: {
+    src: string
+    alt: string
+  }
 }
 
 export type RestaurantDetail = {

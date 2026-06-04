@@ -9,6 +9,7 @@ import { jsonSuccess } from '../../../test/msw/core'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { AdminDashboardPage } from './AdminDashboardPage'
 import { AdminLoginPage } from './AdminLoginPage'
+import { AdminPublishedContentPage } from './AdminPublishedContentPage'
 import { AdminSubmissionDetailPage } from './AdminSubmissionDetailPage'
 import { ProtectedAdminRoute } from './ProtectedAdminRoute'
 
@@ -56,6 +57,10 @@ function renderAdminRoute(initialEntry: string) {
               {
                 path: 'submissions',
                 element: <AdminDashboardPage />,
+              },
+              {
+                path: 'content',
+                element: <AdminPublishedContentPage />,
               },
               {
                 path: 'submissions/:type/:id',
@@ -340,5 +345,27 @@ describe('admin access flow', () => {
     ).toBeVisible()
     expect(screen.getByText('Description')).toBeVisible()
     expect(screen.getAllByRole('img', { name: 'Lagoon Music Night' })).toHaveLength(2)
+  })
+
+  it('shows published content management and lets admins switch content types', async () => {
+    getSession.mockResolvedValue({
+      data: {
+        session: buildSession(),
+      },
+    })
+
+    await renderAdminRoute('/admin/content')
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Manage featured content',
+      }),
+    ).toBeVisible()
+    expect(await screen.findByText('1 of 5 featured slots used')).toBeVisible()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Restaurants' }))
+
+    expect(await screen.findByText('Cielo de Maiz')).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Add to featured' })).toBeVisible()
   })
 })

@@ -87,6 +87,9 @@ export const resources = {
             status: 'Status: {{status}}',
             type: 'Type: {{type}}',
           },
+          links: {
+            content: 'Manage featured content',
+          },
           actions: {
             approve: 'Approve',
             reject: 'Reject',
@@ -120,6 +123,29 @@ export const resources = {
           descriptionLabel: 'Description',
           galleryTitle: 'Images',
           additionalContacts: 'Additional contact details',
+        },
+        content: {
+          eyebrow: 'Published content',
+          title: 'Manage featured content',
+          description:
+            'Choose which live events, restaurants, and tours should appear in featured rows across the site.',
+          loading: 'Loading published content...',
+          error:
+            'We could not load published content right now. Please try again.',
+          empty: 'There is no published content in this section right now.',
+          featured: 'Featured',
+          notFeatured: 'Not featured',
+          summary: {
+            count: '{{count}} of {{cap}} featured slots used',
+          },
+          links: {
+            submissions: 'Back to submission review',
+          },
+          actions: {
+            add: 'Add to featured',
+            remove: 'Remove from featured',
+            open: 'Open live page',
+          },
         },
       },
       home: {
@@ -533,6 +559,9 @@ export const resources = {
             status: 'Estado: {{status}}',
             type: 'Tipo: {{type}}',
           },
+          links: {
+            content: 'Gestionar destacados',
+          },
           actions: {
             approve: 'Aprobar',
             reject: 'Rechazar',
@@ -566,6 +595,29 @@ export const resources = {
           descriptionLabel: 'Descripcion',
           galleryTitle: 'Imagenes',
           additionalContacts: 'Datos de contacto adicionales',
+        },
+        content: {
+          eyebrow: 'Contenido publicado',
+          title: 'Gestionar destacados',
+          description:
+            'Elige que eventos, restaurantes y tours publicados deben aparecer en las filas destacadas del sitio.',
+          loading: 'Cargando contenido publicado...',
+          error:
+            'No pudimos cargar el contenido publicado en este momento. Intentalo de nuevo.',
+          empty: 'No hay contenido publicado en esta seccion por ahora.',
+          featured: 'Destacado',
+          notFeatured: 'No destacado',
+          summary: {
+            count: '{{count}} de {{cap}} espacios destacados usados',
+          },
+          links: {
+            submissions: 'Volver a revision de envios',
+          },
+          actions: {
+            add: 'Agregar a destacados',
+            remove: 'Quitar de destacados',
+            open: 'Abrir pagina publica',
+          },
         },
       },
       home: {

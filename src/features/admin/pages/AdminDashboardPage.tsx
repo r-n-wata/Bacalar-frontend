@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { Button } from '../../../components/atoms/Button'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
@@ -93,6 +95,7 @@ export function AdminDashboardPage() {
 
       <div className={styles.page}>
         <ContentPanel className={styles.toolbar}>
+          <Link to="/admin/content">{t('admin.dashboard.links.content')}</Link>
           <div className={styles.filterGroup}>
             <p className={styles.filterLabel}>{t('admin.dashboard.labels.status')}</p>
             <div className={styles.filters}>
@@ -132,7 +135,9 @@ export function AdminDashboardPage() {
           </div>
         </ContentPanel>
 
-        {submissionsQuery.isLoading ? <p>{t('admin.dashboard.loading')}</p> : null}
+        {submissionsQuery.isLoading ? (
+          <LoadingSpinner label={t('admin.dashboard.loading')} />
+        ) : null}
         {submissionsQuery.isError ? (
           <ContentPanel>
             <p className={styles.empty} role="alert">

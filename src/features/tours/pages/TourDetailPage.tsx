@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { formatCurrency } from '../../../utils/formatCurrency'
@@ -11,7 +12,7 @@ export function TourDetailPage() {
   const { data, isLoading, isError } = useTourDetail(id)
 
   if (isLoading) {
-    return <p>{t('tours.loading')}</p>
+    return <LoadingSpinner label={t('tours.loading')} />
   }
 
   if (isError || !data) {

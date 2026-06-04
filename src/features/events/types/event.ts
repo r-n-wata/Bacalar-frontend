@@ -10,6 +10,10 @@ export type Event = {
   startsAt?: string
   endsAt?: string
   route: string
+  image?: {
+    src: string
+    alt: string
+  }
 }
 
 export type EventsPagination = {

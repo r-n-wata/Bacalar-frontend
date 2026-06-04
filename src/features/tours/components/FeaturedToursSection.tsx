@@ -34,6 +34,8 @@ export function FeaturedToursSection({ tours }: FeaturedToursSectionProps) {
                 price: formatCurrency(tour.priceFrom),
               })}
               to={tour.route}
+              image={tour.image}
+              placeholderLabel={tour.categoryLabel}
             />
           </div>
         ))}
