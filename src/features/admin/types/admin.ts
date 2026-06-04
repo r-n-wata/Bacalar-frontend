@@ -1,5 +1,6 @@
 export type AdminSubmissionFilter = 'all' | 'events' | 'restaurants' | 'tours'
 export type AdminSubmissionType = Exclude<AdminSubmissionFilter, 'all'>
+export type AdminPublishedContentType = AdminSubmissionType
 export type AdminSubmissionStatusFilter =
   | 'all'
   | 'pending'
@@ -116,4 +117,46 @@ export type ModerationResult = {
   reviewedAt: string
   reviewedBy: string
   publishedRecordId?: string
+}
+
+type AdminPublishedContentBase = {
+  id: string
+  type: AdminPublishedContentType
+  title: string
+  route: string
+  isFeatured: boolean
+  featuredOrder?: number
+  image?: {
+    src: string
+    alt: string
+  }
+}
+
+export type AdminPublishedEventItem = AdminPublishedContentBase & {
+  type: 'events'
+  category: 'music' | 'wellness' | 'food'
+  subtitle: string
+}
+
+export type AdminPublishedRestaurantItem = AdminPublishedContentBase & {
+  type: 'restaurants'
+  moment: 'breakfast' | 'lunch' | 'dinner'
+  subtitle: string
+}
+
+export type AdminPublishedTourItem = AdminPublishedContentBase & {
+  type: 'tours'
+  category: 'premium' | 'group' | 'adventure'
+  subtitle: string
+}
+
+export type AdminPublishedContentItem =
+  | AdminPublishedEventItem
+  | AdminPublishedRestaurantItem
+  | AdminPublishedTourItem
+
+export type AdminPublishedContentResponse = {
+  items: AdminPublishedContentItem[]
+  featuredCount: number
+  featuredCap: number
 }

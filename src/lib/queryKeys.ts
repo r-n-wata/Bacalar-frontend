@@ -6,6 +6,9 @@ export const queryKeys = {
       ['admin', 'submissions', status, type] as const,
     submissionDetail: (type: string, id: string) =>
       ['admin', 'submission-detail', type, id] as const,
+    contentRoot: ['admin', 'content'] as const,
+    content: (language: string, type: string) =>
+      ['admin', 'content', language, type] as const,
   },
   home: {
     content: (language: string) => ['home', 'content', language] as const,

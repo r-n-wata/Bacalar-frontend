@@ -89,6 +89,8 @@ export function TourList({
             description={t('tours.hours', { count: tour.durationHours })}
             meta={t('tours.priceFrom', { price: formatCurrency(tour.priceFrom) })}
             to={tour.route}
+            image={tour.image}
+            placeholderLabel={tour.categoryLabel}
           />
         ))}
       </div>

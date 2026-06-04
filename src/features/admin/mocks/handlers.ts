@@ -1,8 +1,10 @@
 import { http } from 'msw'
 import { jsonSuccess } from '../../../test/msw/core'
+import { adminPublishedContentApiPath } from '../api/getAdminPublishedContent'
 import { adminSessionApiPath } from '../api/getAdminSession'
 import { adminSubmissionsApiPath } from '../api/getAdminSubmissions'
 import {
+  adminPublishedContentFixture,
   adminSessionFixture,
   adminSubmissionDetailFixtures,
   adminSubmissionsFixture,
@@ -10,6 +12,15 @@ import {
 
 export const adminHandlers = [
   http.get(adminSessionApiPath, async () => jsonSuccess(adminSessionFixture)),
+  http.get(adminPublishedContentApiPath, async ({ request }) => {
+    const url = new URL(request.url)
+    const type = (url.searchParams.get('type') ?? 'events') as
+      | 'events'
+      | 'restaurants'
+      | 'tours'
+
+    return jsonSuccess(adminPublishedContentFixture[type])
+  }),
   http.get(adminSubmissionsApiPath, async ({ request }) => {
     const url = new URL(request.url)
     const type = url.searchParams.get('type') ?? 'all'
@@ -37,5 +48,11 @@ export const adminHandlers = [
       reviewedAt: '2026-06-02T12:00:00.000Z',
       reviewedBy: adminSessionFixture.email,
     }),
+  ),
+  http.post('/api/admin/content/:type/:id/feature', async ({ params }) =>
+    jsonSuccess(adminPublishedContentFixture[String(params.type) as 'events']),
+  ),
+  http.delete('/api/admin/content/:type/:id/feature', async ({ params }) =>
+    jsonSuccess(adminPublishedContentFixture[String(params.type) as 'events']),
   ),
 ]

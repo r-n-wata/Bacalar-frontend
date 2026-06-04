@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
@@ -178,7 +179,9 @@ export function AdminSubmissionDetailPage() {
           ) : null}
         </div>
 
-        {detailQuery.isLoading ? <p>{t('admin.detail.loading')}</p> : null}
+        {detailQuery.isLoading ? (
+          <LoadingSpinner label={t('admin.detail.loading')} />
+        ) : null}
         {detailQuery.isError ? (
           <ContentPanel>
             <p className={styles.errorText} role="alert">

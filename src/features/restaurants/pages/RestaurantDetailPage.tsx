@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
@@ -10,7 +11,7 @@ export function RestaurantDetailPage() {
   const { data, isLoading, isError } = useRestaurantDetail(id)
 
   if (isLoading) {
-    return <p>{t('restaurants.loading')}</p>
+    return <LoadingSpinner label={t('restaurants.loading')} />
   }
 
   if (isError || !data) {

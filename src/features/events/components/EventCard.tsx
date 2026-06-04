@@ -19,6 +19,15 @@ export function EventCard({ event, featured = false }: EventCardProps) {
   return (
     <Link className={styles.cardLink} to={event.route}>
       <ContentPanel as="article" compact className={panelClassName}>
+        {event.image ? (
+          <div className={styles.media}>
+            <img src={event.image.src} alt={event.image.alt} />
+          </div>
+        ) : (
+          <div className={styles.mediaFallback} aria-hidden="true">
+            <span>{t(`events.categories.${event.category}`)}</span>
+          </div>
+        )}
         <div className={styles.topRow}>
           {featured ? (
             <span className={`${styles.pill} ${styles.featuredPill}`}>

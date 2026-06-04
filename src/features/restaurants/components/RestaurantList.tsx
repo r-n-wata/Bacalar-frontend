@@ -88,6 +88,8 @@ export function RestaurantList({
             description={restaurant.vibe}
             meta={`${restaurant.cuisine} - ${restaurant.priceBand}`}
             to={restaurant.route}
+            image={restaurant.image}
+            placeholderLabel={restaurant.cuisine}
           />
         ))}
       </div>

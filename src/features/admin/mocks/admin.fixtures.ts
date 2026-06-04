@@ -1,4 +1,5 @@
 import type {
+  AdminPublishedContentResponse,
   AdminSession,
   AdminSubmissionDetailResponse,
   AdminSubmissionsResponse,
@@ -136,5 +137,62 @@ export const adminSubmissionDetailFixtures: Record<string, AdminSubmissionDetail
         },
       ],
     },
+  },
+}
+
+export const adminPublishedContentFixture: Record<
+  'events' | 'restaurants' | 'tours',
+  AdminPublishedContentResponse
+> = {
+  events: {
+    items: [
+      {
+        id: 'event-sunset-jazz',
+        type: 'events',
+        title: 'Sunset Jazz by the Lagoon',
+        route: '/events/event-sunset-jazz',
+        isFeatured: true,
+        featuredOrder: 0,
+        category: 'music',
+        subtitle: 'Friday evening - Casa Laguna Deck',
+        image: {
+          src: 'https://images.example.com/event-featured.jpg',
+          alt: 'Sunset Jazz by the Lagoon',
+        },
+      },
+    ],
+    featuredCount: 1,
+    featuredCap: 5,
+  },
+  restaurants: {
+    items: [
+      {
+        id: 'rest-cielo',
+        type: 'restaurants',
+        title: 'Cielo de Maiz',
+        route: '/restaurants/rest-cielo',
+        isFeatured: false,
+        moment: 'breakfast',
+        subtitle: 'Garden breakfast spot',
+      },
+    ],
+    featuredCount: 0,
+    featuredCap: 5,
+  },
+  tours: {
+    items: [
+      {
+        id: 'tour-sailing',
+        type: 'tours',
+        title: 'Private Sailing at Sunrise',
+        route: '/tours/tour-sailing',
+        isFeatured: true,
+        featuredOrder: 0,
+        category: 'premium',
+        subtitle: 'Premium - 4h',
+      },
+    ],
+    featuredCount: 1,
+    featuredCap: 5,
   },
 }

@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
@@ -11,7 +12,7 @@ export function EventDetailPage() {
   const { data, isLoading, isError } = useEventDetail(id)
 
   if (isLoading) {
-    return <p>{t('events.loading')}</p>
+    return <LoadingSpinner label={t('events.loading')} />
   }
 
   if (isError || !data) {

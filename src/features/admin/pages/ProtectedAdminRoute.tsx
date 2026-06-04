@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { ApiError } from '../../../services/http'
 import { useAdminAuth } from '../auth/useAdminAuth'
@@ -23,7 +24,7 @@ export function ProtectedAdminRoute() {
   }, [authError, logout])
 
   if (isLoading) {
-    return <p>{t('admin.auth.checking')}</p>
+    return <LoadingSpinner label={t('admin.auth.checking')} />
   }
 
   if (!session) {
@@ -37,7 +38,7 @@ export function ProtectedAdminRoute() {
   }
 
   if (adminSessionQuery.isLoading) {
-    return <p>{t('admin.auth.checking')}</p>
+    return <LoadingSpinner label={t('admin.auth.checking')} />
   }
 
   if (authError && (authError.status === 401 || authError.status === 403)) {

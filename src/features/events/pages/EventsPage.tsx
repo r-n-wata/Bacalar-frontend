@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { EventCategoryNav } from '../components/EventCategoryNav'
@@ -46,7 +47,7 @@ export function EventsPage() {
         onSelectCategory={setSelectedCategory}
       />
 
-      {isLoading ? <p>{t('events.loading')}</p> : null}
+      {isLoading ? <LoadingSpinner label={t('events.loading')} /> : null}
       {isError ? <p role="alert">{t('events.error')}</p> : null}
       {events.length > 0 && !isLoading && !isError ? (
         <EventList
