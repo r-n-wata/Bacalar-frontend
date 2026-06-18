@@ -11,6 +11,7 @@ type SeoProps = {
 
 const SITE_NAME = 'Sueno Bacalar'
 const DEFAULT_SITE_URL = 'https://suenobacalar.com'
+const DEFAULT_SOCIAL_IMAGE_PATH = '/social-preview.png'
 const DEFAULT_TITLE_SUFFIX = ` | ${SITE_NAME}`
 const MAX_DESCRIPTION_LENGTH = 160
 
@@ -83,6 +84,7 @@ export function Seo({ title, description, image, noIndex = false }: SeoProps) {
     const canonicalUrl = buildCanonicalUrl(siteUrl, location.pathname)
     const locale = i18n.resolvedLanguage === 'es' ? 'es_MX' : 'en_US'
     const normalizedDescription = truncateDescription(description.trim())
+    const socialImage = image ?? DEFAULT_SOCIAL_IMAGE_PATH
 
     document.title = `${title}${DEFAULT_TITLE_SUFFIX}`
     document.documentElement.lang = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
@@ -97,14 +99,14 @@ export function Seo({ title, description, image, noIndex = false }: SeoProps) {
     setMetaContent('property', 'og:title', title)
     setMetaContent('property', 'og:description', normalizedDescription)
     setMetaContent('property', 'og:url', canonicalUrl)
-    setMetaContent('name', 'twitter:card', image ? 'summary_large_image' : 'summary')
+    setMetaContent('name', 'twitter:card', 'summary_large_image')
     setMetaContent('name', 'twitter:title', title)
     setMetaContent('name', 'twitter:description', normalizedDescription)
 
-    if (image) {
-      const absoluteImageUrl = image.startsWith('http')
-        ? image
-        : `${siteUrl}${image.startsWith('/') ? image : `/${image}`}`
+    if (socialImage) {
+      const absoluteImageUrl = socialImage.startsWith('http')
+        ? socialImage
+        : `${siteUrl}${socialImage.startsWith('/') ? socialImage : `/${socialImage}`}`
 
       setMetaContent('property', 'og:image', absoluteImageUrl)
       setMetaContent('name', 'twitter:image', absoluteImageUrl)

@@ -104,6 +104,9 @@ describe('Seo', () => {
     ).toBe('es_MX')
     expect(
       document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'),
-    ).toBe('summary')
+    ).toBe('summary_large_image')
+    expect(
+      document.head.querySelector('meta[property="og:image"]')?.getAttribute('content'),
+    ).toBe('https://suenobacalar.com/social-preview.png')
   })
 })
