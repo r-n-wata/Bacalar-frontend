@@ -14,12 +14,12 @@ export const resources = {
         footer: {
           brandTitle: 'Bacalar',
           brandCopy:
-            'Curated lagoon experiences, food, and timely local plans for a calmer Bacalar trip.',
+            'Helping you discover the best of Bacalar without the endless searching',
           navTitle: 'Explore',
           supportTitle: 'Plan with confidence',
           location: 'Bacalar, Quintana Roo',
-          contact: 'Planning support available daily',
-          legal: 'Curated Bacalar guide for browsing and trip planning.',
+          contact: 'Updated every week with new places and events',
+          legal: 'Independent travel guide for Bacalar',
         },
         languageLabel: 'Language',
         nav: {
@@ -167,7 +167,7 @@ export const resources = {
           eyebrow: 'Host something in Bacalar?',
           title: 'Submit an event for review',
           description:
-            'Share the key details and we will review it before anything goes live.',
+            "Share your event details, and we'll review it before publishing.",
           action: 'Submit an event',
         },
         submit: {
@@ -231,13 +231,13 @@ export const resources = {
         featured: {
           ariaLabel: 'Featured events',
           eyebrow: 'Featured now',
-          title: 'Start with the strongest event picks',
+          title: 'Our top picks for this week.',
           description:
             'A curated row of timely moments worth considering before you filter deeper.',
         },
         detailEyebrow: 'Featured event',
         thisWeekNote:
-          'This week in Bacalar: timely picks first, with room to browse more when you need it.',
+          'Browse all events by category',
         loadMore: 'Load more events',
         loadingMore: 'Loading more events...',
         emptyTitle: 'No events in this category right now.',
@@ -278,9 +278,9 @@ export const resources = {
           'We could not load restaurants right now. Please refresh or try another language.',
         submitCta: {
           eyebrow: 'Know a strong Bacalar table?',
-          title: 'Submit a restaurant for review',
+          title: 'Know a restaurant we should feature?',
           description:
-            'Share the basics, contact details, and optional images so we can review it before it appears in the guide.',
+            "Share the details and we'll review it before adding it to the guide",
           action: 'Submit a restaurant',
         },
         submit: {
@@ -342,7 +342,7 @@ export const resources = {
         categoryNavLabel: 'Restaurant categories',
         listAriaLabel: 'Restaurants list',
         listNote:
-          'Start with the strongest dining moment, then keep browsing by pace and timing.',
+          'Browse restaurants by meal',
         featured: {
           ariaLabel: 'Featured restaurants',
           eyebrow: 'Featured now',
@@ -377,9 +377,9 @@ export const resources = {
           'We could not load tours right now. Please refresh or try another language.',
         submitCta: {
           eyebrow: 'Know a great Bacalar tour?',
-          title: 'Submit a tour for review',
+          title: 'Know a tour we should feature?',
           description:
-            'Share the core experience details, contact info, and optional images so we can review it before it appears in the guide.',
+            "Share the tour details, and we'll review them before adding them to the guide.",
           action: 'Submit a tour',
         },
         submit: {
@@ -441,13 +441,13 @@ export const resources = {
         categoryNavLabel: 'Tour categories',
         listAriaLabel: 'Tours list',
         listNote:
-          'Start with the strongest lagoon fit, then keep browsing by style and pace.',
+          'Find the experience that suits your trip',
         featured: {
           ariaLabel: 'Featured tours',
           eyebrow: 'Featured now',
-          title: 'Start with the strongest tour picks',
+          title: 'Our top recommendations',
           description:
-            'A quick row of high-confidence lagoon experiences before you narrow the list.',
+            'Our favourite tours to help you get started.',
         },
         detailEyebrow: 'Featured tour',
         loadMore: 'Load more tours',
@@ -486,12 +486,12 @@ export const resources = {
         footer: {
           brandTitle: 'Bacalar',
           brandCopy:
-            'Experiencias curadas de laguna, comida y planes locales para un viaje a Bacalar mas claro.',
+            'Te ayudamos a descubrir lo mejor de Bacalar sin la busqueda interminable',
           navTitle: 'Explorar',
           supportTitle: 'Planea con confianza',
           location: 'Bacalar, Quintana Roo',
-          contact: 'Apoyo de planeacion disponible todos los dias',
-          legal: 'Guia curada de Bacalar para explorar y planear el viaje.',
+          contact: 'Actualizado cada semana con nuevos lugares y eventos',
+          legal: 'Guia de viajes independiente de Bacalar',
         },
         languageLabel: 'Idioma',
         nav: {
@@ -640,7 +640,7 @@ export const resources = {
           eyebrow: 'Organizas algo en Bacalar?',
           title: 'Envia un evento para revision',
           description:
-            'Comparte los datos clave y lo revisaremos antes de que aparezca publicado.',
+            'Comparte los detalles de tu evento y lo revisaremos antes de publicarlo.',
           action: 'Enviar un evento',
         },
         submit: {
@@ -704,13 +704,13 @@ export const resources = {
         featured: {
           ariaLabel: 'Eventos destacados',
           eyebrow: 'Destacados ahora',
-          title: 'Empieza con los eventos mas fuertes del momento',
+          title: 'Nuestras mejores recomendaciones de esta semana.',
           description:
             'Una fila curada de planes oportunos que vale la pena revisar antes de filtrar mas.',
         },
         detailEyebrow: 'Evento destacado',
         thisWeekNote:
-          'Esta semana en Bacalar: primero los planes oportunos, con espacio para seguir explorando si hace falta.',
+          'Explora todos los eventos por categoria',
         loadMore: 'Cargar mas eventos',
         loadingMore: 'Cargando mas eventos...',
         emptyTitle: 'No hay eventos en esta categoria por ahora.',
@@ -751,9 +751,9 @@ export const resources = {
           'No pudimos cargar los restaurantes en este momento. Actualiza o prueba otro idioma.',
         submitCta: {
           eyebrow: 'Conoces una buena mesa en Bacalar?',
-          title: 'Envia un restaurante para revision',
+          title: 'Conoces un restaurante que deberiamos destacar?',
           description:
-            'Comparte los datos base, contacto e imagenes opcionales para revisarlo antes de incluirlo en la guia.',
+            'Comparte los detalles y lo revisaremos antes de sumarlo a la guia.',
           action: 'Enviar un restaurante',
         },
         submit: {
@@ -815,7 +815,7 @@ export const resources = {
         categoryNavLabel: 'Categorias de restaurantes',
         listAriaLabel: 'Lista de restaurantes',
         listNote:
-          'Empieza con el mejor momento para comer y despues sigue explorando segun el ritmo del dia.',
+          'Explora restaurantes por momento del dia',
         featured: {
           ariaLabel: 'Restaurantes destacados',
           eyebrow: 'Destacados',
@@ -850,9 +850,9 @@ export const resources = {
           'No pudimos cargar los tours en este momento. Actualiza o prueba otro idioma.',
         submitCta: {
           eyebrow: 'Conoces un gran tour en Bacalar?',
-          title: 'Envia un tour para revision',
+          title: 'Conoces un tour que deberiamos destacar?',
           description:
-            'Comparte los detalles clave, contacto e imagenes opcionales para revisarlo antes de que aparezca en la guia.',
+            'Comparte los detalles del tour y los revisaremos antes de sumarlo a la guia.',
           action: 'Enviar un tour',
         },
         submit: {
@@ -914,13 +914,13 @@ export const resources = {
         categoryNavLabel: 'Categorias de tours',
         listAriaLabel: 'Lista de tours',
         listNote:
-          'Empieza con el estilo de laguna mas fuerte y luego sigue explorando por ritmo y formato.',
+          'Encuentra la experiencia que mejor va con tu viaje',
         featured: {
           ariaLabel: 'Tours destacados',
           eyebrow: 'Destacados ahora',
-          title: 'Empieza con los tours mas fuertes',
+          title: 'Nuestras recomendaciones principales',
           description:
-            'Una fila rapida de experiencias de laguna con alta confianza antes de filtrar la lista.',
+            'Nuestros tours favoritos para ayudarte a empezar.',
         },
         detailEyebrow: 'Tour destacado',
         loadMore: 'Cargar mas tours',

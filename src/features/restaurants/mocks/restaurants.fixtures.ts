@@ -297,9 +297,9 @@ function buildRestaurantsContent(
   if (language === 'es') {
     return {
       eyebrow: 'Restaurantes',
-      title: 'Elige la parada correcta para cada momento',
+      title: 'Donde comer en Bacalar',
       description:
-        'Haz la comida facil: un gran desayuno, un almuerzo sin vueltas y una cena que valga bajar el ritmo.',
+        'Desde desayunos junto a la laguna hasta cenas relajadas, seleccionamos lugares que vale la pena visitar.',
       featuredItems: [...restaurantSeedsByLanguage.es]
         .sort((left, right) => left.featuredOrder - right.featuredOrder)
         .slice(0, 3)
@@ -314,9 +314,9 @@ function buildRestaurantsContent(
 
   return {
     eyebrow: 'Restaurants',
-    title: 'Pick the right stop for the moment',
+    title: 'Where to eat in Bacalar',
     description:
-      'Keep dining simple: one strong breakfast, one easy lunch, and one dinner worth slowing down for.',
+      "From breakfast by the lagoon to relaxed dinners, we've selected places worth visiting.",
     featuredItems: [...restaurantSeedsByLanguage.en]
       .sort((left, right) => left.featuredOrder - right.featuredOrder)
       .slice(0, 3)

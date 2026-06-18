@@ -76,7 +76,7 @@ describe('HomePage', () => {
 
     expect(
       await screen.findByText(
-        'Start with the water, then layer in food and what is happening this week.',
+        'A calmer way to experience Bacalar',
       ),
     ).toBeVisible()
 
@@ -88,7 +88,7 @@ describe('HomePage', () => {
 
     expect(
       await screen.findByText(
-        'Empieza por el agua y despues suma comida y lo que esta pasando esta semana.',
+        'Una forma mas tranquila de vivir Bacalar',
       ),
     ).toBeVisible()
   })
@@ -189,7 +189,7 @@ describe('HomePage', () => {
 
     expect(
       await screen.findByText(
-        'Start with the water, then layer in food and what is happening this week.',
+        'A calmer way to experience Bacalar',
       ),
     ).toBeVisible()
     expect(screen.queryByText('Browse quickly')).not.toBeInTheDocument()
@@ -199,7 +199,7 @@ describe('HomePage', () => {
 
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeVisible()
     expect(screen.getAllByRole('img', { name: 'Sueno Bacalar' })).toHaveLength(2)
-    expect(screen.getByText('Curated lagoon experiences, food, and timely local plans for a calmer Bacalar trip.')).toBeVisible()
+    expect(screen.getByText('Helping you discover the best of Bacalar without the endless searching')).toBeVisible()
     expect(screen.getAllByRole('link', { name: 'Overview' })).toHaveLength(2)
   })
 
@@ -227,7 +227,7 @@ describe('HomePage', () => {
     await renderHomeRoute()
 
     const toursSection = await screen.findByRole('region', {
-      name: 'A short list of lagoon experiences worth opening first',
+      name: 'Our favourite lagoon tours',
     })
 
     expect(

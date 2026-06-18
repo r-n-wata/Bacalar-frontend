@@ -627,15 +627,15 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
 const pageMetadataByLanguage = {
   en: {
     eyebrow: 'Events',
-    title: 'See what feels current in Bacalar this week',
+    title: 'Events happening this week',
     description:
-      'Use events as texture for the trip: a timely extra when the right night or morning opens up.',
+      'Music, food and wellness events worth adding to your itinerary.',
   },
   es: {
     eyebrow: 'Eventos',
-    title: 'Mira que se siente vigente en Bacalar esta semana',
+    title: 'Eventos de esta semana',
     description:
-      'Usa los eventos como textura del viaje: un extra oportuno cuando aparece la noche o la manana correcta.',
+      'Eventos de musica, comida y bienestar que vale la pena sumar a tu itinerario.',
   },
 } satisfies Record<AppLanguage, Pick<EventsContent, 'eyebrow' | 'title' | 'description'>>
 

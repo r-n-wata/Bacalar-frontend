@@ -72,12 +72,12 @@ describe('ToursPage', () => {
     await renderToursRoute()
 
     const heroTitle = await screen.findByText(
-      'Choose a lagoon experience that fits the day',
+      'Discover the best lagoon tours in Bacalar',
     )
-    const featuredTitle = screen.getByText('Start with the strongest tour picks')
+    const featuredTitle = screen.getByText('Our top recommendations')
     const categoryFilter = screen.getByRole('button', { name: 'All' })
     const toursList = screen.getByLabelText('Tours list')
-    const submitTitle = screen.getByText('Submit a tour for review')
+    const submitTitle = screen.getByText('Know a tour we should feature?')
 
     expect(heroTitle.compareDocumentPosition(featuredTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
@@ -126,7 +126,7 @@ describe('ToursPage', () => {
       within(localizedToursList).getByText('Vela privada al amanecer'),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Grupo' })).toBeVisible()
-    expect(screen.getByText('Empieza con los tours mas fuertes')).toBeVisible()
+    expect(screen.getByText('Nuestras recomendaciones principales')).toBeVisible()
     expect(screen.queryByText('Guided Mangrove Kayak')).not.toBeInTheDocument()
   })
 

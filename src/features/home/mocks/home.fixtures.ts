@@ -40,9 +40,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
   en: {
     hero: {
       eyebrow: 'Bacalar, made simple',
-      title: 'Start with the water, then layer in food and what is happening this week.',
+      title: 'A calmer way to experience Bacalar',
       description:
-        'A calmer homepage for both first-time visitors and returning travelers, with lagoon picks first and timely events only when they help.',
+        'Curated recommendations for visitors who want less noise and better choices.',
     },
     spotlight: {
       actions: [
@@ -96,9 +96,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     featuredExperiences: {
       intro: {
         eyebrow: 'Top tours',
-        title: 'A short list of lagoon experiences worth opening first',
+        title: 'Our favourite lagoon tours',
         description:
-          'Compact, confidence-building options for people who want to move quickly.',
+          'Trusted experiences to help you make the most of your time on the lagoon.',
       },
       items: [
         {
@@ -132,9 +132,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     diningMoments: {
       intro: {
         eyebrow: 'Where to eat',
-        title: 'Breakfast, lunch, and dinner that fit the pace of Bacalar',
+        title: 'Where to eat in Bacalar',
         description:
-          'Keep restaurant decisions short, visual, and easy to scan.',
+          'From breakfast by the lagoon to relaxed dinners, these are the places worth knowing.',
       },
       items: [
         {
@@ -172,9 +172,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     weeklyHappenings: {
       intro: {
         eyebrow: 'This week',
-        title: 'Current events that add texture without crowding the page',
+        title: "This week's events",
         description:
-          'Fresh enough for repeat visitors, selective enough for everyone else.',
+          'Just the events worth knowing about.',
       },
       items: [
         {
@@ -212,9 +212,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
   es: {
     hero: {
       eyebrow: 'Bacalar, mas simple',
-      title: 'Empieza por el agua y despues suma comida y lo que esta pasando esta semana.',
+      title: 'Una forma mas tranquila de vivir Bacalar',
       description:
-        'Una portada mas calmada para quienes vienen por primera vez y para quienes regresan, con picks de laguna al frente y eventos oportunos solo cuando ayudan.',
+        'Recomendaciones curadas para visitantes que quieren menos ruido y mejores decisiones.',
     },
     spotlight: {
       actions: [
@@ -277,9 +277,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     featuredExperiences: {
       intro: {
         eyebrow: 'Tours top',
-        title: 'Una lista corta de experiencias en la laguna que vale la pena abrir primero',
+        title: 'Nuestros tours favoritos por la laguna',
         description:
-          'Opciones compactas y claras para avanzar rapido con confianza.',
+          'Experiencias confiables para aprovechar mejor tu tiempo en la laguna.',
       },
       items: [
         {
@@ -319,9 +319,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     diningMoments: {
       intro: {
         eyebrow: 'Donde comer',
-        title: 'Desayuno, almuerzo y cena con el ritmo correcto para Bacalar',
+        title: 'Donde comer en Bacalar',
         description:
-          'Haz que decidir restaurante sea corto, visual y facil de leer.',
+          'Desde desayunos junto a la laguna hasta cenas relajadas, estos son los lugares que vale la pena conocer.',
       },
       items: [
         {
@@ -368,9 +368,9 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
     weeklyHappenings: {
       intro: {
         eyebrow: 'Esta semana',
-        title: 'Eventos actuales que suman textura sin saturar la pagina',
+        title: 'Eventos de esta semana',
         description:
-          'Lo bastante fresco para quien vuelve, lo bastante selectivo para todos.',
+          'Solo los eventos que vale la pena conocer.',
       },
       items: [
         {
