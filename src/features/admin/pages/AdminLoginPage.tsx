@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { TextInput } from '../../../components/atoms/TextInput'
@@ -19,7 +21,7 @@ type LoginLocationState = {
 }
 
 export function AdminLoginPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as LoginLocationState | null
@@ -32,6 +34,8 @@ export function AdminLoginPage() {
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const destination = state?.from ?? '/admin/submissions'
+  const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const seo = seoContentByLanguage[language].adminLogin
 
   if (!isLoading && session && adminSessionQuery.data) {
     return <Navigate to={destination} replace />
@@ -69,6 +73,7 @@ export function AdminLoginPage() {
 
   return (
     <section className={pageStyles.page}>
+      <Seo title={seo.title} description={seo.description} noIndex />
       <ContentPanel className={styles.panel} tone="warm">
         <div className={styles.page}>
           <PageIntro

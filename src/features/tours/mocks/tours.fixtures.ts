@@ -313,12 +313,12 @@ export function getToursFixture(
       language === 'es' ? 'Tours en Bacalar' : 'Bacalar tours',
     title:
       language === 'es'
-        ? 'Elige una experiencia en la laguna que encaje con el dia'
-        : 'Choose a lagoon experience that fits the day',
+        ? 'Descubre los mejores tours por la laguna en Bacalar'
+        : 'Discover the best lagoon tours in Bacalar',
     description:
       language === 'es'
-        ? 'Compara primero unas pocas opciones claras y luego entra a una exploracion mas amplia cuando el ritmo del dia ya este definido.'
-        : 'Compare a few focused options first, then move into a fuller browse once the right pace becomes clear.',
+        ? 'Explora experiencias confiables en la laguna para todo tipo de viaje.'
+        : 'Browse trusted lagoon experiences for every type of trip.',
     featuredItems,
     items,
     pagination: {

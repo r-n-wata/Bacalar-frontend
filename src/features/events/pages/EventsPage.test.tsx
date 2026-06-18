@@ -72,9 +72,9 @@ describe('EventsPage', () => {
     await renderEventsRoute()
 
     const heroTitle = await screen.findByText(
-      'See what feels current in Bacalar this week',
+      'Events happening this week',
     )
-    const featuredTitle = screen.getByText('Start with the strongest event picks')
+    const featuredTitle = screen.getByText('Our top picks for this week.')
     const categoryFilter = screen.getByRole('button', { name: 'All' })
     const eventsList = screen.getByLabelText('Events list')
     const submitTitle = screen.getByText('Submit an event for review')
@@ -125,7 +125,9 @@ describe('EventsPage', () => {
       within(localizedEventsList).getByText('Jazz al atardecer junto a la laguna'),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Musica' })).toBeVisible()
-    expect(screen.getByText('Empieza con los eventos mas fuertes del momento')).toBeVisible()
+    expect(
+      screen.getByText('Nuestras mejores recomendaciones de esta semana.'),
+    ).toBeVisible()
     expect(
       screen.queryByText('Sesion de vinilos en el patio'),
     ).not.toBeInTheDocument()

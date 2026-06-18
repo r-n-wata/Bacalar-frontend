@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" role="img" aria-labelledby="title desc">
-  <title id="title">Sueño Bacalar painted transparent logo dark lettering</title>
-  <desc id="desc">A transparent-background painted-style Sueño Bacalar logo with palms, yellow sunset arch, turquoise lagoon strokes, and dark teal lettering.</desc>
+  <title id="title">Sueño Bacalar painted transparent logo</title>
+  <desc id="desc">A transparent-background painted-style Sueño Bacalar logo with palms, yellow sunset arch, turquoise lagoon strokes, and light lettering.</desc>
   <defs>
     <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#06383d" flood-opacity="0.18"/>
@@ -14,7 +14,7 @@
       .tealDark{fill:none;stroke:#057276;stroke-linecap:round;stroke-linejoin:round;filter:url(#paintTexture)}
       .teal{fill:none;stroke:#00A9AD;stroke-linecap:round;stroke-linejoin:round;filter:url(#paintTexture)}
       .aqua{fill:none;stroke:#61D7D6;stroke-linecap:round;stroke-linejoin:round;filter:url(#paintTexture)}
-      .darkText{fill:#057276;stroke:#03565A;stroke-width:1.5;paint-order:stroke fill;filter:url(#softShadow)}
+      .lightText{fill:#F4F4F1;stroke:#E1E1DC;stroke-width:2;paint-order:stroke fill;filter:url(#softShadow)}
     </style>
   </defs>
 
@@ -77,7 +77,7 @@
 
   <!-- text -->
   <g text-anchor="middle">
-    <text x="768" y="760" class="darkText" font-family="Georgia, 'Times New Roman', serif" font-size="150" font-weight="500" letter-spacing="22">SUEÑO</text>
-    <text x="768" y="880" class="darkText" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" letter-spacing="34">BACALAR</text>
+    <text x="768" y="760" class="lightText" font-family="Georgia, 'Times New Roman', serif" font-size="150" font-weight="500" letter-spacing="22">SUEÑO</text>
+    <text x="768" y="880" class="lightText" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" letter-spacing="34">BACALAR</text>
   </g>
 </svg>

@@ -71,7 +71,7 @@ describe('RestaurantsPage', () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
-    const heroTitle = await screen.findByText('Pick the right stop for the moment')
+    const heroTitle = await screen.findByText('Where to eat in Bacalar')
     const featuredTitle = screen.getByText('Start with the strongest meal picks')
     const categoryFilter = screen.getByRole('button', { name: 'All' })
     const restaurantList = screen.getByLabelText('Restaurants list')
@@ -119,7 +119,7 @@ describe('RestaurantsPage', () => {
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Desayuno' })).toBeVisible()
     expect(
-      screen.getByText('Empieza con las mejores comidas del momento'),
+      screen.getByText('Conoces un restaurante que deberiamos destacar?'),
     ).toBeVisible()
   })
 

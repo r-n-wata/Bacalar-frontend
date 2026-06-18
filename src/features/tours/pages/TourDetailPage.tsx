@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Seo } from '../../../app/seo/Seo'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -12,15 +13,36 @@ export function TourDetailPage() {
   const { data, isLoading, isError } = useTourDetail(id)
 
   if (isLoading) {
-    return <LoadingSpinner label={t('tours.loading')} />
+    return (
+      <>
+        <Seo
+          title={t('shell.nav.tours')}
+          description={t('tours.loading')}
+        />
+        <LoadingSpinner label={t('tours.loading')} />
+      </>
+    )
   }
 
   if (isError || !data) {
-    return <p role="alert">{t('tours.error')}</p>
+    return (
+      <>
+        <Seo
+          title={t('shell.nav.tours')}
+          description={t('tours.error')}
+        />
+        <p role="alert">{t('tours.error')}</p>
+      </>
+    )
   }
 
   return (
     <section className={pageStyles.page}>
+      <Seo
+        title={`${data.name} | ${t('shell.nav.tours')}`}
+        description={data.description}
+        image={data.image?.src}
+      />
       <article className={pageStyles.hero}>
         {data.image ? (
           <img

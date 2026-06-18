@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Seo } from '../../../app/seo/Seo'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -12,11 +13,27 @@ export function EventDetailPage() {
   const { data, isLoading, isError } = useEventDetail(id)
 
   if (isLoading) {
-    return <LoadingSpinner label={t('events.loading')} />
+    return (
+      <>
+        <Seo
+          title={t('shell.nav.events')}
+          description={t('events.loading')}
+        />
+        <LoadingSpinner label={t('events.loading')} />
+      </>
+    )
   }
 
   if (isError || !data) {
-    return <p role="alert">{t('events.error')}</p>
+    return (
+      <>
+        <Seo
+          title={t('shell.nav.events')}
+          description={t('events.error')}
+        />
+        <p role="alert">{t('events.error')}</p>
+      </>
+    )
   }
 
   const moodLabel = t(getMoodTranslationKey(data.category))
@@ -24,6 +41,11 @@ export function EventDetailPage() {
 
   return (
     <section className={pageStyles.page}>
+      <Seo
+        title={`${data.title} | ${t('shell.nav.events')}`}
+        description={data.description}
+        image={data.image?.src}
+      />
       <article className={pageStyles.hero}>
         {data.image ? (
           <img
