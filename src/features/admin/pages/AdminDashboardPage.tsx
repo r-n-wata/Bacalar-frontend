@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { Button } from '../../../components/atoms/Button'
@@ -35,7 +37,7 @@ const typeFilters: AdminSubmissionFilter[] = [
 ]
 
 export function AdminDashboardPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
   const { session } = useAdminAuth()
   const token = session?.access_token ?? null
@@ -84,9 +86,12 @@ export function AdminDashboardPage() {
     ],
     [activeStatus, activeType, t],
   )
+  const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const seo = seoContentByLanguage[language].adminSubmissions
 
   return (
     <section className={pageStyles.page}>
+      <Seo title={seo.title} description={seo.description} noIndex />
       <PageIntro
         eyebrow={t('admin.dashboard.eyebrow')}
         title={t('admin.dashboard.title')}

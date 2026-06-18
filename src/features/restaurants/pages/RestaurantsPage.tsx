@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
@@ -11,7 +13,7 @@ import { useRestaurants } from '../hooks/useRestaurants'
 import type { RestaurantCategoryFilter } from '../types/restaurant'
 
 export function RestaurantsPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [selectedCategory, setSelectedCategory] =
     useState<RestaurantCategoryFilter>('all')
   const {
@@ -29,9 +31,19 @@ export function RestaurantsPage() {
   const emptyDescription = t('restaurants.emptyDescription', {
     category: t(`restaurants.categories.${selectedCategory}`),
   })
+  const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const fallbackSeo = seoContentByLanguage[language].restaurants
+  const seo = (
+    <Seo
+      title={firstPage?.title ?? fallbackSeo.title}
+      description={firstPage?.description ?? fallbackSeo.description}
+      image={featuredItems[0]?.image?.src}
+    />
+  )
 
   return (
     <section className={pageStyles.page}>
+      {seo}
       {firstPage ? (
         <PageIntro
           eyebrow={firstPage.eyebrow}

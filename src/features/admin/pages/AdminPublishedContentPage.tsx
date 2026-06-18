@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
@@ -37,6 +39,7 @@ export function AdminPublishedContentPage() {
   const { session } = useAdminAuth()
   const token = session?.access_token ?? null
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const seo = seoContentByLanguage[language].adminContent
   const [activeType, setActiveType] = useState<AdminPublishedContentType>('events')
   const contentQuery = useAdminPublishedContent(activeType, token)
   const items = contentQuery.data?.items ?? []
@@ -72,6 +75,7 @@ export function AdminPublishedContentPage() {
 
   return (
     <section className={pageStyles.page}>
+      <Seo title={seo.title} description={seo.description} noIndex />
       <PageIntro
         eyebrow={t('admin.content.eyebrow')}
         title={t('admin.content.title')}

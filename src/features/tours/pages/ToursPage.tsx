@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
@@ -11,7 +13,7 @@ import { useTours } from '../hooks/useTours'
 import type { TourCategoryFilter } from '../types/tour'
 
 export function ToursPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [selectedCategory, setSelectedCategory] =
     useState<TourCategoryFilter>('all')
   const {
@@ -29,9 +31,19 @@ export function ToursPage() {
   const emptyDescription = t('tours.emptyDescription', {
     category: t(`tours.categories.${selectedCategory}`),
   })
+  const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const fallbackSeo = seoContentByLanguage[language].tours
+  const seo = (
+    <Seo
+      title={firstPage?.title ?? fallbackSeo.title}
+      description={firstPage?.description ?? fallbackSeo.description}
+      image={featuredItems[0]?.image?.src}
+    />
+  )
 
   return (
     <section className={pageStyles.page}>
+      {seo}
       {firstPage ? (
         <PageIntro
           eyebrow={firstPage.eyebrow}

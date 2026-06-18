@@ -1,6 +1,8 @@
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Seo } from '../../../app/seo/Seo'
+import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { TextInput } from '../../../components/atoms/TextInput'
@@ -106,6 +108,7 @@ function formatFileSizeLabel(bytes: number) {
 export function EventSubmissionPage() {
   const { t } = useTranslation()
   const language = useAppLanguage()
+  const seo = seoContentByLanguage[language].eventSubmit
   const [form, setForm] = useState<SubmissionFormState>(initialFormState)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [externalImageUrls, setExternalImageUrls] = useState<string[]>([])
@@ -370,6 +373,7 @@ export function EventSubmissionPage() {
 
   return (
     <section className={pageStyles.page}>
+      <Seo title={seo.title} description={seo.description} noIndex />
       <PageIntro
         eyebrow={t('events.submit.eyebrow')}
         title={t('events.submit.title')}

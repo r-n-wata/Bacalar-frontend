@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import suenoBacalarLogo from "../../assets/sueno-bacalar-logo.svg";
+import footerLogo from "../../assets/logo-dark.svg";
+import suenoBacalarLogo from "../../assets/logo-new.svg";
 import { ScrollToTop } from "../../app/router/ScrollToTop";
 import { useAdminAuth } from "../../features/admin/auth/useAdminAuth";
 import { Button } from "../atoms/Button";
@@ -39,6 +40,27 @@ export function AppShell() {
             src={suenoBacalarLogo}
             alt="Sueno Bacalar"
           />
+
+          <nav
+            id="primary-navigation"
+            className={styles.nav}
+            aria-label="Primary"
+          >
+            {navigation.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.navLink} ${styles.navLinkActive}`
+                    : styles.navLink
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
 
           <div className={styles.headerActions}>
             {session ? (
@@ -145,27 +167,6 @@ export function AppShell() {
             </div>
           </div>
         </div>
-
-        <nav
-          id="primary-navigation"
-          className={styles.nav}
-          aria-label="Primary"
-        >
-          {navigation.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                isActive
-                  ? `${styles.navLink} ${styles.navLinkActive}`
-                  : styles.navLink
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
       </header>
 
       <main id="content" className={styles.main}>
@@ -177,7 +178,7 @@ export function AppShell() {
           <section className={styles.footerBrand}>
             <img
               className={styles.footerLogo}
-              src={suenoBacalarLogo}
+              src={footerLogo}
               alt="Sueno Bacalar"
             />
             <p className={styles.footerCopy}>{t("shell.footer.brandCopy")}</p>

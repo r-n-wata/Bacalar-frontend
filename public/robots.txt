@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /events/submit
+Disallow: /restaurants/submit
+Disallow: /tours/submit
+Sitemap: https://suenobacalar.com/sitemap.xml
