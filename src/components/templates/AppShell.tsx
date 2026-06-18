@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import footerLogo from "../../assets/logo-dark.svg";
 import suenoBacalarLogo from "../../assets/logo-new.svg";
 import { ScrollToTop } from "../../app/router/ScrollToTop";
@@ -10,7 +10,6 @@ import styles from "./AppShell.module.scss";
 
 export function AppShell() {
   const { t, i18n } = useTranslation();
-  const location = useLocation();
   const navigate = useNavigate();
   const { session, logout } = useAdminAuth();
   const activeLanguage = i18n.resolvedLanguage === "es" ? "es" : "en";
@@ -34,9 +33,14 @@ export function AppShell() {
     navigate("/admin/login");
   }
 
-  useEffect(() => {
+  function closeAdminMenu() {
     setIsAdminMenuOpen(false);
-  }, [location.pathname]);
+  }
+
+  async function handleLanguageChange(language: "en" | "es") {
+    closeAdminMenu();
+    await i18n.changeLanguage(language);
+  }
 
   useEffect(() => {
     document.body.style.overflow = isAdminMenuOpen ? "hidden" : "";
@@ -72,6 +76,7 @@ export function AppShell() {
                     ? `${styles.navLink} ${styles.navLinkActive}`
                     : styles.navLink
                 }
+                onClick={closeAdminMenu}
               >
                 {item.label}
               </NavLink>
@@ -127,6 +132,7 @@ export function AppShell() {
                     : `${styles.adminLink} ${styles.desktopAdminLink}`
                 }
                 aria-label={t("shell.nav.admin")}
+                onClick={closeAdminMenu}
               >
                 <svg
                   className={styles.adminIcon}
@@ -169,14 +175,14 @@ export function AppShell() {
               <Button
                 className={styles.languageButton}
                 variant={activeLanguage === "en" ? "secondary" : "inverse"}
-                onClick={() => void i18n.changeLanguage("en")}
+                onClick={() => void handleLanguageChange("en")}
               >
                 EN
               </Button>
               <Button
                 className={styles.languageButton}
                 variant={activeLanguage === "es" ? "secondary" : "inverse"}
-                onClick={() => void i18n.changeLanguage("es")}
+                onClick={() => void handleLanguageChange("es")}
               >
                 ES
               </Button>
@@ -276,6 +282,7 @@ export function AppShell() {
                         : `${styles.adminLink} ${styles.mobileAdminLink}`
                     }
                     aria-label={t("shell.nav.admin")}
+                    onClick={closeAdminMenu}
                   >
                     <svg
                       className={styles.adminIcon}
@@ -318,7 +325,7 @@ export function AppShell() {
                     : `${styles.languageButton} ${styles.mobileLanguageButton}`
                 }
                 variant={activeLanguage === "en" ? "secondary" : "inverse"}
-                onClick={() => void i18n.changeLanguage("en")}
+                onClick={() => void handleLanguageChange("en")}
               >
                 EN
               </Button>
@@ -329,10 +336,10 @@ export function AppShell() {
                     : `${styles.languageButton} ${styles.mobileLanguageButton}`
                 }
                 variant={activeLanguage === "es" ? "secondary" : "inverse"}
-                onClick={() => void i18n.changeLanguage("es")}
+                onClick={() => void handleLanguageChange("es")}
               >
                 ES
-                  </Button>
+              </Button>
                 </div>
               </div>
             </div>
