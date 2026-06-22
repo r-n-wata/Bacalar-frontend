@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import footerLogo from "../../assets/logo-dark.svg";
+import footerMobileLogo from "../../assets/logo-mobile-dark.svg";
+import mobileHeaderLogo from "../../assets/logo-mobile-light.svg";
 import suenoBacalarLogo from "../../assets/logo-new.svg";
 import { ScrollToTop } from "../../app/router/ScrollToTop";
 import { useAdminAuth } from "../../features/admin/auth/useAdminAuth";
@@ -55,11 +57,14 @@ export function AppShell() {
       <ScrollToTop />
       <header className={styles.header}>
         <div className={styles.headerBar}>
-          <img
-            className={styles.headerLogo}
-            src={suenoBacalarLogo}
-            alt="Sueno Bacalar"
-          />
+          <picture>
+            <source media="(max-width: 920px)" srcSet={mobileHeaderLogo} />
+            <img
+              className={styles.headerLogo}
+              src={suenoBacalarLogo}
+              alt="Sueno Bacalar"
+            />
+          </picture>
 
           <nav
             id="primary-navigation"
@@ -354,11 +359,14 @@ export function AppShell() {
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <section className={styles.footerBrand}>
-            <img
-              className={styles.footerLogo}
-              src={footerLogo}
-              alt="Sueno Bacalar"
-            />
+            <picture>
+              <source media="(max-width: 920px)" srcSet={footerMobileLogo} />
+              <img
+                className={styles.footerLogo}
+                src={footerLogo}
+                alt="Sueno Bacalar"
+              />
+            </picture>
             <p className={styles.footerCopy}>{t("shell.footer.brandCopy")}</p>
           </section>
 
