@@ -5,6 +5,7 @@ import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
+import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 
 export function RestaurantDetailPage() {
   const { t } = useTranslation()
@@ -73,7 +74,7 @@ export function RestaurantDetailPage() {
         </article>
         <article className={pageStyles.metaCard}>
           <span>{t('restaurants.meta.moment')}</span>
-          <strong>{t(`restaurants.categories.${data.moment}`)}</strong>
+          <strong>{formatRestaurantMoments(data.moments, t)}</strong>
         </article>
       </div>
 

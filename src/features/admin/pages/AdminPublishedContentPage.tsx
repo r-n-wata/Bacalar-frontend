@@ -16,6 +16,7 @@ import { updateAdminPublishedContentFeature } from '../api/updateAdminPublishedC
 import { useAdminPublishedContent } from '../hooks/useAdminPublishedContent'
 import type { AdminPublishedContentItem, AdminPublishedContentType } from '../types/admin'
 import styles from './AdminPublishedContentPage.module.scss'
+import { formatRestaurantMoments } from '../../restaurants/lib/formatRestaurantMoments'
 
 const contentTypes: AdminPublishedContentType[] = ['events', 'restaurants', 'tours']
 
@@ -27,7 +28,7 @@ function getTypeMeta(
     case 'events':
       return t(`events.categories.${item.category}`)
     case 'restaurants':
-      return t(`restaurants.categories.${item.moment}`)
+      return formatRestaurantMoments(item.moments, t)
     case 'tours':
       return t(`tours.categories.${item.category}`)
   }

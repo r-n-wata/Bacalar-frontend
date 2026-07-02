@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { FeatureCard } from '../../../components/molecules/FeatureCard'
+import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 import type { Restaurant } from '../types/restaurant'
 import styles from './FeaturedRestaurantsSection.module.scss'
 
@@ -33,7 +34,7 @@ export function FeaturedRestaurantsSection({
         {restaurants.map((restaurant) => (
           <div key={restaurant.id} className={styles.cardWrap}>
             <FeatureCard
-              tag={t(`restaurants.categories.${restaurant.moment}`)}
+              tag={formatRestaurantMoments(restaurant.moments, t)}
               title={restaurant.name}
               description={restaurant.vibe}
               meta={`${restaurant.cuisine} - ${restaurant.priceBand}`}

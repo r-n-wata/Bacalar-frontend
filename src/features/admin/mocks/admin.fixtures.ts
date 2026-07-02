@@ -172,7 +172,7 @@ export const adminPublishedContentFixture: Record<
         title: 'Cielo de Maiz',
         route: '/restaurants/rest-cielo',
         isFeatured: false,
-        moment: 'breakfast',
+        moments: ['breakfast'],
         subtitle: 'Garden breakfast spot',
       },
     ],
