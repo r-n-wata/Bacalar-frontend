@@ -7,7 +7,7 @@ export type Restaurant = {
   cuisine: string
   vibe: string
   priceBand: '$' | '$$' | '$$$'
-  moment: RestaurantMoment
+  moments: RestaurantMoment[]
   route: string
   image?: {
     src: string
@@ -21,7 +21,7 @@ export type RestaurantDetail = {
   cuisine: string
   vibe: string
   priceBand: '$' | '$$' | '$$$'
-  moment: RestaurantMoment
+  moments: RestaurantMoment[]
   description: string
   route: string
   image?: {

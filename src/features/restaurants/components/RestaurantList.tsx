@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
 import { FeatureCard } from '../../../components/molecules/FeatureCard'
+import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 import type { Restaurant } from '../types/restaurant'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
 import styles from './RestaurantList.module.scss'
@@ -83,7 +84,7 @@ export function RestaurantList({
         {restaurants.map((restaurant) => (
           <FeatureCard
             key={restaurant.id}
-            tag={t(`restaurants.categories.${restaurant.moment}`)}
+            tag={formatRestaurantMoments(restaurant.moments, t)}
             title={restaurant.name}
             description={restaurant.vibe}
             meta={`${restaurant.cuisine} - ${restaurant.priceBand}`}

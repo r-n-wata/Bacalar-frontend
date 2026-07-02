@@ -89,6 +89,7 @@ describe('RestaurantsPage', () => {
     const featuredSection = screen.getByLabelText('Featured restaurants')
     expect(within(featuredSection).getAllByRole('link')).toHaveLength(3)
     expect(within(featuredSection).getByText('Cielo de Maiz')).toBeVisible()
+    expect(within(featuredSection).getByText('Lunch / Dinner')).toBeVisible()
     expect(
       screen.getByRole('link', { name: 'Submit a restaurant' }),
     ).toHaveAttribute('href', '/restaurants/submit')

@@ -140,7 +140,7 @@ export type AdminPublishedEventItem = AdminPublishedContentBase & {
 
 export type AdminPublishedRestaurantItem = AdminPublishedContentBase & {
   type: 'restaurants'
-  moment: 'breakfast' | 'lunch' | 'dinner'
+  moments: Array<'breakfast' | 'lunch' | 'dinner'>
   subtitle: string
 }
 
