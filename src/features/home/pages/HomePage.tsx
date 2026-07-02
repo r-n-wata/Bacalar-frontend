@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
+import homepageImage from '../../../assets/homepageImage.jpg'
 import { HomeHero } from '../components/HomeHero'
 import { HomeSection } from '../components/HomeSection'
 import { useHomeContent } from '../hooks/useHomeContent'
@@ -14,7 +15,11 @@ export function HomePage() {
   const fallbackSeo = seoContentByLanguage[language].home
   const seoTitle = data?.hero.title ?? fallbackSeo.title
   const seoDescription = data?.hero.description ?? fallbackSeo.description
-  const heroImage = data?.spotlight.entries.tours.image?.src
+  const heroImage = homepageImage
+  const heroImageAlt =
+    language === 'es'
+      ? 'Vista de la laguna de Bacalar desde la orilla'
+      : 'Bacalar lagoon view from the shoreline'
 
   const seo = (
     <Seo
@@ -49,7 +54,10 @@ export function HomePage() {
         eyebrow={data.hero.eyebrow}
         title={data.hero.title}
         description={data.hero.description}
-        image={data.spotlight.entries.tours.image}
+        image={{
+          src: homepageImage,
+          alt: heroImageAlt,
+        }}
         ctaLabel={t('home.toursCta')}
       />
 
