@@ -24,14 +24,14 @@ type SeoContent = Record<
 export const seoContentByLanguage: SeoContent = {
   en: {
     home: {
-      title: 'A calmer way to experience Bacalar',
+      title: 'A calmer way to tour Bacalar',
       description:
         'Curated recommendations for visitors who want less noise and better choices in Bacalar.',
     },
     tours: {
-      title: 'Discover the best lagoon tours in Bacalar',
+      title: 'Discover the best tours in Bacalar',
       description:
-        'Browse trusted lagoon experiences in Bacalar for every type of trip, from premium sails to easy group outings.',
+        'Browse trusted Bacalar tours by activity, compare operators, and find the right lagoon outing for your trip.',
     },
     restaurants: {
       title: 'Where to eat in Bacalar',
@@ -41,7 +41,7 @@ export const seoContentByLanguage: SeoContent = {
     events: {
       title: 'Events happening this week',
       description:
-        'Discover Bacalar events this week, including music, food and wellness experiences worth adding to your itinerary.',
+        'Discover Bacalar events this week, including music, food and wellness tours worth adding to your itinerary.',
     },
     tourSubmit: {
       title: 'Submit a tour in Bacalar',
@@ -78,9 +78,9 @@ export const seoContentByLanguage: SeoContent = {
         'Recomendaciones curadas para visitantes que quieren menos ruido y mejores decisiones en Bacalar.',
     },
     tours: {
-      title: 'Descubre los mejores tours por la laguna en Bacalar',
+      title: 'Descubre los mejores tours en Bacalar',
       description:
-        'Explora experiencias confiables en la laguna de Bacalar para todo tipo de viaje, desde opciones premium hasta salidas en grupo.',
+        'Explora tours confiables en Bacalar por actividad, compara operadores y encuentra la salida ideal para tu viaje.',
     },
     restaurants: {
       title: 'Donde comer en Bacalar',

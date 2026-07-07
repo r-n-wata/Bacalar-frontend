@@ -72,7 +72,7 @@ describe('ToursPage', () => {
     await renderToursRoute()
 
     const heroTitle = await screen.findByText(
-      'Discover the best lagoon tours in Bacalar',
+      'Discover the best tours in Bacalar',
     )
     const featuredTitle = screen.getByText('Our top recommendations')
     const categoryFilter = screen.getByRole('button', { name: 'All' })
@@ -95,6 +95,7 @@ describe('ToursPage', () => {
     const featuredSection = screen.getByLabelText('Featured tours')
     expect(within(featuredSection).getAllByRole('link')).toHaveLength(3)
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
+    expect(within(featuredSection).getByText('Provided by: Laguna Vela')).toBeVisible()
     expect(screen.getByRole('link', { name: 'Submit a tour' })).toHaveAttribute(
       'href',
       '/tours/submit',
@@ -108,6 +109,7 @@ describe('ToursPage', () => {
     const toursList = await screen.findByLabelText('Tours list')
     expect(within(toursList).getByText('Private Sailing at Sunrise')).toBeVisible()
     expect(within(toursList).getByText('Family Pontoon Loop')).toBeVisible()
+    expect(within(toursList).getByText('Provided by: Casa Ponton')).toBeVisible()
     expect(
       screen.queryByRole('button', { name: 'Load more tours' }),
     ).not.toBeInTheDocument()
@@ -125,7 +127,7 @@ describe('ToursPage', () => {
     expect(
       within(localizedToursList).getByText('Vela privada al amanecer'),
     ).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Grupo' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Boat Tour' })).toBeVisible()
     expect(screen.getByText('Nuestras recomendaciones principales')).toBeVisible()
     expect(screen.queryByText('Guided Mangrove Kayak')).not.toBeInTheDocument()
   })
@@ -134,7 +136,9 @@ describe('ToursPage', () => {
     setViewportPosition()
     await renderToursRoute()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Adventure' }))
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Kayak Tour' }),
+    )
 
     const featuredSection = await screen.findByLabelText('Featured tours')
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
@@ -153,7 +157,7 @@ describe('ToursPage', () => {
     )
     expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Group' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Boat Tour' }))
 
     const toursList = await screen.findByLabelText('Tours list')
     expect(within(toursList).getByText('Family Pontoon Loop')).toBeVisible()
@@ -161,18 +165,20 @@ describe('ToursPage', () => {
   })
 
   it('shows an empty state for a category with no results', async () => {
-    server.use(emptyToursCategoryHandler('adventure'))
+    server.use(emptyToursCategoryHandler('Kayak Tour'))
 
     setViewportPosition()
     await renderToursRoute()
-    await userEvent.click(screen.getByRole('button', { name: 'Adventure' }))
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Kayak Tour' }),
+    )
 
     expect(
       await screen.findByText('No tours match this category right now.'),
     ).toBeVisible()
     expect(
       screen.getByText(
-        'Try another category or come back later for more Adventure options.',
+        'Try another category or come back later for more Kayak Tour options.',
       ),
     ).toBeVisible()
   })

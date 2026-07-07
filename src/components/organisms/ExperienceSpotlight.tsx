@@ -1,29 +1,29 @@
-import type { ExperienceKey } from '../../app/store/ui-store'
+import type { TourKey } from '../../app/store/ui-store'
 import { Button } from '../atoms/Button'
 import { ContentPanel } from '../atoms/ContentPanel'
 import { MetricBadge } from '../molecules/MetricBadge'
-import styles from './ExperienceSpotlight.module.scss'
+import styles from './TourSpotlight.module.scss'
 
-type ExperienceSpotlightProps = {
+type TourSpotlightProps = {
   title: string
   description: string
   metrics: Array<{ label: string; value: string }>
   actions: Array<{
-    key: ExperienceKey
+    key: TourKey
     label: string
   }>
-  selectedAction: ExperienceKey
-  onSelectAction: (experience: ExperienceKey) => void
+  selectedAction: TourKey
+  onSelectAction: (tour: TourKey) => void
 }
 
-export function ExperienceSpotlight({
+export function TourSpotlight({
   title,
   description,
   metrics,
   actions,
   selectedAction,
   onSelectAction,
-}: ExperienceSpotlightProps) {
+}: TourSpotlightProps) {
   return (
     <ContentPanel className={styles.card}>
       <div className={styles.copy}>

@@ -26,10 +26,15 @@ export function ToursPage() {
   } = useTours(selectedCategory)
   const firstPage = data?.pages[0]
   const featuredItems = firstPage?.featuredItems ?? []
+  const categories = firstPage?.categories ?? []
   const tours = data?.pages.flatMap((page) => page.items) ?? []
   const emptyTitle = t('tours.emptyTitle')
+  const selectedCategoryLabel =
+    selectedCategory === 'all'
+      ? t('tours.categories.all')
+      : selectedCategory
   const emptyDescription = t('tours.emptyDescription', {
-    category: t(`tours.categories.${selectedCategory}`),
+    category: selectedCategoryLabel,
   })
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const fallbackSeo = seoContentByLanguage[language].tours
@@ -55,6 +60,7 @@ export function ToursPage() {
       {!isLoading && !isError ? <FeaturedToursSection tours={featuredItems} /> : null}
 
       <TourCategoryNav
+        categories={categories}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />

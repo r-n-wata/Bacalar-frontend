@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
 import { MetricBadge } from '../../../components/molecules/MetricBadge'
-import type { ExperienceKey } from '../../../app/store/ui-store'
+import type { TourKey } from '../../../app/store/ui-store'
 import type {
   HomeSpotlightAction,
   HomeSpotlightEntry,
@@ -15,8 +15,8 @@ type HomeSpotlightProps = {
   description: string
   actions: HomeSpotlightAction[]
   entry: HomeSpotlightEntry
-  selectedAction: ExperienceKey
-  onSelectAction: (experience: ExperienceKey) => void
+  selectedAction: TourKey
+  onSelectAction: (tour: TourKey) => void
 }
 
 export function HomeSpotlight({

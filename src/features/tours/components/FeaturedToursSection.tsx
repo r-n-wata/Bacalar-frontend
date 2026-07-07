@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { FeatureCard } from '../../../components/molecules/FeatureCard'
-import { formatCurrency } from '../../../utils/formatCurrency'
 import type { Tour } from '../types/tour'
 import styles from '../../restaurants/components/FeaturedRestaurantsSection.module.scss'
 
@@ -27,15 +26,14 @@ export function FeaturedToursSection({ tours }: FeaturedToursSectionProps) {
         {tours.map((tour) => (
           <div key={tour.id} className={styles.cardWrap}>
             <FeatureCard
-              tag={tour.categoryLabel}
+              tag={tour.category}
               title={tour.name}
-              description={t('tours.hours', { count: tour.durationHours })}
-              meta={t('tours.priceFrom', {
-                price: formatCurrency(tour.priceFrom),
-              })}
+              description={t('tours.bestForLabel', { value: tour.bestFor })}
+              secondaryMeta={t('tours.providedBy', { operator: tour.operatorName })}
+              meta={`${tour.duration} - ${tour.priceFrom}`}
               to={tour.route}
               image={tour.image}
-              placeholderLabel={tour.categoryLabel}
+              placeholderLabel={tour.category}
             />
           </div>
         ))}
