@@ -9,6 +9,7 @@ export type ToursContent = {
   eyebrow: string
   title: string
   description: string
+  categories: string[]
   featuredItems: Tour[]
   items: Tour[]
   pagination: ToursPagination

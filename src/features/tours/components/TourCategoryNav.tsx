@@ -1,31 +1,32 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
-import type { TourCategoryFilter } from '../types/tour'
+import type { TourCategory, TourCategoryFilter } from '../types/tour'
 import styles from '../../restaurants/components/RestaurantCategoryNav.module.scss'
 
-const categories: TourCategoryFilter[] = ['all', 'premium', 'group', 'adventure']
-
 type TourCategoryNavProps = {
+  categories: TourCategory[]
   selectedCategory: TourCategoryFilter
   onSelectCategory: (category: TourCategoryFilter) => void
 }
 
 export function TourCategoryNav({
+  categories,
   selectedCategory,
   onSelectCategory,
 }: TourCategoryNavProps) {
   const { t } = useTranslation()
+  const options: TourCategoryFilter[] = ['all', ...categories]
 
   return (
     <div className={styles.nav} aria-label={t('tours.categoryNavLabel')}>
-      {categories.map((category) => (
+      {options.map((category) => (
         <Button
           key={category}
           variant={selectedCategory === category ? 'chipActive' : 'chip'}
           onClick={() => onSelectCategory(category)}
           aria-pressed={selectedCategory === category}
         >
-          {t(`tours.categories.${category}`)}
+          {category === 'all' ? t('tours.categories.all') : category}
         </Button>
       ))}
     </div>

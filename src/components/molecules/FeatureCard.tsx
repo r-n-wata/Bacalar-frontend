@@ -7,6 +7,7 @@ type FeatureCardProps = {
   title: string
   description: string
   meta: string
+  secondaryMeta?: string
   to?: string
   image?: {
     src: string
@@ -20,6 +21,7 @@ export function FeatureCard({
   title,
   description,
   meta,
+  secondaryMeta,
   to,
   image,
   placeholderLabel,
@@ -39,6 +41,7 @@ export function FeatureCard({
         <p className={styles.tag}>{tag}</p>
         <h3>{title}</h3>
         <p>{description}</p>
+        {secondaryMeta ? <p>{secondaryMeta}</p> : null}
         <strong>{meta}</strong>
       </div>
     </ContentPanel>

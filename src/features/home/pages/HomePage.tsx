@@ -62,8 +62,8 @@ export function HomePage() {
       />
 
       <HomeSection
-        intro={data.featuredExperiences.intro}
-        items={data.featuredExperiences.items}
+        intro={data.featuredTours.intro}
+        items={data.featuredTours.items}
         ctaLabel={t('home.toursCta')}
         ctaTo="/tours"
       />

@@ -40,7 +40,7 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
   en: {
     hero: {
       eyebrow: 'Bacalar, made simple',
-      title: 'A calmer way to experience Bacalar',
+      title: 'A calmer way to tour Bacalar',
       description:
         'Curated recommendations for visitors who want less noise and better choices.',
     },
@@ -52,7 +52,7 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
       ],
       entries: {
         tours: {
-          title: 'Choose a lagoon experience with less second-guessing',
+          title: 'Choose a lagoon tour with less second-guessing',
           description:
             'Compare a few high-confidence tour options first, then keep browsing if you want more range.',
           route: '/tours',
@@ -93,12 +93,12 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
       },
     },
 
-    featuredExperiences: {
+    featuredTours: {
       intro: {
         eyebrow: 'Top tours',
         title: 'Our favourite lagoon tours',
         description:
-          'Trusted experiences to help you make the most of your time on the lagoon.',
+          'Trusted tours to help you make the most of your time on the lagoon.',
       },
       items: [
         {
@@ -274,7 +274,7 @@ const homeByLanguage: Record<AppLanguage, HomeContent> = {
       },
     },
 
-    featuredExperiences: {
+    featuredTours: {
       intro: {
         eyebrow: 'Tours top',
         title: 'Nuestros tours favoritos por la laguna',

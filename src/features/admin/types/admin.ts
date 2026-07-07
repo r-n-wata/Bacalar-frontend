@@ -60,7 +60,7 @@ export type AdminRestaurantSubmissionListItem = AdminSubmissionListBase & {
 export type AdminTourSubmissionListItem = AdminSubmissionListBase & {
   type: 'tours'
   name: string
-  category: 'premium' | 'group' | 'adventure'
+  category: string
   durationHours: number
   priceFrom: number
 }
@@ -91,7 +91,7 @@ export type AdminRestaurantSubmissionDetail = AdminSubmissionDetailBase & {
 export type AdminTourSubmissionDetail = AdminSubmissionDetailBase & {
   type: 'tours'
   name: string
-  category: 'premium' | 'group' | 'adventure'
+  category: string
   durationHours: number
   priceFrom: number
   description: string
@@ -146,7 +146,7 @@ export type AdminPublishedRestaurantItem = AdminPublishedContentBase & {
 
 export type AdminPublishedTourItem = AdminPublishedContentBase & {
   type: 'tours'
-  category: 'premium' | 'group' | 'adventure'
+  category: string
   subtitle: string
 }
 

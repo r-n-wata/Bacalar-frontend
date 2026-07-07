@@ -76,7 +76,7 @@ describe('HomePage', () => {
 
     expect(
       await screen.findByText(
-        'A calmer way to experience Bacalar',
+        'A calmer way to tour Bacalar',
       ),
     ).toBeVisible()
 
@@ -129,7 +129,7 @@ describe('HomePage', () => {
               },
             },
           },
-          featuredExperiences: {
+          featuredTours: {
             intro: {
               eyebrow: 'Tours',
               title: 'Fallback tours',
@@ -189,7 +189,7 @@ describe('HomePage', () => {
 
     expect(
       await screen.findByText(
-        'A calmer way to experience Bacalar',
+        'A calmer way to tour Bacalar',
       ),
     ).toBeVisible()
     expect(screen.queryByText('Browse quickly')).not.toBeInTheDocument()
@@ -206,7 +206,7 @@ describe('HomePage', () => {
   it('renders at most 10 cards per homepage rail', async () => {
     const fixture = getHomeFixture('en')
     const expandedTours = Array.from({ length: 12 }, (_, index) => ({
-      ...fixture.featuredExperiences.items[index % fixture.featuredExperiences.items.length],
+      ...fixture.featuredTours.items[index % fixture.featuredTours.items.length],
       id: `tour-${index + 1}`,
       title: `Tour Card ${index + 1}`,
       route: `/tours/tour-${index + 1}`,
@@ -216,8 +216,8 @@ describe('HomePage', () => {
       http.get('/api/home', async () =>
         jsonSuccess({
           ...fixture,
-          featuredExperiences: {
-            ...fixture.featuredExperiences,
+          featuredTours: {
+            ...fixture.featuredTours,
             items: expandedTours,
           },
         }),

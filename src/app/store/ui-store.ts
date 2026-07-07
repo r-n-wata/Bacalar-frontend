@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
-export type ExperienceKey = 'events' | 'restaurants' | 'tours'
+export type TourKey = 'events' | 'restaurants' | 'tours'
 
 type UiState = {
-  featuredExperience: ExperienceKey
-  setFeaturedExperience: (experience: ExperienceKey) => void
+  featuredTour: TourKey
+  setFeaturedTour: (tour: TourKey) => void
 }
 
 export const useUiStore = create<UiState>((set) => ({
-  featuredExperience: 'tours',
-  setFeaturedExperience: (featuredExperience) => set({ featuredExperience }),
+  featuredTour: 'tours',
+  setFeaturedTour: (featuredTour) => set({ featuredTour }),
 }))

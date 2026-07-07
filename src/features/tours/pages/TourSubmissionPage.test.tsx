@@ -52,7 +52,7 @@ async function fillRequiredFields() {
   await userEvent.type(screen.getByLabelText('Starting price'), '2100')
   await userEvent.type(
     screen.getByLabelText('Description'),
-    'A private sunrise sailing experience with a calm route and a polished crew handoff.',
+    'A private sunrise sailing tour with a calm route and a polished crew handoff.',
   )
   await userEvent.type(screen.getByLabelText('Contact name'), 'Maya Cruz')
   await userEvent.type(

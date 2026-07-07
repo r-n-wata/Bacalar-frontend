@@ -1,4 +1,4 @@
-import type { ExperienceKey } from '../../../app/store/ui-store'
+import type { TourKey } from '../../../app/store/ui-store'
 
 export type HomeSpotlightMetric = {
   label: string
@@ -20,7 +20,7 @@ export type HomeSpotlightEntry = {
 }
 
 export type HomeSpotlightAction = {
-  key: ExperienceKey
+  key: TourKey
   label: string
 }
 
@@ -49,9 +49,9 @@ export type HomeContent = {
   }
   spotlight: {
     actions: HomeSpotlightAction[]
-    entries: Record<ExperienceKey, HomeSpotlightEntry>
+    entries: Record<TourKey, HomeSpotlightEntry>
   }
-  featuredExperiences: {
+  featuredTours: {
     intro: HomeSectionIntro
     items: HomeSuggestionCard[]
   }
