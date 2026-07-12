@@ -252,4 +252,36 @@ describe('HomePage', () => {
       ),
     ).toBeVisible()
   })
+
+  it('renders a compact weekly happenings empty state with the event submission CTA', async () => {
+    const fixture = getHomeFixture('en')
+
+    server.use(
+      http.get('/api/home', async () =>
+        jsonSuccess({
+          ...fixture,
+          weeklyHappenings: {
+            ...fixture.weeklyHappenings,
+            items: [],
+          },
+        }),
+      ),
+    )
+
+    await renderHomeRoute()
+
+    expect(
+      await screen.findByText('There are currently no upcoming events.'),
+    ).toBeVisible()
+    expect(
+      screen.getByText(
+        'There are currently no upcoming events to feature here, but you can still send one in for review.',
+      ),
+    ).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Submit an event' })).toHaveAttribute(
+      'href',
+      '/events/submit',
+    )
+    expect(screen.queryByText('Sunset Jazz by the Lagoon')).not.toBeInTheDocument()
+  })
 })

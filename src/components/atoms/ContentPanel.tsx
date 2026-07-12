@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from 'react'
+import type { AriaRole, ElementType, ReactNode } from 'react'
 import styles from './ContentPanel.module.scss'
 
 type ContentPanelProps = {
@@ -7,6 +7,7 @@ type ContentPanelProps = {
   className?: string
   tone?: 'default' | 'warm'
   compact?: boolean
+  role?: AriaRole
 }
 
 export function ContentPanel({
@@ -15,6 +16,7 @@ export function ContentPanel({
   className,
   tone = 'default',
   compact = false,
+  role,
 }: ContentPanelProps) {
   const classes = [
     styles.card,
@@ -25,5 +27,9 @@ export function ContentPanel({
     .filter(Boolean)
     .join(' ')
 
-  return <Component className={classes}>{children}</Component>
+  return (
+    <Component className={classes} role={role}>
+      {children}
+    </Component>
+  )
 }

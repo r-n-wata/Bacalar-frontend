@@ -93,6 +93,12 @@ export function HomePage() {
         items={data.weeklyHappenings.items}
         ctaLabel={t('home.eventsCta')}
         ctaTo="/events"
+        emptyState={{
+          title: t('events.emptyUpcomingTitle'),
+          description: t('home.eventsEmptyDescription'),
+          ctaLabel: t('events.submitCta.action'),
+          ctaTo: '/events/submit',
+        }}
       />
     </div>
   )

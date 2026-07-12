@@ -6,6 +6,8 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
+import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
@@ -15,7 +17,7 @@ export function EventDetailPage() {
   const { t } = useTranslation()
   const language = useAppLanguage()
   const { id } = useParams()
-  const { data, isLoading, isError } = useEventDetail(id)
+  const { data, isLoading, isError, error, refetch } = useEventDetail(id)
 
   if (isLoading) {
     return (
@@ -30,13 +32,49 @@ export function EventDetailPage() {
   }
 
   if (isError || !data) {
+    const isMissing = error instanceof ApiError && error.status === 404
+    const description = isMissing
+      ? t('events.detailUnavailableDescription')
+      : t('events.error')
+
     return (
       <>
         <Seo
           title={t('shell.nav.events')}
-          description={t('events.error')}
+          description={description}
         />
-        <p role="alert">{t('events.error')}</p>
+        <PublicStatusPanel
+          role="alert"
+          eyebrow={
+            isMissing ? t('events.detailUnavailableEyebrow') : t('events.errorEyebrow')
+          }
+          title={
+            isMissing ? t('events.detailUnavailableTitle') : t('events.errorTitle')
+          }
+          description={description}
+          actions={
+            isMissing
+              ? [
+                  {
+                    kind: 'link' as const,
+                    label: t('events.backToList'),
+                    to: '/events',
+                  },
+                ]
+              : [
+                  {
+                    kind: 'button' as const,
+                    label: t('common.retry'),
+                    onClick: () => void refetch(),
+                  },
+                  {
+                    kind: 'link' as const,
+                    label: t('events.backToList'),
+                    to: '/events',
+                  },
+                ]
+          }
+        />
       </>
     )
   }

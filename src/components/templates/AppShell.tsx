@@ -1,56 +1,61 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import footerLogo from "../../assets/logo-dark.svg";
-import footerMobileLogo from "../../assets/logo-mobile-dark.svg";
-import mobileHeaderLogo from "../../assets/logo-mobile-light.svg";
-import suenoBacalarLogo from "../../assets/logo-new.svg";
-import { ScrollToTop } from "../../app/router/ScrollToTop";
-import { useAdminAuth } from "../../features/admin/auth/useAdminAuth";
-import { Button } from "../atoms/Button";
-import styles from "./AppShell.module.scss";
+import type { ReactNode } from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import footerLogo from '../../assets/logo-dark.svg'
+import footerMobileLogo from '../../assets/logo-mobile-dark.svg'
+import mobileHeaderLogo from '../../assets/logo-mobile-light.svg'
+import suenoBacalarLogo from '../../assets/logo-new.svg'
+import { ScrollToTop } from '../../app/router/ScrollToTop'
+import { useAdminAuth } from '../../features/admin/auth/useAdminAuth'
+import { Button } from '../atoms/Button'
+import styles from './AppShell.module.scss'
 
-export function AppShell() {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const { session, logout } = useAdminAuth();
-  const activeLanguage = i18n.resolvedLanguage === "es" ? "es" : "en";
-  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
+type AppShellProps = {
+  children?: ReactNode
+}
+
+export function AppShell({ children }: AppShellProps) {
+  const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
+  const { session, logout } = useAdminAuth()
+  const activeLanguage = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false)
   const navigation = [
-    { to: "/", label: t("shell.nav.overview"), end: true },
-    { to: "/tours", label: t("shell.nav.tours") },
-    { to: "/restaurants", label: t("shell.nav.restaurants") },
-    { to: "/events", label: t("shell.nav.events") },
-  ];
+    { to: '/', label: t('shell.nav.overview'), end: true },
+    { to: '/tours', label: t('shell.nav.tours') },
+    { to: '/restaurants', label: t('shell.nav.restaurants') },
+    { to: '/events', label: t('shell.nav.events') },
+  ]
   const footerLinks = [
-    { to: "/", label: t("shell.nav.overview") },
-    { to: "/tours", label: t("shell.nav.tours") },
-    { to: "/restaurants", label: t("shell.nav.restaurants") },
-    { to: "/events", label: t("shell.nav.events") },
-  ];
+    { to: '/', label: t('shell.nav.overview') },
+    { to: '/tours', label: t('shell.nav.tours') },
+    { to: '/restaurants', label: t('shell.nav.restaurants') },
+    { to: '/events', label: t('shell.nav.events') },
+  ]
 
   async function handleLogout() {
-    setIsAdminMenuOpen(false);
-    await logout();
-    navigate("/admin/login");
+    setIsAdminMenuOpen(false)
+    await logout()
+    navigate('/admin/login')
   }
 
   function closeAdminMenu() {
-    setIsAdminMenuOpen(false);
+    setIsAdminMenuOpen(false)
   }
 
-  async function handleLanguageChange(language: "en" | "es") {
-    closeAdminMenu();
-    await i18n.changeLanguage(language);
+  async function handleLanguageChange(language: 'en' | 'es') {
+    closeAdminMenu()
+    await i18n.changeLanguage(language)
   }
 
   useEffect(() => {
-    document.body.style.overflow = isAdminMenuOpen ? "hidden" : "";
+    document.body.style.overflow = isAdminMenuOpen ? 'hidden' : ''
 
     return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isAdminMenuOpen]);
+      document.body.style.overflow = ''
+    }
+  }, [isAdminMenuOpen])
 
   return (
     <div className={styles.shell}>
@@ -353,7 +358,7 @@ export function AppShell() {
       </header>
 
       <main id="content" className={styles.main}>
-        <Outlet />
+              {children ?? <Outlet />}
       </main>
 
       <footer className={styles.footer}>

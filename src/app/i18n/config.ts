@@ -34,6 +34,24 @@ export const resources = {
       common: {
         loading: 'Loading...',
         error: 'Something went wrong. Please try again.',
+        retry: 'Try again',
+      },
+      status: {
+        actions: {
+          home: 'Back to homepage',
+        },
+        notFound: {
+          eyebrow: 'Page not found',
+          title: 'This page is not available.',
+          description:
+            'The link may be outdated or the page may have moved. You can head back to the homepage and keep exploring from there.',
+        },
+        error: {
+          eyebrow: 'Unexpected error',
+          title: 'We hit a problem loading this page.',
+          description:
+            'Please go back home and try again in a moment.',
+        },
       },
       admin: {
         auth: {
@@ -151,6 +169,8 @@ export const resources = {
       home: {
         loading: 'Loading homepage...',
         error: 'We could not load the homepage right now. Please try again.',
+        eventsEmptyDescription:
+          'There are currently no upcoming events to feature here, but you can still send one in for review.',
         spotlightEyebrow: 'Browse quickly',
         spotlightTitle: 'Pick the next right move',
         spotlightDescription:
@@ -161,8 +181,18 @@ export const resources = {
       },
       events: {
         loading: 'Loading events...',
+        errorEyebrow: 'Events update',
+        errorTitle: 'We could not load upcoming events.',
         error:
-          'We could not load events right now. Please refresh or try another language.',
+          'We could not load events right now. Please try again.',
+        emptyEyebrow: 'Events in Bacalar',
+        emptyUpcomingTitle: 'There are currently no upcoming events.',
+        emptyUpcomingDescription:
+          'Check back soon for new listings, or submit an event for review.',
+        detailUnavailableEyebrow: 'Event unavailable',
+        detailUnavailableTitle: 'This event is no longer available.',
+        detailUnavailableDescription:
+          'The event link may be outdated or the listing is no longer live.',
         submitCta: {
           eyebrow: 'Host something in Bacalar?',
           title: 'Submit an event for review',
@@ -240,9 +270,6 @@ export const resources = {
           'Browse all events by category',
         loadMore: 'Load more events',
         loadingMore: 'Loading more events...',
-        emptyTitle: 'No events in this category right now.',
-        emptyDescription:
-          'Try another category or come back later for more {{category}} plans.',
         backToList: 'See all events',
         backHome: 'Back to homepage',
         categories: {
@@ -526,6 +553,24 @@ export const resources = {
       common: {
         loading: 'Cargando...',
         error: 'Algo salio mal. Intentalo de nuevo.',
+        retry: 'Intentar de nuevo',
+      },
+      status: {
+        actions: {
+          home: 'Volver a inicio',
+        },
+        notFound: {
+          eyebrow: 'Pagina no encontrada',
+          title: 'Esta pagina no esta disponible.',
+          description:
+            'Es posible que el enlace ya no exista o que la pagina haya cambiado. Puedes volver al inicio y seguir explorando desde ahi.',
+        },
+        error: {
+          eyebrow: 'Error inesperado',
+          title: 'Tuvimos un problema al cargar esta pagina.',
+          description:
+            'Vuelve al inicio e intentalo de nuevo en un momento.',
+        },
       },
       admin: {
         auth: {
@@ -644,6 +689,8 @@ export const resources = {
         loading: 'Cargando inicio...',
         error:
           'No pudimos cargar la pagina principal en este momento. Intentalo de nuevo.',
+        eventsEmptyDescription:
+          'Por ahora no hay eventos proximos para destacar aqui, pero aun puedes enviar uno para revision.',
         spotlightEyebrow: 'Explora rapido',
         spotlightTitle: 'Elige el siguiente mejor paso',
         spotlightDescription:
@@ -654,8 +701,18 @@ export const resources = {
       },
       events: {
         loading: 'Cargando eventos...',
+        errorEyebrow: 'Actualizacion de eventos',
+        errorTitle: 'No pudimos cargar los proximos eventos.',
         error:
-          'No pudimos cargar los eventos en este momento. Actualiza o prueba otro idioma.',
+          'No pudimos cargar los eventos en este momento. Intentalo de nuevo.',
+        emptyEyebrow: 'Eventos en Bacalar',
+        emptyUpcomingTitle: 'Actualmente no hay eventos proximos.',
+        emptyUpcomingDescription:
+          'Vuelve pronto para ver nuevas publicaciones o envia un evento para revision.',
+        detailUnavailableEyebrow: 'Evento no disponible',
+        detailUnavailableTitle: 'Este evento ya no esta disponible.',
+        detailUnavailableDescription:
+          'Es posible que el enlace este desactualizado o que la publicacion ya no siga activa.',
         submitCta: {
           eyebrow: 'Organizas algo en Bacalar?',
           title: 'Envia un evento para revision',
@@ -733,9 +790,6 @@ export const resources = {
           'Explora todos los eventos por categoria',
         loadMore: 'Cargar mas eventos',
         loadingMore: 'Cargando mas eventos...',
-        emptyTitle: 'No hay eventos en esta categoria por ahora.',
-        emptyDescription:
-          'Prueba otra categoria o vuelve mas tarde para ver mas planes de {{category}}.',
         backToList: 'Ver todos los eventos',
         backHome: 'Volver a inicio',
         categories: {

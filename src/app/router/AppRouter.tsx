@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppShell } from '../../components/templates/AppShell'
+import { PublicRouteStatusPage } from './PublicRouteStatusPage'
 import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage'
 import { AdminLoginPage } from '../../features/admin/pages/AdminLoginPage'
 import { AdminPublishedContentPage } from '../../features/admin/pages/AdminPublishedContentPage'
@@ -16,10 +17,15 @@ import { ToursPage } from '../../features/tours/pages/ToursPage'
 import { TourDetailPage } from '../../features/tours/pages/TourDetailPage'
 import { TourSubmissionPage } from '../../features/tours/pages/TourSubmissionPage'
 
-const router = createBrowserRouter([
+export const appRoutes = [
   {
     path: '/',
     element: <AppShell />,
+    errorElement: (
+      <AppShell>
+        <PublicRouteStatusPage />
+      </AppShell>
+    ),
     children: [
       {
         index: true,
@@ -83,9 +89,15 @@ const router = createBrowserRouter([
         path: 'tours/:id',
         element: <TourDetailPage />,
       },
+      {
+        path: '*',
+        element: <PublicRouteStatusPage mode="notFound" />,
+      },
     ],
   },
-])
+]
+
+const router = createBrowserRouter(appRoutes)
 
 export function AppRouter() {
   return <RouterProvider router={router} />
