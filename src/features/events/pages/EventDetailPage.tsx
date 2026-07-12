@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
+import { StructuredData } from '../../../app/seo/StructuredDataScript'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
+import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -9,6 +12,7 @@ import { useEventDetail } from '../hooks/useEventDetail'
 
 export function EventDetailPage() {
   const { t } = useTranslation()
+  const language = useAppLanguage()
   const { id } = useParams()
   const { data, isLoading, isError } = useEventDetail(id)
 
@@ -45,6 +49,19 @@ export function EventDetailPage() {
         title={`${data.title} | ${t('shell.nav.events')}`}
         description={data.description}
         image={data.image?.src}
+      />
+      <StructuredData
+        data={buildEventStructuredData({
+          language,
+          pathname: data.route,
+          title: data.title,
+          description: data.description,
+          dateLabel: data.dateLabel,
+          venue: data.venue,
+          startsAt: data.startsAt,
+          endsAt: data.endsAt,
+          image: data.image,
+        })}
       />
       <article className={pageStyles.hero}>
         {data.image ? (

@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
+import { StructuredData } from '../../../app/seo/StructuredDataScript'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
+import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -9,6 +12,7 @@ import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 
 export function RestaurantDetailPage() {
   const { t } = useTranslation()
+  const language = useAppLanguage()
   const { id } = useParams()
   const { data, isLoading, isError } = useRestaurantDetail(id)
 
@@ -42,6 +46,17 @@ export function RestaurantDetailPage() {
         title={`${data.name} | ${t('shell.nav.restaurants')}`}
         description={data.description}
         image={data.image?.src}
+      />
+      <StructuredData
+        data={buildRestaurantStructuredData({
+          language,
+          pathname: data.route,
+          name: data.name,
+          description: data.description,
+          cuisine: data.cuisine,
+          priceRange: data.priceBand,
+          image: data.image,
+        })}
       />
       <article className={pageStyles.hero}>
         {data.image ? (

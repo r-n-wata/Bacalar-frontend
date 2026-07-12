@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run seo:generate",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
+    "seo:generate": "node ./scripts/generate-sitemap.mjs",
     "msw:init": "msw init public --save",
     "test": "vitest run",
     "test:watch": "vitest",
