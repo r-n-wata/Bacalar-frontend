@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
+import { StructuredData } from '../../../app/seo/StructuredDataScript'
+import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
+import { buildTourStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -8,6 +11,7 @@ import { useTourDetail } from '../hooks/useTourDetail'
 
 export function TourDetailPage() {
   const { t } = useTranslation()
+  const language = useAppLanguage()
   const { id } = useParams()
   const { data, isLoading, isError } = useTourDetail(id)
 
@@ -41,6 +45,17 @@ export function TourDetailPage() {
         title={`${data.name} | ${t('shell.nav.tours')}`}
         description={data.description}
         image={data.image?.src}
+      />
+      <StructuredData
+        data={buildTourStructuredData({
+          language,
+          pathname: data.route,
+          name: data.name,
+          description: data.description,
+          duration: data.duration,
+          image: data.image,
+          providerName: data.operatorName,
+        })}
       />
       <article className={pageStyles.hero}>
         {data.image ? (

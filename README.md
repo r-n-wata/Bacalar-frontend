@@ -23,6 +23,7 @@ Environment variables:
 ```bash
 VITE_ENABLE_MSW=true
 VITE_API_BASE_URL=
+VITE_SITE_URL=https://suenobacalar.com
 ```
 
 Recommended usage:
@@ -30,6 +31,7 @@ Recommended usage:
 - local mock mode: `VITE_ENABLE_MSW=true` and leave `VITE_API_BASE_URL` empty
 - local real-backend mode: `VITE_ENABLE_MSW=false` and set `VITE_API_BASE_URL=http://localhost:4000`
 - Netlify production: `VITE_ENABLE_MSW=false` and set `VITE_API_BASE_URL` to the Render backend URL
+- set `VITE_SITE_URL` to the public frontend origin so canonical tags and sitemap entries use the right host
 
 A starter file lives at `/Users/ruth.wata/Projects/bacalar/frontend/.env.example`.
 

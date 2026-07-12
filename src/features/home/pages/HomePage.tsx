@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
+import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
+import {
+  buildOrganizationStructuredData,
+  buildWebsiteStructuredData,
+} from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import homepageImage from '../../../assets/homepageImage.jpg'
 import { HomeHero } from '../components/HomeHero'
@@ -22,11 +27,19 @@ export function HomePage() {
       : 'Bacalar lagoon view from the shoreline'
 
   const seo = (
-    <Seo
-      title={seoTitle}
-      description={seoDescription}
-      image={heroImage}
-    />
+    <>
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        image={heroImage}
+      />
+      <StructuredData
+        data={[
+          buildOrganizationStructuredData(),
+          buildWebsiteStructuredData(language),
+        ]}
+      />
+    </>
   )
 
   if (isLoading) {

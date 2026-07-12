@@ -1,45 +1,21 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
+import {
+  buildCanonicalUrl,
+  DEFAULT_SOCIAL_IMAGE_PATH,
+  DEFAULT_TITLE_SUFFIX,
+  resolveAbsoluteUrl,
+  resolveSiteUrl,
+  SITE_NAME,
+  truncateDescription,
+} from './seoUtils'
 
 type SeoProps = {
   title: string
   description: string
   image?: string
   noIndex?: boolean
-}
-
-const SITE_NAME = 'Sueno Bacalar'
-const DEFAULT_SITE_URL = 'https://suenobacalar.com'
-const DEFAULT_SOCIAL_IMAGE_PATH = '/social-preview.png'
-const DEFAULT_TITLE_SUFFIX = ` | ${SITE_NAME}`
-const MAX_DESCRIPTION_LENGTH = 160
-
-function trimTrailingSlash(value: string) {
-  return value.endsWith('/') ? value.slice(0, -1) : value
-}
-
-function resolveSiteUrl() {
-  const configuredSiteUrl = import.meta.env.VITE_SITE_URL?.trim()
-
-  if (configuredSiteUrl) {
-    return trimTrailingSlash(configuredSiteUrl)
-  }
-
-  return DEFAULT_SITE_URL
-}
-
-function buildCanonicalUrl(siteUrl: string, pathname: string) {
-  const normalizedPath = pathname === '/' ? '' : pathname
-  return `${siteUrl}${normalizedPath}`
-}
-
-function truncateDescription(value: string) {
-  if (value.length <= MAX_DESCRIPTION_LENGTH) {
-    return value
-  }
-
-  return `${value.slice(0, MAX_DESCRIPTION_LENGTH - 1).trimEnd()}…`
 }
 
 function ensureMetaTag(attribute: 'name' | 'property', key: string) {
@@ -104,9 +80,7 @@ export function Seo({ title, description, image, noIndex = false }: SeoProps) {
     setMetaContent('name', 'twitter:description', normalizedDescription)
 
     if (socialImage) {
-      const absoluteImageUrl = socialImage.startsWith('http')
-        ? socialImage
-        : `${siteUrl}${socialImage.startsWith('/') ? socialImage : `/${socialImage}`}`
+      const absoluteImageUrl = resolveAbsoluteUrl(siteUrl, socialImage)
 
       setMetaContent('property', 'og:image', absoluteImageUrl)
       setMetaContent('name', 'twitter:image', absoluteImageUrl)

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
+import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
+import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
@@ -39,11 +41,21 @@ export function ToursPage() {
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const fallbackSeo = seoContentByLanguage[language].tours
   const seo = (
-    <Seo
-      title={firstPage?.title ?? fallbackSeo.title}
-      description={firstPage?.description ?? fallbackSeo.description}
-      image={featuredItems[0]?.image?.src}
-    />
+    <>
+      <Seo
+        title={firstPage?.title ?? fallbackSeo.title}
+        description={firstPage?.description ?? fallbackSeo.description}
+        image={featuredItems[0]?.image?.src}
+      />
+      <StructuredData
+        data={buildCollectionPageStructuredData({
+          language,
+          pathname: '/tours',
+          title: firstPage?.title ?? fallbackSeo.title,
+          description: firstPage?.description ?? fallbackSeo.description,
+        })}
+      />
+    </>
   )
 
   return (
