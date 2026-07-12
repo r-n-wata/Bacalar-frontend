@@ -7,6 +7,7 @@ import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSc
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
 import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 
@@ -40,12 +41,19 @@ export function RestaurantDetailPage() {
     )
   }
 
+  const heroImage = resolveFeatureImage({
+    kind: 'restaurant',
+    id: data.id,
+    image: data.image,
+    fallbackAlt: data.name,
+  })
+
   return (
     <section className={pageStyles.page}>
       <Seo
         title={`${data.name} | ${t('shell.nav.restaurants')}`}
         description={data.description}
-        image={data.image?.src}
+        image={heroImage.src}
       />
       <StructuredData
         data={buildRestaurantStructuredData({
@@ -55,17 +63,15 @@ export function RestaurantDetailPage() {
           description: data.description,
           cuisine: data.cuisine,
           priceRange: data.priceBand,
-          image: data.image,
+          image: heroImage,
         })}
       />
       <article className={pageStyles.hero}>
-        {data.image ? (
-          <img
-            className={pageStyles.heroImage}
-            src={data.image.src}
-            alt={data.image.alt}
-          />
-        ) : null}
+        <img
+          className={pageStyles.heroImage}
+          src={heroImage.src}
+          alt={heroImage.alt}
+        />
         <div className={pageStyles.heroOverlay} />
         <div className={pageStyles.heroBody}>
           <SectionEyebrow>{t('restaurants.detailEyebrow')}</SectionEyebrow>

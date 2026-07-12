@@ -7,6 +7,7 @@ import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
 import { useEventDetail } from '../hooks/useEventDetail'
 
@@ -42,13 +43,19 @@ export function EventDetailPage() {
 
   const moodLabel = t(getMoodTranslationKey(data.category))
   const showUpcoming = isUpcomingEvent(data)
+  const heroImage = resolveFeatureImage({
+    kind: 'event',
+    id: data.id,
+    image: data.image,
+    fallbackAlt: data.title,
+  })
 
   return (
     <section className={pageStyles.page}>
       <Seo
         title={`${data.title} | ${t('shell.nav.events')}`}
         description={data.description}
-        image={data.image?.src}
+        image={heroImage.src}
       />
       <StructuredData
         data={buildEventStructuredData({
@@ -60,17 +67,15 @@ export function EventDetailPage() {
           venue: data.venue,
           startsAt: data.startsAt,
           endsAt: data.endsAt,
-          image: data.image,
+          image: heroImage,
         })}
       />
       <article className={pageStyles.hero}>
-        {data.image ? (
-          <img
-            className={pageStyles.heroImage}
-            src={data.image.src}
-            alt={data.image.alt}
-          />
-        ) : null}
+        <img
+          className={pageStyles.heroImage}
+          src={heroImage.src}
+          alt={heroImage.alt}
+        />
         <div className={pageStyles.heroOverlay} />
         <div className={pageStyles.heroBody}>
           <SectionEyebrow>{t('events.detailEyebrow')}</SectionEyebrow>

@@ -7,6 +7,7 @@ import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDa
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { FeaturedRestaurantsSection } from '../components/FeaturedRestaurantsSection'
 import { RestaurantCategoryNav } from '../components/RestaurantCategoryNav'
 import { RestaurantList } from '../components/RestaurantList'
@@ -35,12 +36,20 @@ export function RestaurantsPage() {
   })
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const fallbackSeo = seoContentByLanguage[language].restaurants
+  const featuredSeoImage = featuredItems[0]
+    ? resolveFeatureImage({
+        kind: 'restaurant',
+        id: featuredItems[0].id,
+        image: featuredItems[0].image,
+        fallbackAlt: featuredItems[0].name,
+      }).src
+    : undefined
   const seo = (
     <>
       <Seo
         title={firstPage?.title ?? fallbackSeo.title}
         description={firstPage?.description ?? fallbackSeo.description}
-        image={featuredItems[0]?.image?.src}
+        image={featuredSeoImage}
       />
       <StructuredData
         data={buildCollectionPageStructuredData({

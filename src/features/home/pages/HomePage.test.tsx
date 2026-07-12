@@ -170,6 +170,9 @@ describe('HomePage', () => {
 
     expect(await screen.findByText('Image-optional homepage')).toBeVisible()
     expect(screen.getByText('Text only card')).toBeVisible()
+    expect(
+      screen.getByRole('img', { name: 'Guided Mangrove Kayak' }),
+    ).toBeVisible()
   })
 
   it('renders the denser card anatomy for all homepage groups', async () => {
@@ -182,6 +185,7 @@ describe('HomePage', () => {
       screen.getByText('Private crew, sunrise light, slower pace.'),
     ).toBeVisible()
     expect(screen.getByText('Vegetarian · $$')).toBeVisible()
+    expect(screen.getByRole('img', { name: 'Lagoon Breathwork Session' })).toBeVisible()
   })
 
   it('removes the browse-quickly section, keeps navigation visible, and renders the footer', async () => {

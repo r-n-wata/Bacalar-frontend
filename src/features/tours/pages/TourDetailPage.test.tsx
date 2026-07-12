@@ -73,6 +73,46 @@ describe('TourDetailPage', () => {
     expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
     expect(screen.getByText('Provided by: Manglar Guides')).toBeVisible()
     expect(screen.queryByText('WhatsApp')).not.toBeInTheDocument()
-    expect(screen.queryByRole('img', { name: /Guided Mangrove Kayak/i })).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: 'Guided Mangrove Kayak' }),
+    ).toBeVisible()
+    expect(screen.queryByLabelText('Tour gallery')).not.toBeInTheDocument()
+  })
+
+  it('uses the first gallery image as the hero when image is missing', async () => {
+    server.use(
+      http.get(tourDetailApiPath('tour-pontoon'), async () =>
+        jsonSuccess({
+          id: 'tour-pontoon',
+          name: 'Family Pontoon Loop',
+          category: 'Boat Tour',
+          duration: '3 hours',
+          priceFrom: 'From MXN 1,600',
+          privateOrShared: 'Shared',
+          bestFor: 'Families',
+          difficulty: 'Easy',
+          suitableForKids: 'Yes',
+          description: 'A relaxed midday circuit.',
+          imageUrls: [
+            'https://images.example.com/pontoon-hero.jpg',
+            'https://images.example.com/pontoon-gallery.jpg',
+          ],
+          operatorName: 'Casa Ponton',
+          route: '/tours/tour-pontoon',
+        }),
+      ),
+    )
+
+    await renderDetailRoute('/tours/tour-pontoon')
+
+    expect(await screen.findByText('Family Pontoon Loop')).toBeVisible()
+    expect(screen.getByRole('img', { name: 'Family Pontoon Loop' })).toHaveAttribute(
+      'src',
+      'https://images.example.com/pontoon-hero.jpg',
+    )
+    expect(screen.getByRole('img', { name: 'Family Pontoon Loop 2' })).toHaveAttribute(
+      'src',
+      'https://images.example.com/pontoon-gallery.jpg',
+    )
   })
 })

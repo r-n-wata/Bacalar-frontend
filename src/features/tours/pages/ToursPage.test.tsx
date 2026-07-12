@@ -120,6 +120,7 @@ describe('ToursPage', () => {
     )
 
     expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
+    expect(screen.getByRole('img', { name: 'Guided Mangrove Kayak' })).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 

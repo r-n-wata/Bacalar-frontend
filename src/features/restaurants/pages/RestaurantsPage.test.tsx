@@ -109,6 +109,7 @@ describe('RestaurantsPage', () => {
     )
 
     expect(await screen.findByText('Bruma Azul')).toBeVisible()
+    expect(screen.getByRole('img', { name: 'Bruma Azul' })).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
@@ -135,6 +136,9 @@ describe('RestaurantsPage', () => {
     const restaurantsList = await screen.findByLabelText('Restaurants list')
     expect(within(restaurantsList).getByText('Nao')).toBeVisible()
     expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
+    expect(
+      within(restaurantsList).getByRole('img', { name: 'Orilla Comedor' }),
+    ).toBeVisible()
     expect(within(restaurantsList).queryByText('Ixchel Cocina')).not.toBeInTheDocument()
   })
 
