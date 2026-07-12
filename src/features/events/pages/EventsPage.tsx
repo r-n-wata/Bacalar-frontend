@@ -7,6 +7,7 @@ import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDa
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { EventCategoryNav } from '../components/EventCategoryNav'
 import { EventList } from '../components/EventList'
 import { EventSubmitCta } from '../components/EventSubmitCta'
@@ -35,12 +36,20 @@ export function EventsPage() {
   })
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const fallbackSeo = seoContentByLanguage[language].events
+  const featuredSeoImage = featuredItems[0]
+    ? resolveFeatureImage({
+        kind: 'event',
+        id: featuredItems[0].id,
+        image: featuredItems[0].image,
+        fallbackAlt: featuredItems[0].title,
+      }).src
+    : undefined
   const seo = (
     <>
       <Seo
         title={firstPage?.title ?? fallbackSeo.title}
         description={firstPage?.description ?? fallbackSeo.description}
-        image={featuredItems[0]?.image?.src}
+        image={featuredSeoImage}
       />
       <StructuredData
         data={buildCollectionPageStructuredData({

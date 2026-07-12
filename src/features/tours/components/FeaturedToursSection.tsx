@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { FeatureCard } from '../../../components/molecules/FeatureCard'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import type { Tour } from '../types/tour'
 import styles from '../../restaurants/components/FeaturedRestaurantsSection.module.scss'
 
@@ -32,7 +33,12 @@ export function FeaturedToursSection({ tours }: FeaturedToursSectionProps) {
               secondaryMeta={t('tours.providedBy', { operator: tour.operatorName })}
               meta={`${tour.duration} - ${tour.priceFrom}`}
               to={tour.route}
-              image={tour.image}
+              image={resolveFeatureImage({
+                kind: 'tour',
+                id: tour.id,
+                image: tour.image,
+                fallbackAlt: tour.name,
+              })}
               placeholderLabel={tour.category}
             />
           </div>

@@ -96,6 +96,9 @@ describe('EventsPage', () => {
     expect(within(featuredSection).getAllByRole('link')).toHaveLength(5)
     expect(within(featuredSection).getByText('Local Market Brunch Crawl')).toBeVisible()
     expect(
+      within(featuredSection).getByRole('img', { name: 'Lagoon Breathwork Session' }),
+    ).toBeVisible()
+    expect(
       screen.getByRole('link', { name: 'Submit an event' }),
     ).toHaveAttribute('href', '/events/submit')
   })

@@ -7,6 +7,7 @@ import { buildTourStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
 import { useTourDetail } from '../hooks/useTourDetail'
 
 export function TourDetailPage() {
@@ -39,12 +40,23 @@ export function TourDetailPage() {
     )
   }
 
+  const heroImage = data.image?.src
+    ? data.image
+    : data.imageUrls[0]
+      ? { src: data.imageUrls[0], alt: data.name }
+      : getFeaturePlaceholderImage({
+          kind: 'tour',
+          id: data.id,
+          fallbackAlt: data.name,
+        })
+  const galleryImages = data.imageUrls.filter((url) => url !== heroImage.src)
+
   return (
     <section className={pageStyles.page}>
       <Seo
         title={`${data.name} | ${t('shell.nav.tours')}`}
         description={data.description}
-        image={data.image?.src}
+        image={heroImage.src}
       />
       <StructuredData
         data={buildTourStructuredData({
@@ -53,18 +65,16 @@ export function TourDetailPage() {
           name: data.name,
           description: data.description,
           duration: data.duration,
-          image: data.image,
+          image: heroImage,
           providerName: data.operatorName,
         })}
       />
       <article className={pageStyles.hero}>
-        {data.image ? (
-          <img
-            className={pageStyles.heroImage}
-            src={data.image.src}
-            alt={data.image.alt}
-          />
-        ) : null}
+        <img
+          className={pageStyles.heroImage}
+          src={heroImage.src}
+          alt={heroImage.alt}
+        />
         <div className={pageStyles.heroOverlay} />
         <div className={pageStyles.heroBody}>
           <SectionEyebrow>{t('tours.detailEyebrow')}</SectionEyebrow>
@@ -107,9 +117,9 @@ export function TourDetailPage() {
         </article>
       </div>
 
-      {data.imageUrls.length > 1 ? (
+      {galleryImages.length > 0 ? (
         <section className={pageStyles.galleryGrid} aria-label={t('tours.galleryAriaLabel')}>
-          {data.imageUrls.slice(1).map((url, index) => (
+          {galleryImages.map((url, index) => (
             <img
               key={`${url}-${index}`}
               className={pageStyles.galleryImage}

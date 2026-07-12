@@ -22,8 +22,7 @@
   }
 }
 
-.media,
-.mediaFallback {
+.media {
   position: relative;
   aspect-ratio: 1 / 1;
 }
@@ -46,12 +45,6 @@
   background:
     linear-gradient(180deg, rgba(6, 48, 58, 0.04), rgba(6, 48, 58, 0.1)),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
-}
-
-.mediaFallback {
-  background:
-    linear-gradient(135deg, rgba(45, 156, 171, 0.16), rgba(245, 232, 198, 0.4)),
-    var(--surface-subtle);
 }
 
 .mediaRow {

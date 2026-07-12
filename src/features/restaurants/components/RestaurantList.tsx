@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
 import { FeatureCard } from '../../../components/molecules/FeatureCard'
+import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 import type { Restaurant } from '../types/restaurant'
 import cardStyles from '../../../styles/FeatureCards.module.scss'
@@ -89,7 +90,12 @@ export function RestaurantList({
             description={restaurant.vibe}
             meta={`${restaurant.cuisine} - ${restaurant.priceBand}`}
             to={restaurant.route}
-            image={restaurant.image}
+            image={resolveFeatureImage({
+              kind: 'restaurant',
+              id: restaurant.id,
+              image: restaurant.image,
+              fallbackAlt: restaurant.name,
+            })}
             placeholderLabel={restaurant.cuisine}
           />
         ))}
