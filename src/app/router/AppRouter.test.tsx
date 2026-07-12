@@ -3,8 +3,8 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../components/templates/AppShell'
 import { renderWithProviders } from '../../test/renderWithProviders'
-import { appRoutes } from './AppRouter'
 import { PublicRouteStatusPage } from './PublicRouteStatusPage'
+import { appRoutes } from './appRoutes'
 
 function BrokenPage() {
   throw new Error('render failed')
