@@ -100,6 +100,20 @@ export function eventDetailErrorHandler(
   })
 }
 
+export function eventDetailNotFoundHandler(id: string) {
+  return http.get(eventDetailApiPath(id), async () => {
+    return Response.json(
+      {
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Content not found',
+        },
+      },
+      { status: 404 },
+    )
+  })
+}
+
 export function eventSubmissionErrorHandler(
   message = 'Unable to submit event',
 ) {

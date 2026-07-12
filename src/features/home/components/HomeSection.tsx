@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { PageIntro } from '../../../components/molecules/PageIntro'
+import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import type {
   HomeSectionIntro,
   HomeSuggestionCard,
@@ -12,6 +13,12 @@ type HomeSectionProps = {
   items: HomeSuggestionCard[]
   ctaLabel: string
   ctaTo: string
+  emptyState?: {
+    title: string
+    description: string
+    ctaLabel: string
+    ctaTo: string
+  }
 }
 
 export function HomeSection({
@@ -19,6 +26,7 @@ export function HomeSection({
   items,
   ctaLabel,
   ctaTo,
+  emptyState,
 }: HomeSectionProps) {
   const visibleItems = items.slice(0, 10)
 
@@ -35,11 +43,27 @@ export function HomeSection({
         </Link>
       </div>
 
-      <div className={styles.grid}>
-        {visibleItems.map((item) => (
-          <HomePreviewCard key={item.id} item={item} />
-        ))}
-      </div>
+      {visibleItems.length > 0 ? (
+        <div className={styles.grid}>
+          {visibleItems.map((item) => (
+            <HomePreviewCard key={item.id} item={item} />
+          ))}
+        </div>
+      ) : emptyState ? (
+        <PublicStatusPanel
+          compact
+          eyebrow={intro.eyebrow}
+          title={emptyState.title}
+          description={emptyState.description}
+          actions={[
+            {
+              kind: 'link',
+              label: emptyState.ctaLabel,
+              to: emptyState.ctaTo,
+            },
+          ]}
+        />
+      ) : null}
     </section>
   )
 }

@@ -8,8 +8,11 @@ import { renderWithProviders } from '../../../test/renderWithProviders'
 import { EventsPage } from './EventsPage'
 import {
   emptyEventsCategoryHandler,
-  eventsErrorHandler,
 } from '../mocks/handlers'
+import { http } from 'msw'
+import { jsonSuccess, resolveMockLanguage } from '../../../test/msw/core'
+import { getEventsFixture } from '../mocks/events.fixtures'
+import { eventsApiPath } from '../api/getEvents'
 
 describe('EventsPage', () => {
   function setViewportPosition({
@@ -170,7 +173,7 @@ describe('EventsPage', () => {
     expect(within(eventsList).queryByText('Courtyard Vinyl Jam')).not.toBeInTheDocument()
   })
 
-  it('shows an empty state for a category with no results', async () => {
+  it('shows the upcoming-events empty state with a submit CTA when the API succeeds with no results', async () => {
     server.use(emptyEventsCategoryHandler('wellness'))
 
     setViewportPosition()
@@ -178,24 +181,59 @@ describe('EventsPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Wellness' }))
 
     expect(
-      await screen.findByText('No events in this category right now.'),
+      await screen.findByText('There are currently no upcoming events.'),
     ).toBeVisible()
     expect(
       screen.getByText(
-        'Try another category or come back later for more Wellness plans.',
+        'Check back soon for new listings, or submit an event for review.',
       ),
     ).toBeVisible()
+    expect(screen.getAllByRole('link', { name: 'Submit an event' })[0]).toHaveAttribute(
+      'href',
+      '/events/submit',
+    )
   })
 
-  it('shows a translated error state when the handler fails', async () => {
-    server.use(eventsErrorHandler('broken'))
+  it('shows an error state with retry when the handler fails', async () => {
+    let attempts = 0
 
-    await renderEventsRoute('es')
+    server.use(
+      http.get(eventsApiPath, async ({ request }) => {
+        attempts += 1
+
+        if (attempts === 1) {
+          return Response.json(
+            {
+              error: {
+                code: 'INTERNAL_SERVER_ERROR',
+                message: 'broken',
+              },
+            },
+            { status: 500 },
+          )
+        }
+
+        return jsonSuccess(
+          getEventsFixture(resolveMockLanguage(request), {
+            category: 'all',
+            cursor: null,
+            limit: 10,
+          }),
+        )
+      }),
+    )
+
+    await renderEventsRoute()
 
     expect(
-      await screen.findByText(
-        'No pudimos cargar los eventos en este momento. Actualiza o prueba otro idioma.',
-      ),
+      await screen.findByText('We could not load upcoming events.'),
+    ).toBeVisible()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Try again' }))
+
+    const eventsList = await screen.findByLabelText('Events list')
+    expect(
+      within(eventsList).getByText('Sunset Jazz by the Lagoon'),
     ).toBeVisible()
   })
 })

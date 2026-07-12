@@ -1,0 +1,57 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.compact {
+  gap: 14px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  line-height: 1.05;
+  color: var(--text-strong);
+}
+
+.compactTitle {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+}
+
+.description {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: var(--sun-gold);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #003b62;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}

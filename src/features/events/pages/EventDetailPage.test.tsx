@@ -4,6 +4,11 @@ import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { EventDetailPage } from './EventDetailPage'
+import { server } from '../../../test/msw/server'
+import {
+  eventDetailErrorHandler,
+  eventDetailNotFoundHandler,
+} from '../mocks/handlers'
 
 function renderDetailRoute(path = '/events/event-breathwork') {
   const router = createMemoryRouter(
@@ -35,5 +40,30 @@ describe('EventDetailPage', () => {
     expect(
       screen.getByRole('img', { name: 'Lagoon Breathwork Session' }),
     ).toBeVisible()
+  })
+
+  it('shows an unavailable state for missing events', async () => {
+    server.use(eventDetailNotFoundHandler('event-breathwork'))
+
+    await renderDetailRoute()
+
+    expect(
+      await screen.findByText('This event is no longer available.'),
+    ).toBeVisible()
+    expect(screen.getByRole('link', { name: 'See all events' })).toHaveAttribute(
+      'href',
+      '/events',
+    )
+  })
+
+  it('shows a retryable error state for server failures', async () => {
+    server.use(eventDetailErrorHandler('event-breathwork', 'broken'))
+
+    await renderDetailRoute()
+
+    expect(
+      await screen.findByText('We could not load upcoming events.'),
+    ).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeVisible()
   })
 })

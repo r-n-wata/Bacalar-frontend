@@ -6,6 +6,7 @@ import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
+import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { EventCategoryNav } from '../components/EventCategoryNav'
@@ -26,14 +27,11 @@ export function EventsPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch,
   } = useEvents(selectedCategory)
   const firstPage = data?.pages[0]
   const featuredItems = firstPage?.featuredItems ?? []
   const events = data?.pages.flatMap((page) => page.items) ?? []
-  const emptyTitle = t('events.emptyTitle')
-  const emptyDescription = t('events.emptyDescription', {
-    category: t(`events.categories.${selectedCategory}`),
-  })
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const fallbackSeo = seoContentByLanguage[language].events
   const featuredSeoImage = featuredItems[0]
@@ -81,7 +79,21 @@ export function EventsPage() {
       />
 
       {isLoading ? <LoadingSpinner label={t('events.loading')} /> : null}
-      {isError ? <p role="alert">{t('events.error')}</p> : null}
+      {isError ? (
+        <PublicStatusPanel
+          role="alert"
+          eyebrow={t('events.errorEyebrow')}
+          title={t('events.errorTitle')}
+          description={t('events.error')}
+          actions={[
+            {
+              kind: 'button',
+              label: t('common.retry'),
+              onClick: () => void refetch(),
+            },
+          ]}
+        />
+      ) : null}
       {events.length > 0 && !isLoading && !isError ? (
         <EventList
           events={events}
@@ -91,10 +103,18 @@ export function EventsPage() {
         />
       ) : null}
       {!isLoading && !isError && events.length === 0 ? (
-        <div>
-          <p>{emptyTitle}</p>
-          <p>{emptyDescription}</p>
-        </div>
+        <PublicStatusPanel
+          eyebrow={t('events.emptyEyebrow')}
+          title={t('events.emptyUpcomingTitle')}
+          description={t('events.emptyUpcomingDescription')}
+          actions={[
+            {
+              kind: 'link',
+              label: t('events.submitCta.action'),
+              to: '/events/submit',
+            },
+          ]}
+        />
       ) : null}
 
       <EventSubmitCta />
