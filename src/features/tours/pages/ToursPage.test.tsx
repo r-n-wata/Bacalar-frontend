@@ -95,7 +95,7 @@ describe('ToursPage', () => {
     const featuredSection = screen.getByLabelText('Featured tours')
     expect(within(featuredSection).getAllByRole('link')).toHaveLength(3)
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
-    expect(within(featuredSection).getByText('Provided by: Laguna Vela')).toBeVisible()
+    expect(within(featuredSection).getByText('Provided by Laguna Vela')).toBeVisible()
     expect(screen.getByRole('link', { name: 'Submit a tour' })).toHaveAttribute(
       'href',
       '/tours/submit',
@@ -109,7 +109,7 @@ describe('ToursPage', () => {
     const toursList = await screen.findByLabelText('Tours list')
     expect(within(toursList).getByText('Private Sailing at Sunrise')).toBeVisible()
     expect(within(toursList).getByText('Family Pontoon Loop')).toBeVisible()
-    expect(within(toursList).getByText('Provided by: Casa Ponton')).toBeVisible()
+    expect(within(toursList).getByText('Provided by Casa Ponton')).toBeVisible()
     expect(
       screen.queryByRole('button', { name: 'Load more tours' }),
     ).not.toBeInTheDocument()
