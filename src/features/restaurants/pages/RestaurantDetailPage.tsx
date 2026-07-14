@@ -1,11 +1,15 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailHero } from '../../../components/molecules/DetailHero'
+import { DetailIntro } from '../../../components/molecules/DetailIntro'
+import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
+import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
@@ -47,6 +51,8 @@ export function RestaurantDetailPage() {
     image: data.image,
     fallbackAlt: data.name,
   })
+  const heroImages = [heroImage]
+  const momentsLabel = formatRestaurantMoments(data.moments, t)
 
   return (
     <section className={pageStyles.page}>
@@ -66,50 +72,74 @@ export function RestaurantDetailPage() {
           image: heroImage,
         })}
       />
-      <article className={pageStyles.hero}>
-        <img
-          className={pageStyles.heroImage}
-          src={heroImage.src}
-          alt={heroImage.alt}
-        />
-        <div className={pageStyles.heroOverlay} />
-        <div className={pageStyles.heroBody}>
-          <SectionEyebrow>{t('restaurants.detailEyebrow')}</SectionEyebrow>
-          <h1 className={pageStyles.title}>{data.name}</h1>
-          <p className={pageStyles.summary}>{data.description}</p>
-        </div>
-      </article>
+      <DetailHero
+        eyebrow={t('restaurants.detailEyebrow')}
+        images={heroImages}
+        galleryAriaLabel={t('restaurants.galleryAriaLabel')}
+        viewAllLabel={t('common.gallery.viewAllPhotos')}
+        closeLabel={t('common.gallery.close')}
+        previousLabel={t('common.gallery.previous')}
+        nextLabel={t('common.gallery.next')}
+        countLabel={(current, total) =>
+          t('common.gallery.count', { current, total })
+        }
+      />
 
-      <div className={pageStyles.metaGrid}>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.cuisine')}</span>
-          <strong>{data.cuisine}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.vibe')}</span>
-          <strong>{data.vibe}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.price')}</span>
-          <strong>{data.priceBand}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.moment')}</span>
-          <strong>{formatRestaurantMoments(data.moments, t)}</strong>
-        </article>
+      <DetailIntro
+        title={data.name}
+        summary={data.description}
+        highlights={[
+          {
+            label: t('restaurants.meta.price'),
+            value: data.priceBand,
+          },
+          {
+            label: t('restaurants.meta.moment'),
+            value: momentsLabel,
+          },
+        ]}
+      />
+
+      <div className={pageStyles.layout}>
+        <div className={pageStyles.mainColumn}>
+          <DetailMetadataGrid
+            ariaLabel={t('restaurants.detailMetaAriaLabel')}
+            items={[
+              {
+                label: t('restaurants.meta.cuisine'),
+                value: data.cuisine,
+              },
+              {
+                label: t('restaurants.meta.vibe'),
+                value: data.vibe,
+              },
+            ]}
+          />
+        </div>
+
+        <DetailSidebar title={t('restaurants.sidebar.title')}>
+          <div className={pageStyles.sidebarFacts}>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('restaurants.meta.price')}</span>
+              <strong>{data.priceBand}</strong>
+            </div>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('restaurants.meta.moment')}</span>
+              <strong>{momentsLabel}</strong>
+            </div>
+          </div>
+          <DetailActions
+            compact
+            actions={[
+              {
+                label: t('restaurants.backToList'),
+                to: '/restaurants',
+                variant: 'secondary',
+              },
+            ]}
+          />
+        </DetailSidebar>
       </div>
-
-      <article className={pageStyles.bodyCard}>
-        <p className={pageStyles.bodyCopy}>{data.description}</p>
-        <div className={pageStyles.actions}>
-          <Link className={pageStyles.primaryAction} to="/restaurants">
-            {t('restaurants.backToList')}
-          </Link>
-          <Link className={pageStyles.secondaryAction} to="/">
-            {t('restaurants.backHome')}
-          </Link>
-        </div>
-      </article>
     </section>
   )
 }

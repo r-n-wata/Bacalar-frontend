@@ -1,11 +1,15 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailHero } from '../../../components/molecules/DetailHero'
+import { DetailIntro } from '../../../components/molecules/DetailIntro'
+import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
+import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -87,6 +91,7 @@ export function EventDetailPage() {
     image: data.image,
     fallbackAlt: data.title,
   })
+  const heroImages = [heroImage]
 
   return (
     <section className={pageStyles.page}>
@@ -108,64 +113,74 @@ export function EventDetailPage() {
           image: heroImage,
         })}
       />
-      <article className={pageStyles.hero}>
-        <img
-          className={pageStyles.heroImage}
-          src={heroImage.src}
-          alt={heroImage.alt}
-        />
-        <div className={pageStyles.heroOverlay} />
-        <div className={pageStyles.heroBody}>
-          <SectionEyebrow>{t('events.detailEyebrow')}</SectionEyebrow>
-          <div className={pageStyles.heroPills}>
-            {showUpcoming ? (
-              <span className={pageStyles.heroPill}>
-                {t('events.badges.upcoming')}
-              </span>
-            ) : null}
-            <span className={pageStyles.heroPill}>{moodLabel}</span>
+      <DetailHero
+        eyebrow={t('events.detailEyebrow')}
+        images={heroImages}
+        galleryAriaLabel={t('events.galleryAriaLabel')}
+        viewAllLabel={t('common.gallery.viewAllPhotos')}
+        closeLabel={t('common.gallery.close')}
+        previousLabel={t('common.gallery.previous')}
+        nextLabel={t('common.gallery.next')}
+        countLabel={(current, total) =>
+          t('common.gallery.count', { current, total })
+        }
+      />
+
+      <DetailIntro
+        title={data.title}
+        summary={data.description}
+        badges={[
+          ...(showUpcoming ? [t('events.badges.upcoming')] : []),
+          t(`events.categories.${data.category}`),
+        ]}
+        highlights={[
+          {
+            label: t('events.meta.when'),
+            value: data.dateLabel,
+          },
+          {
+            label: t('events.meta.where'),
+            value: data.venue,
+          },
+        ]}
+      />
+
+      <div className={pageStyles.layout}>
+        <div className={pageStyles.mainColumn}>
+          <DetailMetadataGrid
+            ariaLabel={t('events.detailMetaAriaLabel')}
+            items={[
+              {
+                label: t('events.meta.mood'),
+                value: moodLabel,
+              },
+            ]}
+          />
+        </div>
+
+        <DetailSidebar title={t('events.sidebar.title')}>
+          <div className={pageStyles.sidebarFacts}>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('events.meta.type')}</span>
+              <strong>{t(`events.categories.${data.category}`)}</strong>
+            </div>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('events.meta.mood')}</span>
+              <strong>{moodLabel}</strong>
+            </div>
           </div>
-          <h1 className={pageStyles.title}>{data.title}</h1>
-          <p className={pageStyles.summary}>{data.description}</p>
-          <p className={pageStyles.heroMeta}>
-            {data.dateLabel} · {data.venue}
-          </p>
-        </div>
-      </article>
-
-      <div className={pageStyles.metaGrid}>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.when')}</span>
-          <strong>{data.dateLabel}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.where')}</span>
-          <strong>{data.venue}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.type')}</span>
-          <strong>{t(`events.categories.${data.category}`)}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.mood')}</span>
-          <strong>{moodLabel}</strong>
-        </article>
+          <DetailActions
+            compact
+            actions={[
+              {
+                label: t('events.backToList'),
+                to: '/events',
+                variant: 'secondary',
+              },
+            ]}
+          />
+        </DetailSidebar>
       </div>
-
-      <article className={pageStyles.bodyCard}>
-        <p className={pageStyles.bodyLead}>
-          {showUpcoming ? t('events.detailNote.upcoming') : t('events.detailNote.thisWeek')}
-        </p>
-        <p className={pageStyles.bodyCopy}>{data.description}</p>
-        <div className={pageStyles.actions}>
-          <Link className={pageStyles.primaryAction} to="/events">
-            {t('events.backToList')}
-          </Link>
-          <Link className={pageStyles.secondaryAction} to="/">
-            {t('events.backHome')}
-          </Link>
-        </div>
-      </article>
     </section>
   )
 }

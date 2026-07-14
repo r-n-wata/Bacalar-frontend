@@ -35,6 +35,13 @@ export const resources = {
         loading: 'Loading...',
         error: 'Something went wrong. Please try again.',
         retry: 'Try again',
+        gallery: {
+          viewAllPhotos: 'View all photos',
+          close: 'Close gallery',
+          previous: 'Previous image',
+          next: 'Next image',
+          count: '{{current}} / {{total}}',
+        },
       },
       status: {
         actions: {
@@ -266,6 +273,8 @@ export const resources = {
             'A curated row of timely moments worth considering before you filter deeper.',
         },
         detailEyebrow: 'Featured event',
+        detailMetaAriaLabel: 'Event details',
+        galleryAriaLabel: 'Event image gallery',
         thisWeekNote:
           'Browse all events by category',
         loadMore: 'Load more events',
@@ -297,6 +306,9 @@ export const resources = {
           where: 'Where',
           type: 'Type',
           mood: 'Mood',
+        },
+        sidebar: {
+          title: 'Plan this event',
         },
       },
       restaurants: {
@@ -383,6 +395,8 @@ export const resources = {
         emptyDescription:
           'Try another category or come back later for more {{category}} options.',
         detailEyebrow: 'Featured restaurant',
+        detailMetaAriaLabel: 'Restaurant details',
+        galleryAriaLabel: 'Restaurant image gallery',
         backToList: 'See all restaurants',
         backHome: 'Back to homepage',
         categories: {
@@ -396,6 +410,9 @@ export const resources = {
           vibe: 'Vibe',
           price: 'Price',
           moment: 'Best for',
+        },
+        sidebar: {
+          title: 'At a glance',
         },
       },
       tours: {
@@ -477,6 +494,7 @@ export const resources = {
             'Our favourite tours to help you get started.',
         },
         detailEyebrow: 'Featured tour',
+        detailMetaAriaLabel: 'Tour details',
         galleryAriaLabel: 'Tour image gallery',
         loadMore: 'Load more tours',
         loadingMore: 'Loading more tours...',
@@ -485,7 +503,17 @@ export const resources = {
           'Try another category or come back later for more {{category}} options.',
         backToList: 'See all tours',
         backHome: 'Back to homepage',
-        providedBy: 'Provided by: {{operator}}',
+        providedBy: 'Provided by {{operator}}',
+        providerEyebrow: 'Provided by',
+        actions: {
+          contactOperator: 'Contact operator',
+          checkAvailability: 'Check availability',
+          messageOnInstagram: 'Message on Instagram',
+        },
+        sidebar: {
+          title: 'Tour planning',
+          operator: 'Operator',
+        },
         bestForLabel: 'Best for: {{value}}',
         categories: {
           all: 'All',
@@ -554,6 +582,13 @@ export const resources = {
         loading: 'Cargando...',
         error: 'Algo salio mal. Intentalo de nuevo.',
         retry: 'Intentar de nuevo',
+        gallery: {
+          viewAllPhotos: 'Ver todas las fotos',
+          close: 'Cerrar galeria',
+          previous: 'Imagen anterior',
+          next: 'Imagen siguiente',
+          count: '{{current}} / {{total}}',
+        },
       },
       status: {
         actions: {
@@ -786,6 +821,8 @@ export const resources = {
             'Una fila curada de planes oportunos que vale la pena revisar antes de filtrar mas.',
         },
         detailEyebrow: 'Evento destacado',
+        detailMetaAriaLabel: 'Detalles del evento',
+        galleryAriaLabel: 'Galeria de imagenes del evento',
         thisWeekNote:
           'Explora todos los eventos por categoria',
         loadMore: 'Cargar mas eventos',
@@ -817,6 +854,9 @@ export const resources = {
           where: 'Donde',
           type: 'Tipo',
           mood: 'Ambiente',
+        },
+        sidebar: {
+          title: 'Planea este evento',
         },
       },
       restaurants: {
@@ -903,6 +943,8 @@ export const resources = {
         emptyDescription:
           'Prueba otra categoria o vuelve despues para ver mas opciones de {{category}}.',
         detailEyebrow: 'Restaurante destacado',
+        detailMetaAriaLabel: 'Detalles del restaurante',
+        galleryAriaLabel: 'Galeria de imagenes del restaurante',
         backToList: 'Ver todos los restaurantes',
         backHome: 'Volver a inicio',
         categories: {
@@ -916,6 +958,9 @@ export const resources = {
           vibe: 'Ambiente',
           price: 'Precio',
           moment: 'Mejor para',
+        },
+        sidebar: {
+          title: 'De un vistazo',
         },
       },
       tours: {
@@ -997,6 +1042,7 @@ export const resources = {
             'Nuestros tours favoritos para ayudarte a empezar.',
         },
         detailEyebrow: 'Tour destacado',
+        detailMetaAriaLabel: 'Detalles del tour',
         galleryAriaLabel: 'Galeria de imagenes del tour',
         loadMore: 'Cargar mas tours',
         loadingMore: 'Cargando mas tours...',
@@ -1005,7 +1051,17 @@ export const resources = {
           'Prueba otra categoria o vuelve despues para ver mas opciones de {{category}}.',
         backToList: 'Ver todos los tours',
         backHome: 'Volver a inicio',
-        providedBy: 'Operado por: {{operator}}',
+        providedBy: 'Operado por {{operator}}',
+        providerEyebrow: 'Operado por',
+        actions: {
+          contactOperator: 'Contactar al operador',
+          checkAvailability: 'Consultar disponibilidad',
+          messageOnInstagram: 'Enviar mensaje por Instagram',
+        },
+        sidebar: {
+          title: 'Planea este tour',
+          operator: 'Operador',
+        },
         bestForLabel: 'Ideal para: {{value}}',
         categories: {
           all: 'Todos',
