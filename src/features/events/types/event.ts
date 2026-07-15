@@ -36,6 +36,9 @@ export type EventDetail = {
   category: EventCategory
   dateLabel: string
   venue: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   description: string
   startsAt?: string
   endsAt?: string

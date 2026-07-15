@@ -6,6 +6,7 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -103,6 +104,7 @@ export function EventDetailPage() {
           description: data.description,
           dateLabel: data.dateLabel,
           venue: data.venue,
+          address: data.address,
           startsAt: data.startsAt,
           endsAt: data.endsAt,
           image: heroImage,
@@ -157,6 +159,17 @@ export function EventDetailPage() {
           {showUpcoming ? t('events.detailNote.upcoming') : t('events.detailNote.thisWeek')}
         </p>
         <p className={pageStyles.bodyCopy}>{data.description}</p>
+        {data.mapEmbedUrl ? (
+          <section className={pageStyles.detailSection}>
+            <EmbeddedMapSection
+              title={t('common.labels.location')}
+              description={data.address ?? data.venue}
+              embedUrl={data.mapEmbedUrl}
+              mapUrl={data.mapUrl}
+              frameTitle={`${data.title} map`}
+            />
+          </section>
+        ) : null}
         <div className={pageStyles.actions}>
           <Link className={pageStyles.primaryAction} to="/events">
             {t('events.backToList')}

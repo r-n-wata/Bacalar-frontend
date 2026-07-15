@@ -6,6 +6,7 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
@@ -63,6 +64,7 @@ export function RestaurantDetailPage() {
           description: data.description,
           cuisine: data.cuisine,
           priceRange: data.priceBand,
+          address: data.address,
           image: heroImage,
         })}
       />
@@ -101,6 +103,17 @@ export function RestaurantDetailPage() {
 
       <article className={pageStyles.bodyCard}>
         <p className={pageStyles.bodyCopy}>{data.description}</p>
+        {data.mapEmbedUrl ? (
+          <section className={pageStyles.detailSection}>
+            <EmbeddedMapSection
+              title={t('common.labels.location')}
+              description={data.address}
+              embedUrl={data.mapEmbedUrl}
+              mapUrl={data.mapUrl}
+              frameTitle={`${data.name} map`}
+            />
+          </section>
+        ) : null}
         <div className={pageStyles.actions}>
           <Link className={pageStyles.primaryAction} to="/restaurants">
             {t('restaurants.backToList')}

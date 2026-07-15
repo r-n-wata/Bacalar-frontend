@@ -33,6 +33,17 @@ function renderDetailRoute(path = '/events/event-breathwork') {
 }
 
 describe('EventDetailPage', () => {
+  it('renders the embedded map section when map data exists', async () => {
+    await renderDetailRoute('/events/event-sunset-jazz')
+
+    expect(await screen.findByText('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
+      'href',
+      'https://maps.google.com/?q=Costera+12+Bacalar',
+    )
+    expect(screen.getByTitle('Sunset Jazz by the Lagoon map')).toBeVisible()
+  })
+
   it('renders a placeholder hero image when the event has no image', async () => {
     await renderDetailRoute()
 

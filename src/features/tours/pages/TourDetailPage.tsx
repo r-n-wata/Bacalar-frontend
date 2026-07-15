@@ -6,6 +6,7 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildTourStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
 import { useTourDetail } from '../hooks/useTourDetail'
@@ -67,6 +68,7 @@ export function TourDetailPage() {
           duration: data.duration,
           image: heroImage,
           providerName: data.operatorName,
+          address: data.address,
         })}
       />
       <article className={pageStyles.hero}>
@@ -147,7 +149,18 @@ export function TourDetailPage() {
         {data.meetingPoint ? (
           <section className={pageStyles.detailSection}>
             <h2>{t('tours.sections.meetingPoint')}</h2>
-            <p className={pageStyles.bodyCopy}>{data.meetingPoint}</p>
+            <p className={pageStyles.bodyCopy}>{data.address ?? data.meetingPoint}</p>
+          </section>
+        ) : null}
+        {data.mapEmbedUrl ? (
+          <section className={pageStyles.detailSection}>
+            <EmbeddedMapSection
+              title={t('common.labels.location')}
+              description={data.address ?? data.meetingPoint}
+              embedUrl={data.mapEmbedUrl}
+              mapUrl={data.mapUrl}
+              frameTitle={`${data.name} map`}
+            />
           </section>
         ) : null}
         <section className={pageStyles.detailSection}>

@@ -40,6 +40,10 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['breakfast'],
         description:
           'A relaxed breakfast stop with garden energy, fresh plates, and enough calm to set up a lagoon morning without rushing anyone through it.',
+        address: 'Avenida 3 210, Bacalar, Quintana Roo',
+        mapUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
+        mapEmbedUrl:
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.395!3d18.679!2m3!1f0!2f0!3f0',
         route: '/restaurants/rest-cielo',
         image: {
           src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
@@ -169,6 +173,10 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['breakfast'],
         description:
           'Un desayuno relajado con ambiente de jardin, platos frescos y la calma suficiente para arrancar una manana de laguna sin prisas.',
+        address: 'Avenida 3 210, Bacalar, Quintana Roo',
+        mapUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
+        mapEmbedUrl:
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.395!3d18.679!2m3!1f0!2f0!3f0',
         route: '/restaurants/rest-cielo',
         image: {
           src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',

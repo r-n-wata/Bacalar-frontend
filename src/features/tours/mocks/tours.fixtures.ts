@@ -29,6 +29,9 @@ function createTourSeed(input: {
   included?: string
   whatToBring?: string
   meetingPoint?: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   operatorName: string
   operatorDescription?: string
   operatorWhatsapp?: string
@@ -67,6 +70,9 @@ function createTourSeed(input: {
       included: input.included,
       whatToBring: input.whatToBring,
       meetingPoint: input.meetingPoint,
+      address: input.address,
+      mapUrl: input.mapUrl,
+      mapEmbedUrl: input.mapEmbedUrl,
       imageUrls: input.imageUrls ?? (input.image ? [input.image.src] : []),
       operatorName: input.operatorName,
       operatorDescription: input.operatorDescription,
@@ -97,6 +103,10 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       included: 'Captain, safety gear, fruit, and chilled water.',
       whatToBring: 'Swimwear, a light layer, reef-safe sunscreen, and cash for extras.',
       meetingPoint: 'Main marina dock near the lagoon boulevard.',
+      address: 'Boulevard Costero 17, Bacalar, Quintana Roo',
+      mapUrl: 'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
+      mapEmbedUrl:
+        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.392!3d18.681!2m3!1f0!2f0!3f0',
       operatorName: 'Laguna Vela',
       operatorDescription:
         'A small Bacalar sailing crew focused on private sunrise departures and calm pacing.',
@@ -172,6 +182,10 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       included: 'Capitan, equipo de seguridad, fruta y agua fria.',
       whatToBring: 'Traje de bano, capa ligera, bloqueador y efectivo.',
       meetingPoint: 'Muelle principal cerca del boulevard de la laguna.',
+      address: 'Boulevard Costero 17, Bacalar, Quintana Roo',
+      mapUrl: 'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
+      mapEmbedUrl:
+        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.392!3d18.681!2m3!1f0!2f0!3f0',
       operatorName: 'Laguna Vela',
       operatorDescription:
         'Un equipo pequeno de vela en Bacalar enfocado en salidas privadas al amanecer.',

@@ -34,6 +34,9 @@ export type CreateEventSubmissionRequest = {
   title: string
   startsAt: string
   location: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   category: EventCategory
   description: string
   contactName: string

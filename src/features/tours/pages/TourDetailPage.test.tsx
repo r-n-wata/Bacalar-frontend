@@ -44,6 +44,11 @@ describe('TourDetailPage', () => {
     expect(screen.getByText('https://lagunavela.example.com')).toBeVisible()
     expect(screen.getByText('What is included')).toBeVisible()
     expect(screen.getByText('Meeting point')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
+      'href',
+      'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
+    )
+    expect(screen.getByTitle('Private Sailing at Sunrise map')).toBeVisible()
   })
 
   it('handles missing optional contact fields and missing images', async () => {

@@ -75,6 +75,7 @@ export function buildEventStructuredData(options: {
   description: string
   dateLabel: string
   venue: string
+  address?: string
   startsAt?: string
   endsAt?: string
   image?: ImageValue
@@ -97,6 +98,7 @@ export function buildEventStructuredData(options: {
       name: options.venue,
       address: {
         '@type': 'PostalAddress',
+        streetAddress: options.address,
         addressLocality: 'Bacalar',
         addressRegion: 'Quintana Roo',
         addressCountry: 'MX',
@@ -116,6 +118,7 @@ export function buildRestaurantStructuredData(options: {
   description: string
   cuisine: string
   priceRange: string
+  address?: string
   image?: ImageValue
 }) {
   const siteUrl = resolveSiteUrl()
@@ -131,6 +134,7 @@ export function buildRestaurantStructuredData(options: {
     inLanguage: getLocale(options.language),
     address: {
       '@type': 'PostalAddress',
+      streetAddress: options.address,
       addressLocality: 'Bacalar',
       addressRegion: 'Quintana Roo',
       addressCountry: 'MX',
@@ -149,6 +153,7 @@ export function buildTourStructuredData(options: {
   duration: string
   image?: ImageValue
   providerName: string
+  address?: string
 }) {
   const siteUrl = resolveSiteUrl()
 
@@ -172,6 +177,7 @@ export function buildTourStructuredData(options: {
       name: 'Bacalar Lagoon',
       address: {
         '@type': 'PostalAddress',
+        streetAddress: options.address,
         addressLocality: 'Bacalar',
         addressRegion: 'Quintana Roo',
         addressCountry: 'MX',
