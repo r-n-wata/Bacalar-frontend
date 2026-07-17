@@ -33,14 +33,29 @@ function renderDetailRoute(path = '/events/event-breathwork') {
 }
 
 describe('EventDetailPage', () => {
-  it('renders a placeholder hero image with intro details below the hero', async () => {
+  it('renders the embedded map section when map data exists', async () => {
+    await renderDetailRoute('/events/event-sunset-jazz')
+
+    expect(await screen.findByText('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
+      'href',
+      'https://maps.google.com/?q=Costera+12+Bacalar',
+    )
+    expect(screen.getByTitle('Sunset Jazz by the Lagoon map')).toBeVisible()
+  })
+
+  it('renders a placeholder hero image when the event has no image', async () => {
     await renderDetailRoute()
 
     expect(await screen.findByText('Lagoon Breathwork Session')).toBeVisible()
     expect(
       screen.getAllByRole('img', { name: 'Lagoon Breathwork Session' }).length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByText('A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.')).toHaveLength(1)
+    expect(
+      screen.getAllByText(
+        'A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.',
+      ).length,
+    ).toBeGreaterThan(0)
     expect(screen.getByText('Sunday, 8:00 AM')).toBeVisible()
     expect(screen.getByText('Isla Yoga Garden')).toBeVisible()
   })

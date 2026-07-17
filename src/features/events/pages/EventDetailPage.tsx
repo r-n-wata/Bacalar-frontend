@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
@@ -8,8 +8,8 @@ import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { DetailActions } from '../../../components/molecules/DetailActions'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
-import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
 import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
+import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -108,6 +108,7 @@ export function EventDetailPage() {
           description: data.description,
           dateLabel: data.dateLabel,
           venue: data.venue,
+          address: data.address,
           startsAt: data.startsAt,
           endsAt: data.endsAt,
           image: heroImage,
@@ -147,15 +148,33 @@ export function EventDetailPage() {
 
       <div className={pageStyles.layout}>
         <div className={pageStyles.mainColumn}>
-          <DetailMetadataGrid
-            ariaLabel={t('events.detailMetaAriaLabel')}
-            items={[
-              {
-                label: t('events.meta.mood'),
-                value: moodLabel,
-              },
-            ]}
-          />
+          <article className={pageStyles.bodyCard}>
+            <p className={pageStyles.bodyLead}>
+              {showUpcoming
+                ? t('events.detailNote.upcoming')
+                : t('events.detailNote.thisWeek')}
+            </p>
+            <p className={pageStyles.bodyCopy}>{data.description}</p>
+            {data.mapEmbedUrl ? (
+              <section className={pageStyles.detailSection}>
+                <EmbeddedMapSection
+                  title={t('common.labels.location')}
+                  description={data.address ?? data.venue}
+                  embedUrl={data.mapEmbedUrl}
+                  mapUrl={data.mapUrl}
+                  frameTitle={`${data.title} map`}
+                />
+              </section>
+            ) : null}
+            <div className={pageStyles.actions}>
+              <Link className={pageStyles.primaryAction} to="/events">
+                {t('events.backToList')}
+              </Link>
+              <Link className={pageStyles.secondaryAction} to="/">
+                {t('events.backHome')}
+              </Link>
+            </div>
+          </article>
         </div>
 
         <DetailSidebar title={t('events.sidebar.title')}>

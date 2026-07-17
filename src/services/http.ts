@@ -104,3 +104,35 @@ export async function postJson<TRequest, TResponse>(
     },
   })
 }
+
+export async function patchJson<TRequest, TResponse>(
+  path: string,
+  body: TRequest,
+  options?: JsonRequestOptions,
+): Promise<TResponse> {
+  return requestJson<TResponse>(path, {
+    ...options,
+    init: {
+      ...options?.init,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.init?.headers,
+      },
+      body: JSON.stringify(body),
+    },
+  })
+}
+
+export async function deleteJson<TResponse>(
+  path: string,
+  options?: JsonRequestOptions,
+): Promise<TResponse> {
+  return requestJson<TResponse>(path, {
+    ...options,
+    init: {
+      ...options?.init,
+      method: 'DELETE',
+    },
+  })
+}

@@ -1,3 +1,8 @@
+import type { EventSubmissionMedia } from '../../events/types/submission'
+import type { RestaurantMoment } from '../../restaurants/types/restaurant'
+import type { RestaurantSubmissionMedia } from '../../restaurants/types/submission'
+import type { TourSubmissionMedia } from '../../tours/types/submission'
+
 export type AdminSubmissionFilter = 'all' | 'events' | 'restaurants' | 'tours'
 export type AdminSubmissionType = Exclude<AdminSubmissionFilter, 'all'>
 export type AdminPublishedContentType = AdminSubmissionType
@@ -36,6 +41,9 @@ type AdminSubmissionListBase = {
 type AdminSubmissionDetailBase = AdminSubmissionListBase & {
   contactName: string
   contactMethod: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   instagram?: string
   whatsapp?: string
   images: AdminSubmissionThumbnail[]
@@ -159,4 +167,143 @@ export type AdminPublishedContentResponse = {
   items: AdminPublishedContentItem[]
   featuredCount: number
   featuredCap: number
+}
+
+type AdminPublishedTranslationFields<TFields> = {
+  en: TFields
+  es: TFields
+}
+
+type AdminPublishedContentDetailBase = {
+  id: string
+  type: AdminPublishedContentType
+  route: string
+  isFeatured: boolean
+  featuredOrder?: number
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+}
+
+export type AdminPublishedEventDetail = AdminPublishedContentDetailBase & {
+  type: 'events'
+  category: 'music' | 'wellness' | 'food'
+  startsAt: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  media: AdminSubmissionThumbnail[]
+  translations: AdminPublishedTranslationFields<{
+    title: string
+    dateLabel: string
+    venue: string
+    description: string
+  }>
+}
+
+export type AdminPublishedRestaurantDetail = AdminPublishedContentDetailBase & {
+  type: 'restaurants'
+  priceBand: '$' | '$$' | '$$$'
+  moments: RestaurantMoment[]
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  media: AdminSubmissionThumbnail[]
+  translations: AdminPublishedTranslationFields<{
+    name: string
+    cuisine: string
+    vibe: string
+    description: string
+  }>
+}
+
+export type AdminPublishedTourDetail = AdminPublishedContentDetailBase & {
+  type: 'tours'
+  category: string
+  durationHours: number
+  priceFrom: number
+  privateOrShared: string
+  bestFor: string
+  difficulty: string
+  suitableForKids: string
+  meetingPoint?: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  operatorName: string
+  operatorWhatsapp?: string
+  operatorInstagram?: string
+  operatorWebsite?: string
+  operatorPrimaryContactMethod?: string
+  media: AdminSubmissionThumbnail[]
+  translations: AdminPublishedTranslationFields<{
+    name: string
+    description: string
+    included?: string
+    whatToBring?: string
+    operatorDescription?: string
+  }>
+}
+
+export type AdminPublishedContentDetail =
+  | AdminPublishedEventDetail
+  | AdminPublishedRestaurantDetail
+  | AdminPublishedTourDetail
+
+export type AdminPublishedContentDetailResponse = {
+  item: AdminPublishedContentDetail
+}
+
+export type UpdateAdminPublishedEventRequest = {
+  category: 'music' | 'wellness' | 'food'
+  startsAt: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  media: EventSubmissionMedia[]
+  translations: AdminPublishedEventDetail['translations']
+}
+
+export type UpdateAdminPublishedRestaurantRequest = {
+  priceBand: '$' | '$$' | '$$$'
+  moments: RestaurantMoment[]
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  media: RestaurantSubmissionMedia[]
+  translations: AdminPublishedRestaurantDetail['translations']
+}
+
+export type UpdateAdminPublishedTourRequest = {
+  category: string
+  durationHours: number
+  priceFrom: number
+  privateOrShared: string
+  bestFor: string
+  difficulty: string
+  suitableForKids: string
+  meetingPoint?: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
+  operatorName: string
+  operatorWhatsapp?: string
+  operatorInstagram?: string
+  operatorWebsite?: string
+  operatorPrimaryContactMethod?: string
+  media: TourSubmissionMedia[]
+  translations: AdminPublishedTourDetail['translations']
+}
+
+export type UpdateAdminPublishedContentRequest =
+  | UpdateAdminPublishedEventRequest
+  | UpdateAdminPublishedRestaurantRequest
+  | UpdateAdminPublishedTourRequest
+
+export type UpdateAdminPublishedContentResponse = {
+  item: AdminPublishedContentDetail
+}
+
+export type ArchiveAdminPublishedContentResponse = {
+  id: string
+  type: AdminPublishedContentType
+  status: 'ARCHIVED'
 }

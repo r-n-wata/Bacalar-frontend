@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
@@ -12,6 +12,7 @@ import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
+import { archiveAdminPublishedContent } from '../api/archiveAdminPublishedContent'
 import { updateAdminPublishedContentFeature } from '../api/updateAdminPublishedContentFeature'
 import { useAdminPublishedContent } from '../hooks/useAdminPublishedContent'
 import type { AdminPublishedContentItem, AdminPublishedContentType } from '../types/admin'
@@ -37,11 +38,22 @@ function getTypeMeta(
 export function AdminPublishedContentPage() {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { session } = useAdminAuth()
   const token = session?.access_token ?? null
   const language = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const seo = seoContentByLanguage[language].adminContent
   const [activeType, setActiveType] = useState<AdminPublishedContentType>('events')
+  const [flashMessage, setFlashMessage] = useState<string | null>(
+    typeof location.state === 'object' &&
+      location.state !== null &&
+      'flashMessage' in location.state &&
+      typeof location.state.flashMessage === 'string'
+      ? location.state.flashMessage
+      : null,
+  )
+  const [deleteTarget, setDeleteTarget] = useState<AdminPublishedContentItem | null>(null)
   const contentQuery = useAdminPublishedContent(activeType, token)
   const items = contentQuery.data?.items ?? []
   const featuredCount = contentQuery.data?.featuredCount ?? 0
@@ -60,6 +72,7 @@ export function AdminPublishedContentPage() {
       isFeatured: boolean
     }) => updateAdminPublishedContentFeature(activeType, id, isFeatured, token ?? ''),
     onSuccess: async () => {
+      setFlashMessage(t('admin.content.featureUpdated'))
       await queryClient.invalidateQueries({
         queryKey: queryKeys.admin.content(language, activeType),
       })
@@ -73,6 +86,27 @@ export function AdminPublishedContentPage() {
       ])
     },
   })
+
+  const archiveMutation = useMutation({
+    mutationFn: ({ type, id }: { type: AdminPublishedContentType; id: string }) =>
+      archiveAdminPublishedContent(type, id, token ?? ''),
+    onSuccess: async () => {
+      setDeleteTarget(null)
+      setFlashMessage(t('admin.content.delete.success'))
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.admin.contentRoot }),
+        queryClient.invalidateQueries({ queryKey: ['home'] }),
+        queryClient.invalidateQueries({ queryKey: ['events'] }),
+        queryClient.invalidateQueries({ queryKey: ['restaurants'] }),
+        queryClient.invalidateQueries({ queryKey: ['tours'] }),
+      ])
+    },
+  })
+
+  function clearFlash() {
+    setFlashMessage(null)
+    navigate(location.pathname, { replace: true, state: null })
+  }
 
   return (
     <section className={pageStyles.page}>
@@ -111,6 +145,17 @@ export function AdminPublishedContentPage() {
           </div>
         </ContentPanel>
 
+        {flashMessage ? (
+          <ContentPanel>
+            <div className={styles.flashRow}>
+              <p className={styles.flashMessage}>{flashMessage}</p>
+              <button className={styles.dismissButton} type="button" onClick={clearFlash}>
+                {t('admin.content.actions.dismiss')}
+              </button>
+            </div>
+          </ContentPanel>
+        ) : null}
+
         {contentQuery.isLoading ? (
           <LoadingSpinner label={t('admin.content.loading')} />
         ) : null}
@@ -132,6 +177,9 @@ export function AdminPublishedContentPage() {
             {items.map((item) => {
               const isBusy =
                 featureMutation.isPending && featureMutation.variables?.id === item.id
+              const isDeleting =
+                archiveMutation.isPending &&
+                archiveMutation.variables?.id === item.id
               const disableFeature =
                 !item.isFeatured && featuredCount >= featuredCap
 
@@ -164,7 +212,7 @@ export function AdminPublishedContentPage() {
                     <div className={styles.actions}>
                       <Button
                         variant={item.isFeatured ? 'secondary' : 'accent'}
-                        disabled={isBusy || disableFeature}
+                        disabled={isBusy || isDeleting || disableFeature}
                         onClick={() =>
                           featureMutation.mutate({
                             id: item.id,
@@ -176,6 +224,18 @@ export function AdminPublishedContentPage() {
                           ? t('admin.content.actions.remove')
                           : t('admin.content.actions.add')}
                       </Button>
+                      <Link className={styles.link} to={`/admin/content/${item.type}/${item.id}/edit`}>
+                        {t('admin.content.actions.edit')}
+                      </Link>
+                      <Button
+                        variant="secondary"
+                        disabled={isDeleting}
+                        onClick={() => setDeleteTarget(item)}
+                      >
+                        {isDeleting
+                          ? t('admin.content.delete.deleting')
+                          : t('admin.content.actions.delete')}
+                      </Button>
                       <Link className={styles.link} to={item.route}>
                         {t('admin.content.actions.open')}
                       </Link>
@@ -184,6 +244,52 @@ export function AdminPublishedContentPage() {
                 </ContentPanel>
               )
             })}
+          </div>
+        ) : null}
+
+        {archiveMutation.isError ? (
+          <ContentPanel>
+            <p role="alert" className={styles.empty}>
+              {archiveMutation.error instanceof ApiError
+                ? archiveMutation.error.message
+                : t('admin.content.delete.error')}
+            </p>
+          </ContentPanel>
+        ) : null}
+
+        {deleteTarget ? (
+          <div className={styles.dialogBackdrop}>
+            <ContentPanel className={styles.dialog} role="dialog" aria-modal="true">
+              <p className={styles.dialogTitle}>{t('admin.content.delete.title')}</p>
+              <p className={styles.dialogCopy}>
+                {t('admin.content.delete.description', {
+                  title: deleteTarget.title,
+                })}
+              </p>
+              <div className={styles.actions}>
+                <Button
+                  variant="accent"
+                  disabled={archiveMutation.isPending}
+                  onClick={() =>
+                    archiveMutation.mutate({
+                      type: deleteTarget.type,
+                      id: deleteTarget.id,
+                    })
+                  }
+                >
+                  {archiveMutation.isPending
+                    ? t('admin.content.delete.deleting')
+                    : t('admin.content.delete.confirm')}
+                </Button>
+                <Button
+                  variant="secondary"
+                  disabled={archiveMutation.isPending}
+                  onClick={() => setDeleteTarget(null)}
+                >
+                  {t('admin.content.delete.cancel')}
+                </Button>
+              </div>
+            </ContentPanel>
           </div>
         ) : null}
       </div>

@@ -27,6 +27,12 @@ export function AppShell({ children }: AppShellProps) {
     { to: '/restaurants', label: t('shell.nav.restaurants') },
     { to: '/events', label: t('shell.nav.events') },
   ]
+  const adminNavigation = session
+    ? [
+        { to: '/admin/submissions', label: t('shell.nav.submissions') },
+        { to: '/admin/content', label: t('shell.nav.content') },
+      ]
+    : []
   const footerLinks = [
     { to: '/', label: t('shell.nav.overview') },
     { to: '/tours', label: t('shell.nav.tours') },
@@ -81,6 +87,20 @@ export function AppShell({ children }: AppShellProps) {
                 key={item.to}
                 to={item.to}
                 end={item.end}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.navLink} ${styles.navLinkActive}`
+                    : styles.navLink
+                }
+                onClick={closeAdminMenu}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            {adminNavigation.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
                 className={({ isActive }) =>
                   isActive
                     ? `${styles.navLink} ${styles.navLinkActive}`
@@ -327,6 +347,24 @@ export function AppShell({ children }: AppShellProps) {
                     <span>{t("shell.nav.admin")}</span>
                   </NavLink>
                 )}
+                {adminNavigation.length > 0 ? (
+                  <div className={styles.mobileAdminNav}>
+                    {adminNavigation.map((item) => (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        className={({ isActive }) =>
+                          isActive
+                            ? `${styles.adminLink} ${styles.mobileAdminLink} ${styles.adminLinkActive}`
+                            : `${styles.adminLink} ${styles.mobileAdminLink}`
+                        }
+                        onClick={closeAdminMenu}
+                      >
+                        <span>{item.label}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                ) : null}
             <div className={styles.mobileLanguageActions}>
               <Button
                 className={

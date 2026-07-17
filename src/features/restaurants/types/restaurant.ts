@@ -22,6 +22,9 @@ export type RestaurantDetail = {
   vibe: string
   priceBand: '$' | '$$' | '$$$'
   moments: RestaurantMoment[]
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   description: string
   route: string
   image?: {

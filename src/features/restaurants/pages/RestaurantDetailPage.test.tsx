@@ -28,17 +28,24 @@ function renderDetailRoute(path = '/restaurants/rest-bruma') {
 }
 
 describe('RestaurantDetailPage', () => {
-  it('renders a placeholder hero image with the compact intro layout', async () => {
+  it('renders the embedded map section when map data exists', async () => {
+    await renderDetailRoute('/restaurants/rest-cielo')
+
+    expect(await screen.findByText('Cielo de Maiz')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
+      'href',
+      'https://maps.google.com/?q=Avenida+3+210+Bacalar',
+    )
+    expect(screen.getByTitle('Cielo de Maiz map')).toBeVisible()
+  })
+
+  it('renders a placeholder hero image when the restaurant has no image', async () => {
     await renderDetailRoute()
 
     expect(await screen.findByText('Bruma Azul')).toBeVisible()
-    expect(screen.getAllByRole('img', { name: 'Bruma Azul' }).length).toBeGreaterThan(0)
-    expect(screen.getAllByText('A lighter breakfast or coffee stop when the morning wants something low-lift before heading back toward the lagoon.')).toHaveLength(1)
-    expect(screen.getByText('Cafe plates')).toBeVisible()
-    expect(screen.getAllByText('Breakfast').length).toBeGreaterThan(0)
-    expect(screen.getByRole('link', { name: 'See all restaurants' })).toHaveAttribute(
-      'href',
-      '/restaurants',
-    )
+    expect(
+      screen.getAllByRole('img', { name: 'Bruma Azul' }).length,
+    ).toBeGreaterThan(0)
+    expect(screen.queryByRole('link', { name: 'View on map' })).not.toBeInTheDocument()
   })
 })

@@ -1,0 +1,157 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  color: var(--lagoon-teal);
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grid,
+.translationGrid,
+.mediaGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.translationGrid,
+.mediaGrid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.translationCard,
+.mediaPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.select,
+.textarea,
+.textareaSmall,
+.fileInput {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(31, 64, 76, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-color);
+  padding: 0.95rem 1rem;
+  font: inherit;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 180px;
+}
+
+.textareaSmall {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.checkboxRow,
+.inlineField,
+.actions,
+.mediaHeader {
+  display: flex;
+  gap: 14px;
+}
+
+.checkboxRow {
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inlineField,
+.actions,
+.mediaHeader {
+  align-items: center;
+}
+
+.mediaHeader,
+.actions {
+  justify-content: space-between;
+}
+
+.mediaList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mediaList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.removeButton {
+  border: 0;
+  background: transparent;
+  color: var(--accent-color);
+  cursor: pointer;
+  font: inherit;
+}
+
+.sectionTitle,
+.sectionDescription,
+.errorText {
+  margin: 0;
+}
+
+.sectionDescription {
+  color: var(--text-muted);
+}
+
+.errorText {
+  color: #a03b2d;
+}
+
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 64, 76, 0.16);
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .inlineField,
+  .actions,
+  .mediaHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

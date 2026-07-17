@@ -253,6 +253,13 @@
   width: 100%;
 }
 
+.mobileAdminNav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
 .mobileAdminLink {
   width: 100%;
   justify-content: flex-start;
