@@ -32,16 +32,26 @@ function renderDetailRoute(path = '/tours/tour-sailing') {
 }
 
 describe('TourDetailPage', () => {
-  it('renders the full operator and contact section on the detail page', async () => {
+  it('renders the editorial intro and operator actions on the detail page', async () => {
     await renderDetailRoute()
 
     expect(await screen.findByText('Private Sailing at Sunrise')).toBeVisible()
-    expect(screen.getByText('Provided by: Laguna Vela')).toBeVisible()
-    expect(screen.getByRole('heading', { name: 'Tour operator' })).toBeVisible()
-    expect(screen.getAllByText('WhatsApp')).toHaveLength(2)
-    expect(screen.getByText('+52 983 123 4567')).toBeVisible()
-    expect(screen.getByText('@lagunavela')).toBeVisible()
-    expect(screen.getByText('https://lagunavela.example.com')).toBeVisible()
+    expect(screen.getByText('Provided by')).toBeVisible()
+    expect(screen.getByText('Laguna Vela')).toBeVisible()
+    expect(screen.getByText('From MXN 2,800')).toBeVisible()
+    expect(screen.getByText('4 hours')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Contact operator' })).toHaveAttribute(
+      'href',
+      'https://wa.me/529831234567',
+    )
+    expect(screen.getByRole('link', { name: 'Instagram' })).toHaveAttribute(
+      'href',
+      'https://instagram.com/lagunavela',
+    )
+    expect(screen.getByRole('link', { name: 'Website' })).toHaveAttribute(
+      'href',
+      'https://lagunavela.example.com',
+    )
     expect(screen.getByText('What is included')).toBeVisible()
     expect(screen.getByText('Meeting point')).toBeVisible()
     expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
@@ -76,12 +86,13 @@ describe('TourDetailPage', () => {
     await renderDetailRoute('/tours/tour-kayak')
 
     expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
-    expect(screen.getByText('Provided by: Manglar Guides')).toBeVisible()
+    expect(screen.getByText('Provided by')).toBeVisible()
+    expect(screen.getByText('Manglar Guides')).toBeVisible()
     expect(screen.queryByText('WhatsApp')).not.toBeInTheDocument()
     expect(
-      screen.getByRole('img', { name: 'Guided Mangrove Kayak' }),
-    ).toBeVisible()
-    expect(screen.queryByLabelText('Tour gallery')).not.toBeInTheDocument()
+      screen.getAllByRole('img', { name: 'Guided Mangrove Kayak' }).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getAllByText('A shorter paddle.')).toHaveLength(1)
   })
 
   it('uses the first gallery image as the hero when image is missing', async () => {
@@ -111,13 +122,19 @@ describe('TourDetailPage', () => {
     await renderDetailRoute('/tours/tour-pontoon')
 
     expect(await screen.findByText('Family Pontoon Loop')).toBeVisible()
-    expect(screen.getByRole('img', { name: 'Family Pontoon Loop' })).toHaveAttribute(
-      'src',
-      'https://images.example.com/pontoon-hero.jpg',
-    )
-    expect(screen.getByRole('img', { name: 'Family Pontoon Loop 2' })).toHaveAttribute(
-      'src',
-      'https://images.example.com/pontoon-gallery.jpg',
-    )
+    expect(
+      screen
+        .getAllByRole('img', { name: 'Family Pontoon Loop' })
+        .some((image) =>
+          image.getAttribute('src') === 'https://images.example.com/pontoon-hero.jpg',
+        ),
+    ).toBe(true)
+    expect(
+      screen
+        .getAllByRole('img', { name: 'Family Pontoon Loop 2' })
+        .some((image) =>
+          image.getAttribute('src') === 'https://images.example.com/pontoon-gallery.jpg',
+        ),
+    ).toBe(true)
   })
 })

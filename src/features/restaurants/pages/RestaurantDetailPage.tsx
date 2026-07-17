@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
@@ -48,6 +48,8 @@ export function RestaurantDetailPage() {
     image: data.image,
     fallbackAlt: data.name,
   })
+  const heroImages = [heroImage]
+  const momentsLabel = formatRestaurantMoments(data.moments, t)
 
   return (
     <section className={pageStyles.page}>
@@ -68,38 +70,33 @@ export function RestaurantDetailPage() {
           image: heroImage,
         })}
       />
-      <article className={pageStyles.hero}>
-        <img
-          className={pageStyles.heroImage}
-          src={heroImage.src}
-          alt={heroImage.alt}
-        />
-        <div className={pageStyles.heroOverlay} />
-        <div className={pageStyles.heroBody}>
-          <SectionEyebrow>{t('restaurants.detailEyebrow')}</SectionEyebrow>
-          <h1 className={pageStyles.title}>{data.name}</h1>
-          <p className={pageStyles.summary}>{data.description}</p>
-        </div>
-      </article>
+      <DetailHero
+        eyebrow={t('restaurants.detailEyebrow')}
+        images={heroImages}
+        galleryAriaLabel={t('restaurants.galleryAriaLabel')}
+        viewAllLabel={t('common.gallery.viewAllPhotos')}
+        closeLabel={t('common.gallery.close')}
+        previousLabel={t('common.gallery.previous')}
+        nextLabel={t('common.gallery.next')}
+        countLabel={(current, total) =>
+          t('common.gallery.count', { current, total })
+        }
+      />
 
-      <div className={pageStyles.metaGrid}>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.cuisine')}</span>
-          <strong>{data.cuisine}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.vibe')}</span>
-          <strong>{data.vibe}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.price')}</span>
-          <strong>{data.priceBand}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('restaurants.meta.moment')}</span>
-          <strong>{formatRestaurantMoments(data.moments, t)}</strong>
-        </article>
-      </div>
+      <DetailIntro
+        title={data.name}
+        summary={data.description}
+        highlights={[
+          {
+            label: t('restaurants.meta.price'),
+            value: data.priceBand,
+          },
+          {
+            label: t('restaurants.meta.moment'),
+            value: momentsLabel,
+          },
+        ]}
+      />
 
       <article className={pageStyles.bodyCard}>
         <p className={pageStyles.bodyCopy}>{data.description}</p>
@@ -122,7 +119,30 @@ export function RestaurantDetailPage() {
             {t('restaurants.backHome')}
           </Link>
         </div>
-      </article>
+
+        <DetailSidebar title={t('restaurants.sidebar.title')}>
+          <div className={pageStyles.sidebarFacts}>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('restaurants.meta.price')}</span>
+              <strong>{data.priceBand}</strong>
+            </div>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('restaurants.meta.moment')}</span>
+              <strong>{momentsLabel}</strong>
+            </div>
+          </div>
+          <DetailActions
+            compact
+            actions={[
+              {
+                label: t('restaurants.backToList'),
+                to: '/restaurants',
+                variant: 'secondary',
+              },
+            ]}
+          />
+        </DetailSidebar>
+      </div>
     </section>
   )
 }

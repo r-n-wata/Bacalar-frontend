@@ -49,8 +49,11 @@ describe('EventDetailPage', () => {
 
     expect(await screen.findByText('Lagoon Breathwork Session')).toBeVisible()
     expect(
-      screen.getByRole('img', { name: 'Lagoon Breathwork Session' }),
-    ).toBeVisible()
+      screen.getAllByRole('img', { name: 'Lagoon Breathwork Session' }).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getAllByText('A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.')).toHaveLength(1)
+    expect(screen.getByText('Sunday, 8:00 AM')).toBeVisible()
+    expect(screen.getByText('Isla Yoga Garden')).toBeVisible()
   })
 
   it('shows an unavailable state for missing events', async () => {

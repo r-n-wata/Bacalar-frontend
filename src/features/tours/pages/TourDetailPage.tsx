@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
@@ -10,6 +10,16 @@ import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSec
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
 import { useTourDetail } from '../hooks/useTourDetail'
+
+function getWhatsappHref(value: string) {
+  const digits = value.replace(/\D/g, '')
+  return digits ? `https://wa.me/${digits}` : ''
+}
+
+function getInstagramHref(value: string) {
+  const handle = value.replace(/^@/, '').trim()
+  return handle ? `https://instagram.com/${handle}` : ''
+}
 
 export function TourDetailPage() {
   const { t } = useTranslation()
@@ -50,7 +60,38 @@ export function TourDetailPage() {
           id: data.id,
           fallbackAlt: data.name,
         })
-  const galleryImages = data.imageUrls.filter((url) => url !== heroImage.src)
+  const galleryImages = Array.from(
+    new Set(
+      [heroImage.src, ...data.imageUrls].filter(
+        (url): url is string => Boolean(url),
+      ),
+    ),
+  ).map((url, index) => ({
+    src: url,
+    alt: index === 0 ? data.name : `${data.name} ${index + 1}`,
+  }))
+  const primarySidebarActions = [
+    data.operatorWhatsapp
+      ? {
+          label: t('tours.actions.contactOperator'),
+          href: getWhatsappHref(data.operatorWhatsapp),
+        }
+      : data.operatorWebsite
+        ? {
+            label: t('tours.actions.checkAvailability'),
+            href: data.operatorWebsite,
+          }
+        : data.operatorInstagram
+          ? {
+              label: t('tours.actions.messageOnInstagram'),
+              href: getInstagramHref(data.operatorInstagram),
+            }
+          : {
+              label: t('tours.backToList'),
+              to: '/tours',
+              variant: 'secondary' as const,
+            },
+  ].filter((action) => ('href' in action ? Boolean(action.href) : true))
 
   return (
     <section className={pageStyles.page}>
@@ -71,66 +112,54 @@ export function TourDetailPage() {
           address: data.address,
         })}
       />
-      <article className={pageStyles.hero}>
-        <img
-          className={pageStyles.heroImage}
-          src={heroImage.src}
-          alt={heroImage.alt}
-        />
-        <div className={pageStyles.heroOverlay} />
-        <div className={pageStyles.heroBody}>
-          <SectionEyebrow>{t('tours.detailEyebrow')}</SectionEyebrow>
-          <h1 className={pageStyles.title}>{data.name}</h1>
-          <p className={pageStyles.heroMeta}>
-            {t('tours.providedBy', { operator: data.operatorName })}
-          </p>
-          <p className={pageStyles.summary}>{data.description}</p>
-        </div>
-      </article>
+      <DetailHero
+        eyebrow={t('tours.detailEyebrow')}
+        images={galleryImages}
+        galleryAriaLabel={t('tours.galleryAriaLabel')}
+        viewAllLabel={t('common.gallery.viewAllPhotos')}
+        closeLabel={t('common.gallery.close')}
+        previousLabel={t('common.gallery.previous')}
+        nextLabel={t('common.gallery.next')}
+        countLabel={(current, total) =>
+          t('common.gallery.count', { current, total })
+        }
+      />
 
-      <div className={pageStyles.metaGrid}>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.category')}</span>
-          <strong>{data.category}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.duration')}</span>
-          <strong>{data.duration}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.price')}</span>
-          <strong>{data.priceFrom}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.privateOrShared')}</span>
-          <strong>{data.privateOrShared}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.bestFor')}</span>
-          <strong>{data.bestFor}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.difficulty')}</span>
-          <strong>{data.difficulty}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('tours.meta.suitableForKids')}</span>
-          <strong>{data.suitableForKids}</strong>
-        </article>
-      </div>
+      <DetailIntro
+        title={data.name}
+        summary={data.description}
+        badges={[data.category]}
+        highlights={[
+          {
+            label: t('tours.meta.price'),
+            value: data.priceFrom,
+          },
+          {
+            label: t('tours.meta.duration'),
+            value: data.duration,
+          },
+        ]}
+      />
 
-      {galleryImages.length > 0 ? (
-        <section className={pageStyles.galleryGrid} aria-label={t('tours.galleryAriaLabel')}>
-          {galleryImages.map((url, index) => (
-            <img
-              key={`${url}-${index}`}
-              className={pageStyles.galleryImage}
-              src={url}
-              alt={`${data.name} ${index + 2}`}
-            />
-          ))}
-        </section>
-      ) : null}
+      <div className={pageStyles.layout}>
+        <div className={pageStyles.mainColumn}>
+          <DetailMetadataGrid
+            ariaLabel={t('tours.detailMetaAriaLabel')}
+            items={[
+              {
+                label: t('tours.meta.difficulty'),
+                value: data.difficulty,
+              },
+              {
+                label: t('tours.meta.bestFor'),
+                value: data.bestFor,
+              },
+              {
+                label: t('tours.meta.suitableForKids'),
+                value: data.suitableForKids,
+              },
+            ]}
+          />
 
       <article className={pageStyles.bodyCard}>
         <p className={pageStyles.bodyCopy}>{data.description}</p>
@@ -198,16 +227,68 @@ export function TourDetailPage() {
           {data.operatorDescription ? (
             <p className={pageStyles.bodyCopy}>{data.operatorDescription}</p>
           ) : null}
-        </section>
-        <div className={pageStyles.actions}>
-          <Link className={pageStyles.primaryAction} to="/tours">
-            {t('tours.backToList')}
-          </Link>
-          <Link className={pageStyles.secondaryAction} to="/">
-            {t('tours.backHome')}
-          </Link>
+          <ProviderCard
+            eyebrow={t('tours.providerEyebrow')}
+            title={data.operatorName}
+            description={data.operatorDescription}
+            actions={[
+              ...(data.operatorWhatsapp
+                ? [
+                    {
+                      label: t('tours.operator.whatsapp'),
+                      href: getWhatsappHref(data.operatorWhatsapp),
+                    },
+                  ]
+                : []),
+              ...(data.operatorInstagram
+                ? [
+                    {
+                      label: t('tours.operator.instagram'),
+                      href: getInstagramHref(data.operatorInstagram),
+                    },
+                  ]
+                : []),
+              ...(data.operatorWebsite
+                ? [
+                    {
+                      label: t('tours.operator.website'),
+                      href: data.operatorWebsite,
+                    },
+                  ]
+                : []),
+            ]}
+          />
         </div>
-      </article>
+
+        <DetailSidebar title={t('tours.sidebar.title')}>
+          <div className={pageStyles.sidebarFacts}>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('tours.meta.category')}</span>
+              <strong>{data.category}</strong>
+            </div>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('tours.meta.privateOrShared')}</span>
+              <strong>{data.privateOrShared}</strong>
+            </div>
+          </div>
+          <DetailActions compact actions={primarySidebarActions} />
+          <DetailActions
+            compact
+            actions={[
+              ...('to' in primarySidebarActions[0] &&
+              primarySidebarActions[0].to === '/tours'
+                ? []
+                : [
+                    {
+                      label: t('tours.backToList'),
+                      to: '/tours',
+                      variant: 'secondary' as const,
+                    },
+                  ]),
+            ]}
+          />
+        </DetailSidebar>
+      </div>
     </section>
   )
 }

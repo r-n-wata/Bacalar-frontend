@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
@@ -88,6 +88,7 @@ export function EventDetailPage() {
     image: data.image,
     fallbackAlt: data.title,
   })
+  const heroImages = [heroImage]
 
   return (
     <section className={pageStyles.page}>
@@ -110,49 +111,37 @@ export function EventDetailPage() {
           image: heroImage,
         })}
       />
-      <article className={pageStyles.hero}>
-        <img
-          className={pageStyles.heroImage}
-          src={heroImage.src}
-          alt={heroImage.alt}
-        />
-        <div className={pageStyles.heroOverlay} />
-        <div className={pageStyles.heroBody}>
-          <SectionEyebrow>{t('events.detailEyebrow')}</SectionEyebrow>
-          <div className={pageStyles.heroPills}>
-            {showUpcoming ? (
-              <span className={pageStyles.heroPill}>
-                {t('events.badges.upcoming')}
-              </span>
-            ) : null}
-            <span className={pageStyles.heroPill}>{moodLabel}</span>
-          </div>
-          <h1 className={pageStyles.title}>{data.title}</h1>
-          <p className={pageStyles.summary}>{data.description}</p>
-          <p className={pageStyles.heroMeta}>
-            {data.dateLabel} · {data.venue}
-          </p>
-        </div>
-      </article>
+      <DetailHero
+        eyebrow={t('events.detailEyebrow')}
+        images={heroImages}
+        galleryAriaLabel={t('events.galleryAriaLabel')}
+        viewAllLabel={t('common.gallery.viewAllPhotos')}
+        closeLabel={t('common.gallery.close')}
+        previousLabel={t('common.gallery.previous')}
+        nextLabel={t('common.gallery.next')}
+        countLabel={(current, total) =>
+          t('common.gallery.count', { current, total })
+        }
+      />
 
-      <div className={pageStyles.metaGrid}>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.when')}</span>
-          <strong>{data.dateLabel}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.where')}</span>
-          <strong>{data.venue}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.type')}</span>
-          <strong>{t(`events.categories.${data.category}`)}</strong>
-        </article>
-        <article className={pageStyles.metaCard}>
-          <span>{t('events.meta.mood')}</span>
-          <strong>{moodLabel}</strong>
-        </article>
-      </div>
+      <DetailIntro
+        title={data.title}
+        summary={data.description}
+        badges={[
+          ...(showUpcoming ? [t('events.badges.upcoming')] : []),
+          t(`events.categories.${data.category}`),
+        ]}
+        highlights={[
+          {
+            label: t('events.meta.when'),
+            value: data.dateLabel,
+          },
+          {
+            label: t('events.meta.where'),
+            value: data.venue,
+          },
+        ]}
+      />
 
       <article className={pageStyles.bodyCard}>
         <p className={pageStyles.bodyLead}>
@@ -178,7 +167,30 @@ export function EventDetailPage() {
             {t('events.backHome')}
           </Link>
         </div>
-      </article>
+
+        <DetailSidebar title={t('events.sidebar.title')}>
+          <div className={pageStyles.sidebarFacts}>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('events.meta.type')}</span>
+              <strong>{t(`events.categories.${data.category}`)}</strong>
+            </div>
+            <div className={pageStyles.sidebarFact}>
+              <span>{t('events.meta.mood')}</span>
+              <strong>{moodLabel}</strong>
+            </div>
+          </div>
+          <DetailActions
+            compact
+            actions={[
+              {
+                label: t('events.backToList'),
+                to: '/events',
+                variant: 'secondary',
+              },
+            ]}
+          />
+        </DetailSidebar>
+      </div>
     </section>
   )
 }
