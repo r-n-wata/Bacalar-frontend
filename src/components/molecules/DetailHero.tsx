@@ -58,6 +58,7 @@ export function DetailHero({
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null)
   const desktopVisibleCount = getDesktopVisibleCount(images.length)
   const hasOverflowImages = images.length > desktopVisibleCount
+  const isSingleImageGallery = images.length === 1
 
   useEffect(() => {
     if (lightboxIndex === null) {
@@ -300,6 +301,7 @@ export function DetailHero({
           className={`${styles.desktopGallery} ${
             styles[`desktopGalleryCount${Math.min(images.length, 5)}`]
           }`}
+          data-gallery-layout={isSingleImageGallery ? 'single' : 'multi'}
           aria-label={galleryAriaLabel}
         >
           {images.map((image, index) => {

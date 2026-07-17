@@ -14,7 +14,7 @@ export const restaurantsHandlers = [
   http.get(restaurantsApiPath, async ({ request }) => {
     const url = new URL(request.url)
     const cursor = url.searchParams.get('cursor')
-    const limit = Number.parseInt(url.searchParams.get('limit') ?? '2', 10)
+    const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
     const category = (url.searchParams.get('category') ??
       'all') as RestaurantCategoryFilter
 
@@ -22,7 +22,7 @@ export const restaurantsHandlers = [
       getRestaurantsFixture(resolveMockLanguage(request), {
         category,
         cursor,
-        limit: Number.isFinite(limit) ? limit : 2,
+        limit: Number.isFinite(limit) ? limit : 10,
       }),
     )
   }),
@@ -87,13 +87,13 @@ export function emptyRestaurantsCategoryHandler(
     const url = new URL(request.url)
     const selectedCategory = (url.searchParams.get('category') ??
       'all') as RestaurantCategoryFilter
-    const limit = Number.parseInt(url.searchParams.get('limit') ?? '2', 10)
+    const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
 
     return jsonSuccess(
       getRestaurantsFixture(resolveMockLanguage(request), {
         category: selectedCategory,
         cursor: url.searchParams.get('cursor'),
-        limit: Number.isFinite(limit) ? limit : 2,
+        limit: Number.isFinite(limit) ? limit : 10,
         forceEmpty: selectedCategory === category,
       }),
     )

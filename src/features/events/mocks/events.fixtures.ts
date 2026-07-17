@@ -683,7 +683,9 @@ function getFilteredItems(
   language: AppLanguage,
   category: EventCategoryFilter = 'all',
 ) {
-  const items = eventSeedsByLanguage[language].map((entry) => entry.item)
+  const items = eventSeedsByLanguage[language]
+    .filter((entry) => !entry.isFeatured)
+    .map((entry) => entry.item)
 
   return sortEvents(
     category === 'all'

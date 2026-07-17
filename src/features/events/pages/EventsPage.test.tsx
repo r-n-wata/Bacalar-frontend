@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
@@ -34,16 +34,6 @@ describe('EventsPage', () => {
       value: scrollHeight,
       configurable: true,
     })
-  }
-
-  async function scrollToPageBottom() {
-    setViewportPosition({
-      scrollY: 1400,
-      scrollHeight: 2000,
-      innerHeight: 800,
-    })
-
-    fireEvent.scroll(window)
   }
 
   function renderEventsRoute(language?: 'en' | 'es') {
@@ -111,32 +101,23 @@ describe('EventsPage', () => {
     await renderEventsRoute()
 
     const eventsList = await screen.findByLabelText('Events list')
-    expect(within(eventsList).getByText('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(within(eventsList).getByText('Sunrise Paddle Meditation')).toBeVisible()
     expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
     expect(
       screen.queryByRole('button', { name: 'Load more events' }),
     ).not.toBeInTheDocument()
 
-    await scrollToPageBottom()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more events' }),
-    )
-
-    expect(await screen.findByText('Courtyard Vinyl Jam')).toBeVisible()
-
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
     const localizedEventsList = await screen.findByLabelText('Lista de eventos')
     expect(
-      within(localizedEventsList).getByText('Jazz al atardecer junto a la laguna'),
+      within(localizedEventsList).getByText('Meditacion al amanecer en paddle'),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Musica' })).toBeVisible()
     expect(
       screen.getByText('Nuestras mejores recomendaciones de esta semana.'),
     ).toBeVisible()
-    expect(
-      screen.queryByText('Sesion de vinilos en el patio'),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText('Sunrise Paddle Meditation')).not.toBeInTheDocument()
   })
 
   it('keeps featured events global while filters change the main list', async () => {
@@ -148,9 +129,8 @@ describe('EventsPage', () => {
     const featuredSection = await screen.findByLabelText('Featured events')
     expect(within(featuredSection).getByText('Local Market Brunch Crawl')).toBeVisible()
     const eventsList = await screen.findByLabelText('Events list')
-    expect(within(eventsList).getByText('Sunset Jazz by the Lagoon')).toBeVisible()
-    expect(within(eventsList).getByText('Rooftop DJ Session')).toBeVisible()
     expect(within(eventsList).getByText('Moonlight Cinema by the Water')).toBeVisible()
+    expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
     expect(within(eventsList).queryByText('Lagoon Taco Walk')).not.toBeInTheDocument()
   })
 
@@ -158,19 +138,14 @@ describe('EventsPage', () => {
     setViewportPosition()
     await renderEventsRoute()
 
-    await scrollToPageBottom()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more events' }),
-    )
-    expect(await screen.findByText('Courtyard Vinyl Jam')).toBeVisible()
+    await userEvent.click(screen.getByRole('button', { name: 'Music' }))
+    expect(await screen.findByText('Lagoon Salsa Night')).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'Food' }))
 
     const eventsList = await screen.findByLabelText('Events list')
-    expect(within(eventsList).getByText('Local Market Brunch Crawl')).toBeVisible()
-    expect(within(eventsList).getByText('Lagoon Taco Walk')).toBeVisible()
     expect(within(eventsList).getByText('Ceviche Lab Pop-Up')).toBeVisible()
-    expect(within(eventsList).queryByText('Courtyard Vinyl Jam')).not.toBeInTheDocument()
+    expect(within(eventsList).queryByText('Lagoon Salsa Night')).not.toBeInTheDocument()
   })
 
   it('shows the upcoming-events empty state with a submit CTA when the API succeeds with no results', async () => {
@@ -233,7 +208,7 @@ describe('EventsPage', () => {
 
     const eventsList = await screen.findByLabelText('Events list')
     expect(
-      within(eventsList).getByText('Sunset Jazz by the Lagoon'),
+      within(eventsList).getByText('Sunrise Paddle Meditation'),
     ).toBeVisible()
   })
 })

@@ -53,6 +53,11 @@ export function RestaurantDetailPage() {
   })
   const heroImages = [heroImage]
   const momentsLabel = formatRestaurantMoments(data.moments, t)
+  const backToListAction = {
+    label: t('restaurants.backToList'),
+    to: '/restaurants',
+    variant: 'secondary' as const,
+  }
 
   return (
     <section className={pageStyles.page}>
@@ -127,28 +132,21 @@ export function RestaurantDetailPage() {
           </article>
         </div>
 
-        <DetailSidebar title={t('restaurants.sidebar.title')}>
-          <div className={pageStyles.sidebarFacts}>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('restaurants.meta.price')}</span>
-              <strong>{data.priceBand}</strong>
+        <div className={pageStyles.hideOnNarrow}>
+          <DetailSidebar title={t('restaurants.sidebar.title')}>
+            <div className={pageStyles.sidebarFacts}>
+              <div className={pageStyles.sidebarFact}>
+                <span>{t('restaurants.meta.price')}</span>
+                <strong>{data.priceBand}</strong>
+              </div>
+              <div className={pageStyles.sidebarFact}>
+                <span>{t('restaurants.meta.moment')}</span>
+                <strong>{momentsLabel}</strong>
+              </div>
             </div>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('restaurants.meta.moment')}</span>
-              <strong>{momentsLabel}</strong>
-            </div>
-          </div>
-          <DetailActions
-            compact
-            actions={[
-              {
-                label: t('restaurants.backToList'),
-                to: '/restaurants',
-                variant: 'secondary',
-              },
-            ]}
-          />
-        </DetailSidebar>
+            <DetailActions compact actions={[backToListAction]} />
+          </DetailSidebar>
+        </div>
       </div>
     </section>
   )

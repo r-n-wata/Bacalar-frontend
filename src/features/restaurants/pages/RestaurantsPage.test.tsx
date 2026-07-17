@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -31,16 +31,6 @@ describe('RestaurantsPage', () => {
       value: scrollHeight,
       configurable: true,
     })
-  }
-
-  async function scrollToPageBottom() {
-    setViewportPosition({
-      scrollY: 1400,
-      scrollHeight: 2000,
-      innerHeight: 800,
-    })
-
-    fireEvent.scroll(window)
   }
 
   function renderRestaurantsRoute(language?: 'en' | 'es') {
@@ -100,16 +90,12 @@ describe('RestaurantsPage', () => {
     await renderRestaurantsRoute()
 
     const restaurantsList = await screen.findByLabelText('Restaurants list')
-    expect(within(restaurantsList).getByText('Cielo de Maiz')).toBeVisible()
-    expect(within(restaurantsList).queryByText('Orilla Comedor')).not.toBeInTheDocument()
-
-    await scrollToPageBottom()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more restaurants' }),
-    )
-
     expect(await screen.findByText('Bruma Azul')).toBeVisible()
     expect(screen.getByRole('img', { name: 'Bruma Azul' })).toBeVisible()
+    expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
+    expect(
+      screen.queryByRole('button', { name: 'Load more restaurants' }),
+    ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
@@ -117,7 +103,7 @@ describe('RestaurantsPage', () => {
       'Lista de restaurantes',
     )
     expect(
-      within(localizedRestaurantsList).getByText('Favorito local casual'),
+      within(localizedRestaurantsList).getByText('Pausa lenta de media manana'),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Desayuno' })).toBeVisible()
     expect(
@@ -134,7 +120,6 @@ describe('RestaurantsPage', () => {
     const featuredSection = await screen.findByLabelText('Featured restaurants')
     expect(within(featuredSection).getByText('Cielo de Maiz')).toBeVisible()
     const restaurantsList = await screen.findByLabelText('Restaurants list')
-    expect(within(restaurantsList).getByText('Nao')).toBeVisible()
     expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
     expect(
       within(restaurantsList).getByRole('img', { name: 'Orilla Comedor' }),
@@ -146,16 +131,12 @@ describe('RestaurantsPage', () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
-    await scrollToPageBottom()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more restaurants' }),
-    )
-    expect(await screen.findByText('Bruma Azul')).toBeVisible()
+    await userEvent.click(screen.getByRole('button', { name: 'Dinner' }))
+    expect(await screen.findByText('Orilla Comedor')).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'Breakfast' }))
 
     const restaurantsList = await screen.findByLabelText('Restaurants list')
-    expect(within(restaurantsList).getByText('Cielo de Maiz')).toBeVisible()
     expect(within(restaurantsList).getByText('Bruma Azul')).toBeVisible()
     expect(within(restaurantsList).queryByText('Orilla Comedor')).not.toBeInTheDocument()
   })

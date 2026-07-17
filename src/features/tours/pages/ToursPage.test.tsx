@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -31,16 +31,6 @@ describe('ToursPage', () => {
       value: scrollHeight,
       configurable: true,
     })
-  }
-
-  async function scrollToPageBottom() {
-    setViewportPosition({
-      scrollY: 1400,
-      scrollHeight: 2000,
-      innerHeight: 800,
-    })
-
-    fireEvent.scroll(window)
   }
 
   function renderToursRoute(language?: 'en' | 'es') {
@@ -107,30 +97,22 @@ describe('ToursPage', () => {
     await renderToursRoute()
 
     const toursList = await screen.findByLabelText('Tours list')
-    expect(within(toursList).getByText('Private Sailing at Sunrise')).toBeVisible()
-    expect(within(toursList).getByText('Family Pontoon Loop')).toBeVisible()
-    expect(within(toursList).getByText('Provided by Casa Ponton')).toBeVisible()
+    expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
+    expect(within(toursList).getByText('Shallow Snorkel Circuit')).toBeVisible()
+    expect(within(toursList).getByText('Provided by Aves Bacalar')).toBeVisible()
     expect(
       screen.queryByRole('button', { name: 'Load more tours' }),
     ).not.toBeInTheDocument()
-
-    await scrollToPageBottom()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more tours' }),
-    )
-
-    expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
-    expect(screen.getByRole('img', { name: 'Guided Mangrove Kayak' })).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
     const localizedToursList = await screen.findByLabelText('Lista de tours')
     expect(
-      within(localizedToursList).getByText('Vela privada al amanecer'),
+      within(localizedToursList).getByText('Paseo de avistamiento en la laguna'),
     ).toBeVisible()
     expect(screen.getByRole('button', { name: 'Boat Tour' })).toBeVisible()
     expect(screen.getByText('Nuestras recomendaciones principales')).toBeVisible()
-    expect(screen.queryByText('Guided Mangrove Kayak')).not.toBeInTheDocument()
+    expect(screen.queryByText('Lagoon Birdwatching Drift')).not.toBeInTheDocument()
   })
 
   it('keeps featured tours global while filters change the main list', async () => {
@@ -138,13 +120,13 @@ describe('ToursPage', () => {
     await renderToursRoute()
 
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Kayak Tour' }),
+      await screen.findByRole('button', { name: 'Boat Tour' }),
     )
 
     const featuredSection = await screen.findByLabelText('Featured tours')
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
     const toursList = await screen.findByLabelText('Tours list')
-    expect(within(toursList).getByText('Guided Mangrove Kayak')).toBeVisible()
+    expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
     expect(within(toursList).queryByText('Family Pontoon Loop')).not.toBeInTheDocument()
   })
 
@@ -152,17 +134,16 @@ describe('ToursPage', () => {
     setViewportPosition()
     await renderToursRoute()
 
-    await scrollToPageBottom()
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Load more tours' }),
+      await screen.findByRole('button', { name: 'Adventure' }),
     )
-    expect(await screen.findByText('Guided Mangrove Kayak')).toBeVisible()
+    expect(await screen.findByText('Shallow Snorkel Circuit')).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'Boat Tour' }))
 
     const toursList = await screen.findByLabelText('Tours list')
-    expect(within(toursList).getByText('Family Pontoon Loop')).toBeVisible()
-    expect(within(toursList).queryByText('Guided Mangrove Kayak')).not.toBeInTheDocument()
+    expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
+    expect(within(toursList).queryByText('Shallow Snorkel Circuit')).not.toBeInTheDocument()
   })
 
   it('shows an empty state for a category with no results', async () => {

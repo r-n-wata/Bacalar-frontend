@@ -5,7 +5,7 @@ import type { RestaurantsContent } from '../types/restaurants-content'
 import type { RestaurantCategoryFilter } from '../types/restaurant'
 
 export const restaurantsApiPath = '/api/restaurants'
-export const RESTAURANTS_PAGE_SIZE = 2
+export const RESTAURANTS_PAGE_SIZE = 10
 
 export const restaurantsQueryKey = (
   language: AppLanguage,

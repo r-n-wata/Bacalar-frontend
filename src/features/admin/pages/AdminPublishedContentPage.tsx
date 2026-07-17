@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -21,9 +22,16 @@ import { formatRestaurantMoments } from '../../restaurants/lib/formatRestaurantM
 
 const contentTypes: AdminPublishedContentType[] = ['events', 'restaurants', 'tours']
 
+function formatCategoryFallback(category: string) {
+  return category
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 function getTypeMeta(
   item: AdminPublishedContentItem,
-  t: (key: string) => string,
+  t: TFunction,
 ) {
   switch (item.type) {
     case 'events':
@@ -31,7 +39,9 @@ function getTypeMeta(
     case 'restaurants':
       return formatRestaurantMoments(item.moments, t)
     case 'tours':
-      return t(`tours.categories.${item.category}`)
+      return t(`tours.categories.${item.category}`, {
+        defaultValue: formatCategoryFallback(item.category),
+      })
   }
 }
 
@@ -80,9 +90,15 @@ export function AdminPublishedContentPage() {
         queryKey: queryKeys.home.content(language),
       })
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: queryKeys.events.list(language, 'all', 10) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.restaurants.list(language, 'all', 2) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.tours.list(language, 'all', 2) }),
+        queryClient.invalidateQueries({
+          queryKey: ['events', 'list', language],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['restaurants', 'list', language],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['tours', 'list', language],
+        }),
       ])
     },
   })
