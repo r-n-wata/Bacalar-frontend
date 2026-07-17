@@ -176,7 +176,6 @@ export function TourDetailPage() {
           />
 
           <article className={pageStyles.bodyCard}>
-            <p className={pageStyles.bodyCopy}>{data.description}</p>
             {data.included ? (
               <section className={pageStyles.detailSection}>
                 <h2>{t('tours.sections.included')}</h2>
@@ -276,34 +275,36 @@ export function TourDetailPage() {
           </article>
         </div>
 
-        <DetailSidebar title={t('tours.sidebar.title')}>
-          <div className={pageStyles.sidebarFacts}>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('tours.meta.category')}</span>
-              <strong>{data.category}</strong>
+        <div className={pageStyles.hideOnNarrow}>
+          <DetailSidebar title={t('tours.sidebar.title')}>
+            <div className={pageStyles.sidebarFacts}>
+              <div className={pageStyles.sidebarFact}>
+                <span>{t('tours.meta.category')}</span>
+                <strong>{data.category}</strong>
+              </div>
+              <div className={pageStyles.sidebarFact}>
+                <span>{t('tours.meta.privateOrShared')}</span>
+                <strong>{data.privateOrShared}</strong>
+              </div>
             </div>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('tours.meta.privateOrShared')}</span>
-              <strong>{data.privateOrShared}</strong>
-            </div>
-          </div>
-          <DetailActions compact actions={primarySidebarActions} />
-          <DetailActions
-            compact
-            actions={[
-              ...('to' in primarySidebarActions[0] &&
-              primarySidebarActions[0].to === '/tours'
-                ? []
-                : [
-                    {
-                      label: t('tours.backToList'),
-                      to: '/tours',
-                      variant: 'secondary' as const,
-                    },
-                  ]),
-            ]}
-          />
-        </DetailSidebar>
+            <DetailActions compact actions={primarySidebarActions} />
+            <DetailActions
+              compact
+              actions={[
+                ...('to' in primarySidebarActions[0] &&
+                primarySidebarActions[0].to === '/tours'
+                  ? []
+                  : [
+                      {
+                        label: t('tours.backToList'),
+                        to: '/tours',
+                        variant: 'secondary' as const,
+                      },
+                    ]),
+              ]}
+            />
+          </DetailSidebar>
+        </div>
       </div>
     </section>
   )

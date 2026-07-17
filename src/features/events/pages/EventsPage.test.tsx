@@ -163,10 +163,12 @@ describe('EventsPage', () => {
         'Check back soon for new listings, or submit an event for review.',
       ),
     ).toBeVisible()
-    expect(screen.getAllByRole('link', { name: 'Submit an event' })[0]).toHaveAttribute(
-      'href',
-      '/events/submit',
-    )
+    const submitLinks = screen.getAllByRole('link', { name: 'Submit an event' })
+    expect(submitLinks).toHaveLength(1)
+    expect(submitLinks[0]).toHaveAttribute('href', '/events/submit')
+    expect(
+      screen.queryByText('Submit an event for review'),
+    ).not.toBeInTheDocument()
   })
 
   it('shows an error state with retry when the handler fails', async () => {

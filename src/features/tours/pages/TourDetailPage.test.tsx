@@ -92,7 +92,7 @@ describe('TourDetailPage', () => {
     expect(
       screen.getAllByRole('img', { name: 'Guided Mangrove Kayak' }).length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByText('A shorter paddle.').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('A shorter paddle.')).toHaveLength(1)
   })
 
   it('uses the first gallery image as the hero when image is missing', async () => {
