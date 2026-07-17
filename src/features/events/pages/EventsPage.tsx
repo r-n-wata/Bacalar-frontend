@@ -117,7 +117,7 @@ export function EventsPage() {
         />
       ) : null}
 
-      <EventSubmitCta />
+      {!isLoading && !isError && events.length > 0 ? <EventSubmitCta /> : null}
     </section>
   )
 }
