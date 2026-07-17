@@ -334,15 +334,17 @@ export function getRestaurantsFixture(
   {
     category = 'all',
     cursor = null,
-    limit = 2,
+    limit = 10,
     forceEmpty = false,
   }: GetRestaurantsFixtureOptions = {},
 ) {
   const seeds = restaurantSeedsByLanguage[language]
   const filteredSeeds = forceEmpty
     ? []
-    : seeds.filter((seed) =>
-        category === 'all' ? true : seed.item.moments.includes(category),
+    : seeds.filter(
+        (seed) =>
+          seed.featuredOrder >= 3 &&
+          (category === 'all' ? true : seed.item.moments.includes(category)),
       )
 
   return buildRestaurantsContent(language, filteredSeeds, cursor, limit)

@@ -5,7 +5,7 @@ import type { ToursContent } from '../types/tours-content'
 import type { TourCategoryFilter } from '../types/tour'
 
 export const toursApiPath = '/api/tours'
-export const TOURS_PAGE_SIZE = 2
+export const TOURS_PAGE_SIZE = 10
 
 export const toursQueryKey = (
   language: AppLanguage,

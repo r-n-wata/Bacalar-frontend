@@ -26,6 +26,10 @@ function getInstagramHref(value: string) {
   return handle ? `https://instagram.com/${handle}` : ''
 }
 
+function normalizeLongformText(value?: string) {
+  return value?.replace(/\s+/g, ' ').trim().toLowerCase() ?? ''
+}
+
 export function TourDetailPage() {
   const { t } = useTranslation()
   const language = useAppLanguage()
@@ -75,6 +79,11 @@ export function TourDetailPage() {
     src: url,
     alt: index === 0 ? data.name : `${data.name} ${index + 1}`,
   }))
+  const operatorDescription =
+    normalizeLongformText(data.operatorDescription) ===
+    normalizeLongformText(data.description)
+      ? undefined
+      : data.operatorDescription
   const primarySidebarActions = [
     data.operatorWhatsapp
       ? {
@@ -183,7 +192,7 @@ export function TourDetailPage() {
           <ProviderCard
             eyebrow={t('tours.providerEyebrow')}
             title={data.operatorName}
-            description={data.operatorDescription}
+            description={operatorDescription}
             actions={[
               ...(data.operatorWhatsapp
                 ? [

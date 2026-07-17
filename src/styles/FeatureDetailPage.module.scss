@@ -18,13 +18,14 @@
 }
 
 .desktopGalleryCount1 {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, min(820px, 100%));
+  justify-content: start;
 }
 
 .desktopGalleryCount1 .desktopGalleryPrimary {
   aspect-ratio: 16 / 9;
-  min-height: min(52vh, 420px);
-  max-height: min(70vh, 640px);
+  min-height: min(38vh, 320px);
+  max-height: min(52vh, 420px);
 }
 
 .desktopGalleryCount2 {
@@ -510,6 +511,10 @@
   text-decoration: none;
 }
 
+.hideOnNarrow {
+  min-width: 0;
+}
+
 @media (max-width: 1024px) {
   .layout {
     gap: 22px;
@@ -545,6 +550,10 @@
 
   .mobileGalleryFrame {
     display: block;
+  }
+
+  .hideOnNarrow {
+    display: none;
   }
 }
 

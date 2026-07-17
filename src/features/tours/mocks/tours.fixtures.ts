@@ -155,6 +155,36 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       route: '/tours/tour-kayak',
       featuredOrder: 2,
     }),
+    createTourSeed({
+      id: 'tour-birdwatching',
+      name: 'Lagoon Birdwatching Drift',
+      category: 'Boat Tour',
+      duration: '2 hours',
+      priceFrom: 'From MXN 1,100',
+      privateOrShared: 'Shared',
+      bestFor: 'Birdwatching',
+      difficulty: 'Easy',
+      suitableForKids: 'Yes',
+      description: 'A calm morning drift built around shoreline birdlife and slower pacing.',
+      operatorName: 'Aves Bacalar',
+      route: '/tours/tour-birdwatching',
+      featuredOrder: 3,
+    }),
+    createTourSeed({
+      id: 'tour-snorkel',
+      name: 'Shallow Snorkel Circuit',
+      category: 'Adventure',
+      duration: '3 hours',
+      priceFrom: 'From MXN 1,450',
+      privateOrShared: 'Shared',
+      bestFor: 'Swimming',
+      difficulty: 'Moderate',
+      suitableForKids: 'Older kids',
+      description: 'A lighter active outing for travelers who want swim stops without a full-day commitment.',
+      operatorName: 'Agua Clara',
+      route: '/tours/tour-snorkel',
+      featuredOrder: 4,
+    }),
   ],
   es: [
     createTourSeed({
@@ -230,6 +260,36 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       route: '/tours/tour-kayak',
       featuredOrder: 2,
     }),
+    createTourSeed({
+      id: 'tour-birdwatching',
+      name: 'Paseo de avistamiento en la laguna',
+      category: 'Boat Tour',
+      duration: '2 hours',
+      priceFrom: 'Desde MXN 1,100',
+      privateOrShared: 'Compartido',
+      bestFor: 'Aves',
+      difficulty: 'Facil',
+      suitableForKids: 'Si',
+      description: 'Un recorrido matutino sereno pensado para observar aves y moverse sin prisa.',
+      operatorName: 'Aves Bacalar',
+      route: '/tours/tour-birdwatching',
+      featuredOrder: 3,
+    }),
+    createTourSeed({
+      id: 'tour-snorkel',
+      name: 'Circuito de snorkel poco profundo',
+      category: 'Adventure',
+      duration: '3 hours',
+      priceFrom: 'Desde MXN 1,450',
+      privateOrShared: 'Compartido',
+      bestFor: 'Nado',
+      difficulty: 'Moderada',
+      suitableForKids: 'Ninos grandes',
+      description: 'Una salida activa mas ligera para quienes quieren nadar sin comprometer todo el dia.',
+      operatorName: 'Agua Clara',
+      route: '/tours/tour-snorkel',
+      featuredOrder: 4,
+    }),
   ],
 }
 
@@ -239,7 +299,7 @@ function encodeCursor(sortOrder: number, slug: string) {
 
 export function getToursFixture(
   language: AppLanguage,
-  { category = 'all', cursor, limit = 12, forceEmpty = false }: GetToursFixtureOptions = {},
+  { category = 'all', cursor, limit = 10, forceEmpty = false }: GetToursFixtureOptions = {},
 ): ToursContent {
   const seeds = tourSeedsByLanguage[language]
   const featuredItems = seeds
@@ -250,6 +310,7 @@ export function getToursFixture(
   const filteredItems = forceEmpty
     ? []
     : seeds
+        .filter((seed) => seed.featuredOrder >= 3)
         .map((seed) => seed.item)
         .filter((item) => (category === 'all' ? true : item.category === category))
 

@@ -11,14 +11,14 @@ export const toursHandlers = [
   http.get(toursApiPath, async ({ request }) => {
     const url = new URL(request.url)
     const cursor = url.searchParams.get('cursor')
-    const limit = Number.parseInt(url.searchParams.get('limit') ?? '2', 10)
+    const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
     const category = (url.searchParams.get('category') ?? 'all') as TourCategoryFilter
 
     return jsonSuccess(
       getToursFixture(resolveMockLanguage(request), {
         category,
         cursor,
-        limit: Number.isFinite(limit) ? limit : 2,
+        limit: Number.isFinite(limit) ? limit : 10,
       }),
     )
   }),
@@ -76,13 +76,13 @@ export function emptyToursCategoryHandler(category: TourCategoryFilter) {
     const url = new URL(request.url)
     const selectedCategory = (url.searchParams.get('category') ??
       'all') as TourCategoryFilter
-    const limit = Number.parseInt(url.searchParams.get('limit') ?? '2', 10)
+    const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
 
     return jsonSuccess(
       getToursFixture(resolveMockLanguage(request), {
         category: selectedCategory,
         cursor: url.searchParams.get('cursor'),
-        limit: Number.isFinite(limit) ? limit : 2,
+        limit: Number.isFinite(limit) ? limit : 10,
         forceEmpty: selectedCategory === category,
       }),
     )
