@@ -259,10 +259,22 @@ export function AdminPublishedContentEditPage() {
       return
     }
 
-    setForm(toFormState(item))
-    setMediaDrafts(toMediaDrafts(item))
-    setFieldErrors({})
-    setRequestError(null)
+    let cancelled = false
+
+    queueMicrotask(() => {
+      if (cancelled) {
+        return
+      }
+
+      setForm(toFormState(item))
+      setMediaDrafts(toMediaDrafts(item))
+      setFieldErrors({})
+      setRequestError(null)
+    })
+
+    return () => {
+      cancelled = true
+    }
   }, [item])
 
   const mutation = useMutation({

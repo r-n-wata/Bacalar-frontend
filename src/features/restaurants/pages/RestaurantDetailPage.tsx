@@ -1,11 +1,14 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
-import { SectionEyebrow } from '../../../components/atoms/SectionEyebrow'
+import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailHero } from '../../../components/molecules/DetailHero'
+import { DetailIntro } from '../../../components/molecules/DetailIntro'
+import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
@@ -98,26 +101,30 @@ export function RestaurantDetailPage() {
         ]}
       />
 
-      <article className={pageStyles.bodyCard}>
-        <p className={pageStyles.bodyCopy}>{data.description}</p>
-        {data.mapEmbedUrl ? (
-          <section className={pageStyles.detailSection}>
-            <EmbeddedMapSection
-              title={t('common.labels.location')}
-              description={data.address}
-              embedUrl={data.mapEmbedUrl}
-              mapUrl={data.mapUrl}
-              frameTitle={`${data.name} map`}
-            />
-          </section>
-        ) : null}
-        <div className={pageStyles.actions}>
-          <Link className={pageStyles.primaryAction} to="/restaurants">
-            {t('restaurants.backToList')}
-          </Link>
-          <Link className={pageStyles.secondaryAction} to="/">
-            {t('restaurants.backHome')}
-          </Link>
+      <div className={pageStyles.layout}>
+        <div className={pageStyles.mainColumn}>
+          <article className={pageStyles.bodyCard}>
+            <p className={pageStyles.bodyCopy}>{data.description}</p>
+            {data.mapEmbedUrl ? (
+              <section className={pageStyles.detailSection}>
+                <EmbeddedMapSection
+                  title={t('common.labels.location')}
+                  description={data.address}
+                  embedUrl={data.mapEmbedUrl}
+                  mapUrl={data.mapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
+            <div className={pageStyles.actions}>
+              <Link className={pageStyles.primaryAction} to="/restaurants">
+                {t('restaurants.backToList')}
+              </Link>
+              <Link className={pageStyles.secondaryAction} to="/">
+                {t('restaurants.backHome')}
+              </Link>
+            </div>
+          </article>
         </div>
 
         <DetailSidebar title={t('restaurants.sidebar.title')}>

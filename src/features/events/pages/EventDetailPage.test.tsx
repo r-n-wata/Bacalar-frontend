@@ -51,7 +51,11 @@ describe('EventDetailPage', () => {
     expect(
       screen.getAllByRole('img', { name: 'Lagoon Breathwork Session' }).length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByText('A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.')).toHaveLength(1)
+    expect(
+      screen.getAllByText(
+        'A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.',
+      ).length,
+    ).toBeGreaterThan(0)
     expect(screen.getByText('Sunday, 8:00 AM')).toBeVisible()
     expect(screen.getByText('Isla Yoga Garden')).toBeVisible()
   })

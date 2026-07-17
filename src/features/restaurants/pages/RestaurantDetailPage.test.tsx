@@ -43,7 +43,9 @@ describe('RestaurantDetailPage', () => {
     await renderDetailRoute()
 
     expect(await screen.findByText('Bruma Azul')).toBeVisible()
-    expect(screen.getByRole('img', { name: 'Bruma Azul' })).toBeVisible()
+    expect(
+      screen.getAllByRole('img', { name: 'Bruma Azul' }).length,
+    ).toBeGreaterThan(0)
     expect(screen.queryByRole('link', { name: 'View on map' })).not.toBeInTheDocument()
   })
 })
