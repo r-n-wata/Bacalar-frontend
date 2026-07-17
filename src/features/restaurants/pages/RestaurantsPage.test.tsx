@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -31,16 +31,6 @@ describe('RestaurantsPage', () => {
       value: scrollHeight,
       configurable: true,
     })
-  }
-
-  async function scrollToPageBottom() {
-    setViewportPosition({
-      scrollY: 1400,
-      scrollHeight: 2000,
-      innerHeight: 800,
-    })
-
-    fireEvent.scroll(window)
   }
 
   function renderRestaurantsRoute(language?: 'en' | 'es') {

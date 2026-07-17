@@ -20,6 +20,13 @@ import { formatRestaurantMoments } from '../../restaurants/lib/formatRestaurantM
 
 const contentTypes: AdminPublishedContentType[] = ['events', 'restaurants', 'tours']
 
+function formatCategoryFallback(category: string) {
+  return category
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 function getTypeMeta(
   item: AdminPublishedContentItem,
   t: (key: string) => string,
@@ -30,7 +37,9 @@ function getTypeMeta(
     case 'restaurants':
       return formatRestaurantMoments(item.moments, t)
     case 'tours':
-      return t(`tours.categories.${item.category}`)
+      return t(`tours.categories.${item.category}`, {
+        defaultValue: formatCategoryFallback(item.category),
+      })
   }
 }
 
