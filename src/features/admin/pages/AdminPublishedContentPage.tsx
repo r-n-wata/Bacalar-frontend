@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -30,7 +31,7 @@ function formatCategoryFallback(category: string) {
 
 function getTypeMeta(
   item: AdminPublishedContentItem,
-  t: (key: string) => string,
+  t: TFunction,
 ) {
   switch (item.type) {
     case 'events':
