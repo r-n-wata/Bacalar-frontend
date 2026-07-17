@@ -67,9 +67,15 @@ export function AdminPublishedContentPage() {
         queryKey: queryKeys.home.content(language),
       })
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: queryKeys.events.list(language, 'all', 10) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.restaurants.list(language, 'all', 2) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.tours.list(language, 'all', 2) }),
+        queryClient.invalidateQueries({
+          queryKey: ['events', 'list', language],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['restaurants', 'list', language],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['tours', 'list', language],
+        }),
       ])
     },
   })
