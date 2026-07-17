@@ -34,6 +34,10 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         category: 'music',
         dateLabel: 'Friday, 7:00 PM',
         venue: 'Casa Laguna Deck',
+        address: 'Costera 12, Bacalar, Quintana Roo',
+        mapUrl: 'https://maps.google.com/?q=Costera+12+Bacalar',
+        mapEmbedUrl:
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.390!3d18.680!2m3!1f0!2f0!3f0',
         description:
           'An easy, high-reward evening add-on with live music, open air, and a sunset window that works especially well after a lighter afternoon.',
         startsAt: '2026-05-29T19:00:00-05:00',
@@ -338,6 +342,10 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         category: 'music',
         dateLabel: 'Viernes, 7:00 PM',
         venue: 'Terraza Casa Laguna',
+        address: 'Costera 12, Bacalar, Quintana Roo',
+        mapUrl: 'https://maps.google.com/?q=Costera+12+Bacalar',
+        mapEmbedUrl:
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.390!3d18.680!2m3!1f0!2f0!3f0',
         description:
           'Un extra nocturno facil y muy rendidor con musica en vivo, aire libre y una ventana de atardecer que funciona especialmente bien despues de una tarde ligera.',
         startsAt: '2026-05-29T19:00:00-05:00',

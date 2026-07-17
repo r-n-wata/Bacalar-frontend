@@ -49,6 +49,30 @@ function getMetaRows(submission: AdminSubmissionDetail, t: (key: string, options
       label: t('admin.dashboard.meta.contact'),
       value: submission.contactMethod,
     },
+    ...(submission.address
+      ? [
+          {
+            label: t('admin.dashboard.meta.address'),
+            value: submission.address,
+          },
+        ]
+      : []),
+    ...(submission.mapUrl
+      ? [
+          {
+            label: t('admin.dashboard.meta.mapUrl'),
+            value: submission.mapUrl,
+          },
+        ]
+      : []),
+    ...(submission.mapEmbedUrl
+      ? [
+          {
+            label: t('admin.dashboard.meta.mapEmbedUrl'),
+            value: submission.mapEmbedUrl,
+          },
+        ]
+      : []),
   ]
 
   if (submission.type === 'events') {

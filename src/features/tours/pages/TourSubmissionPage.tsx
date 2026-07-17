@@ -30,6 +30,9 @@ type SubmissionFormState = {
   category: TourCategory
   durationHours: string
   priceFrom: string
+  address: string
+  mapUrl: string
+  mapEmbedUrl: string
   description: string
   contactName: string
   contactMethod: string
@@ -44,6 +47,9 @@ const initialFormState: SubmissionFormState = {
   category: 'premium',
   durationHours: '',
   priceFrom: '',
+  address: '',
+  mapUrl: '',
+  mapEmbedUrl: '',
   description: '',
   contactName: '',
   contactMethod: '',
@@ -305,6 +311,9 @@ export function TourSubmissionPage() {
         category: form.category,
         durationHours: Number(form.durationHours),
         priceFrom: Number(form.priceFrom),
+        address: form.address.trim() || undefined,
+        mapUrl: form.mapUrl.trim() || undefined,
+        mapEmbedUrl: form.mapEmbedUrl.trim() || undefined,
         description: form.description.trim(),
         contactName: form.contactName.trim(),
         contactMethod: form.contactMethod.trim(),
@@ -422,6 +431,39 @@ export function TourSubmissionPage() {
               />
               {fieldErrors.priceFrom ? (
                 <span className={styles.error}>{fieldErrors.priceFrom}</span>
+              ) : null}
+            </FormField>
+            <FormField label={t('tours.submit.fields.address')} hint={t('tours.submit.optional')}>
+              <TextInput
+                aria-label={t('tours.submit.fields.address')}
+                value={form.address}
+                onChange={(event) => updateField('address', event.target.value)}
+                aria-invalid={Boolean(fieldErrors.address)}
+              />
+              {fieldErrors.address ? (
+                <span className={styles.error}>{fieldErrors.address}</span>
+              ) : null}
+            </FormField>
+            <FormField label={t('tours.submit.fields.mapUrl')} hint={t('tours.submit.optional')}>
+              <TextInput
+                aria-label={t('tours.submit.fields.mapUrl')}
+                value={form.mapUrl}
+                onChange={(event) => updateField('mapUrl', event.target.value)}
+                aria-invalid={Boolean(fieldErrors.mapUrl)}
+              />
+              {fieldErrors.mapUrl ? (
+                <span className={styles.error}>{fieldErrors.mapUrl}</span>
+              ) : null}
+            </FormField>
+            <FormField label={t('tours.submit.fields.mapEmbedUrl')} hint={t('tours.submit.optional')}>
+              <TextInput
+                aria-label={t('tours.submit.fields.mapEmbedUrl')}
+                value={form.mapEmbedUrl}
+                onChange={(event) => updateField('mapEmbedUrl', event.target.value)}
+                aria-invalid={Boolean(fieldErrors.mapEmbedUrl)}
+              />
+              {fieldErrors.mapEmbedUrl ? (
+                <span className={styles.error}>{fieldErrors.mapEmbedUrl}</span>
               ) : null}
             </FormField>
             <FormField label={t('tours.submit.fields.contactName')}>

@@ -1,6 +1,7 @@
 import { AppShell } from '../../components/templates/AppShell'
 import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage'
 import { AdminLoginPage } from '../../features/admin/pages/AdminLoginPage'
+import { AdminPublishedContentEditPage } from '../../features/admin/pages/AdminPublishedContentEditPage'
 import { AdminPublishedContentPage } from '../../features/admin/pages/AdminPublishedContentPage'
 import { AdminSubmissionDetailPage } from '../../features/admin/pages/AdminSubmissionDetailPage'
 import { ProtectedAdminRoute } from '../../features/admin/pages/ProtectedAdminRoute'
@@ -57,6 +58,10 @@ export const appRoutes = [
           {
             path: 'content',
             element: <AdminPublishedContentPage />,
+          },
+          {
+            path: 'content/:type/:id/edit',
+            element: <AdminPublishedContentEditPage />,
           },
           {
             path: 'submissions/:type/:id',

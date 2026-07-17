@@ -9,6 +9,7 @@ import { jsonSuccess } from '../../../test/msw/core'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { AdminDashboardPage } from './AdminDashboardPage'
 import { AdminLoginPage } from './AdminLoginPage'
+import { AdminPublishedContentEditPage } from './AdminPublishedContentEditPage'
 import { AdminPublishedContentPage } from './AdminPublishedContentPage'
 import { AdminSubmissionDetailPage } from './AdminSubmissionDetailPage'
 import { ProtectedAdminRoute } from './ProtectedAdminRoute'
@@ -63,6 +64,10 @@ function renderAdminRoute(initialEntry: string) {
                 element: <AdminPublishedContentPage />,
               },
               {
+                path: 'content/:type/:id/edit',
+                element: <AdminPublishedContentEditPage />,
+              },
+              {
                 path: 'submissions/:type/:id',
                 element: <AdminSubmissionDetailPage />,
               },
@@ -113,7 +118,7 @@ describe('admin access flow', () => {
     ).toBeVisible()
   })
 
-  it('shows the header logout action after admin sign-in', async () => {
+  it('shows admin navigation after admin sign-in', async () => {
     signInWithPassword.mockResolvedValue({
       data: {
         session: buildSession(),
@@ -132,6 +137,10 @@ describe('admin access flow', () => {
         name: 'Submission review',
       }),
     ).toBeVisible()
+    expect(
+      screen.getByRole('link', { name: 'Submissions' }),
+    ).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Content' })).toBeVisible()
     expect(screen.getByRole('button', { name: 'Log out' })).toBeVisible()
   })
 
@@ -367,5 +376,121 @@ describe('admin access flow', () => {
 
     expect(await screen.findByText('Cielo de Maiz')).toBeVisible()
     expect(screen.getByRole('button', { name: 'Add to featured' })).toBeVisible()
+  })
+
+  it('opens the published content edit route and loads bilingual listing fields', async () => {
+    getSession.mockResolvedValue({
+      data: {
+        session: buildSession(),
+      },
+    })
+
+    server.use(
+      http.get('/api/admin/content/events/event-sunset-jazz', async () =>
+        jsonSuccess({
+          item: {
+            id: 'event-sunset-jazz',
+            type: 'events',
+            route: '/events/event-sunset-jazz',
+            isFeatured: true,
+            featuredOrder: 0,
+            status: 'PUBLISHED',
+            category: 'music',
+            startsAt: '2026-06-03T18:30:00.000Z',
+            translations: {
+              en: {
+                title: 'Sunset Jazz by the Lagoon',
+                dateLabel: 'Friday evening',
+                venue: 'Casa Laguna Deck',
+                description: 'Live jazz at sunset.',
+              },
+              es: {
+                title: 'Jazz al atardecer',
+                dateLabel: 'Viernes por la tarde',
+                venue: 'Terraza Casa Laguna',
+                description: 'Jazz en vivo al atardecer.',
+              },
+            },
+            media: [],
+          },
+        }),
+      ),
+    )
+
+    await renderAdminRoute('/admin/content/events/event-sunset-jazz/edit')
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Edit published listing',
+      }),
+    ).toBeVisible()
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Loading published listing...'),
+      ).not.toBeInTheDocument()
+    })
+    expect(screen.getByDisplayValue('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(screen.getByDisplayValue('Jazz al atardecer')).toBeVisible()
+    expect(screen.getByDisplayValue('Casa Laguna Deck')).toBeVisible()
+  })
+
+  it('confirms archive actions for published content and refreshes the list', async () => {
+    getSession.mockResolvedValue({
+      data: {
+        session: buildSession(),
+      },
+    })
+
+    const items = [
+      {
+        id: 'event-sunset-jazz',
+        type: 'events',
+        title: 'Sunset Jazz by the Lagoon',
+        route: '/events/event-sunset-jazz',
+        isFeatured: true,
+        featuredOrder: 0,
+        category: 'music',
+        subtitle: 'Friday evening - Casa Laguna Deck',
+        image: {
+          src: 'https://images.example.com/event-featured.jpg',
+          alt: 'Sunset Jazz by the Lagoon',
+        },
+      },
+    ]
+
+    server.use(
+      http.get('/api/admin/content', async () =>
+        jsonSuccess({
+          items,
+          featuredCount: items.length,
+          featuredCap: 5,
+        }),
+      ),
+      http.delete('/api/admin/content/:type/:id', async ({ params }) => {
+        const index = items.findIndex((item) => item.id === String(params.id))
+
+        if (index >= 0) {
+          items.splice(index, 1)
+        }
+
+        return jsonSuccess({
+          id: String(params.id),
+          type: String(params.type),
+          status: 'ARCHIVED',
+        })
+      }),
+    )
+
+    await renderAdminRoute('/admin/content')
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Delete' }))
+
+    expect(await screen.findByRole('dialog')).toBeVisible()
+    await userEvent.click(screen.getByRole('button', { name: 'Archive listing' }))
+
+    await waitFor(() => {
+      expect(screen.queryByText('Sunset Jazz by the Lagoon')).not.toBeInTheDocument()
+    })
+    expect(await screen.findByText('Published listing archived.')).toBeVisible()
   })
 })

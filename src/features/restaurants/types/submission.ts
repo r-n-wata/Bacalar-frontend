@@ -35,6 +35,9 @@ export type CreateRestaurantSubmissionRequest = {
   cuisine: string
   moment: RestaurantMoment
   priceBand: '$' | '$$' | '$$$'
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   description: string
   contactName: string
   contactMethod: string

@@ -30,6 +30,9 @@ export type TourDetail = {
   included?: string
   whatToBring?: string
   meetingPoint?: string
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   imageUrls: string[]
   operatorName: string
   operatorDescription?: string

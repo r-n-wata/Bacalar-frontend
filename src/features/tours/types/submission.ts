@@ -35,6 +35,9 @@ export type CreateTourSubmissionRequest = {
   category: TourCategory
   durationHours: number
   priceFrom: number
+  address?: string
+  mapUrl?: string
+  mapEmbedUrl?: string
   description: string
   contactName: string
   contactMethod: string

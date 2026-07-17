@@ -9,8 +9,8 @@ import { DetailActions } from '../../../components/molecules/DetailActions'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
-import { DetailSection } from '../../../components/molecules/DetailSection'
 import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
+import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ProviderCard } from '../../../components/molecules/ProviderCard'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
@@ -123,6 +123,7 @@ export function TourDetailPage() {
           duration: data.duration,
           image: heroImage,
           providerName: data.operatorName,
+          address: data.address,
         })}
       />
       <DetailHero
@@ -174,52 +175,105 @@ export function TourDetailPage() {
             ]}
           />
 
-          {data.included ? (
-            <DetailSection title={t('tours.sections.included')}>
-              <p className={pageStyles.bodyCopy}>{data.included}</p>
-            </DetailSection>
-          ) : null}
-          {data.whatToBring ? (
-            <DetailSection title={t('tours.sections.whatToBring')}>
-              <p className={pageStyles.bodyCopy}>{data.whatToBring}</p>
-            </DetailSection>
-          ) : null}
-          {data.meetingPoint ? (
-            <DetailSection title={t('tours.sections.meetingPoint')}>
-              <p className={pageStyles.bodyCopy}>{data.meetingPoint}</p>
-            </DetailSection>
-          ) : null}
-          <ProviderCard
-            eyebrow={t('tours.providerEyebrow')}
-            title={data.operatorName}
-            description={operatorDescription}
-            actions={[
-              ...(data.operatorWhatsapp
-                ? [
-                    {
-                      label: t('tours.operator.whatsapp'),
-                      href: getWhatsappHref(data.operatorWhatsapp),
-                    },
-                  ]
-                : []),
-              ...(data.operatorInstagram
-                ? [
-                    {
-                      label: t('tours.operator.instagram'),
-                      href: getInstagramHref(data.operatorInstagram),
-                    },
-                  ]
-                : []),
-              ...(data.operatorWebsite
-                ? [
-                    {
-                      label: t('tours.operator.website'),
-                      href: data.operatorWebsite,
-                    },
-                  ]
-                : []),
-            ]}
-          />
+          <article className={pageStyles.bodyCard}>
+            <p className={pageStyles.bodyCopy}>{data.description}</p>
+            {data.included ? (
+              <section className={pageStyles.detailSection}>
+                <h2>{t('tours.sections.included')}</h2>
+                <p className={pageStyles.bodyCopy}>{data.included}</p>
+              </section>
+            ) : null}
+            {data.whatToBring ? (
+              <section className={pageStyles.detailSection}>
+                <h2>{t('tours.sections.whatToBring')}</h2>
+                <p className={pageStyles.bodyCopy}>{data.whatToBring}</p>
+              </section>
+            ) : null}
+            {data.meetingPoint ? (
+              <section className={pageStyles.detailSection}>
+                <h2>{t('tours.sections.meetingPoint')}</h2>
+                <p className={pageStyles.bodyCopy}>
+                  {data.address ?? data.meetingPoint}
+                </p>
+              </section>
+            ) : null}
+            {data.mapEmbedUrl ? (
+              <section className={pageStyles.detailSection}>
+                <EmbeddedMapSection
+                  title={t('common.labels.location')}
+                  description={data.address ?? data.meetingPoint}
+                  embedUrl={data.mapEmbedUrl}
+                  mapUrl={data.mapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
+            <section className={pageStyles.detailSection}>
+              <h2>{t('tours.sections.operator')}</h2>
+              <div className={pageStyles.metaGrid}>
+                <article className={pageStyles.metaCard}>
+                  <span>{t('tours.operator.name')}</span>
+                  <strong>{data.operatorName}</strong>
+                </article>
+                {data.operatorPrimaryContactMethod ? (
+                  <article className={pageStyles.metaCard}>
+                    <span>{t('tours.operator.primaryContactMethod')}</span>
+                    <strong>{data.operatorPrimaryContactMethod}</strong>
+                  </article>
+                ) : null}
+                {data.operatorWhatsapp ? (
+                  <article className={pageStyles.metaCard}>
+                    <span>{t('tours.operator.whatsapp')}</span>
+                    <strong>{data.operatorWhatsapp}</strong>
+                  </article>
+                ) : null}
+                {data.operatorInstagram ? (
+                  <article className={pageStyles.metaCard}>
+                    <span>{t('tours.operator.instagram')}</span>
+                    <strong>{data.operatorInstagram}</strong>
+                  </article>
+                ) : null}
+                {data.operatorWebsite ? (
+                  <article className={pageStyles.metaCard}>
+                    <span>{t('tours.operator.website')}</span>
+                    <strong>{data.operatorWebsite}</strong>
+                  </article>
+                ) : null}
+              </div>
+             
+              <ProviderCard
+                eyebrow={t('tours.providerEyebrow')}
+                title={data.operatorName}
+                description={operatorDescription}
+                actions={[
+                  ...(data.operatorWhatsapp
+                    ? [
+                        {
+                          label: t('tours.operator.whatsapp'),
+                          href: getWhatsappHref(data.operatorWhatsapp),
+                        },
+                      ]
+                    : []),
+                  ...(data.operatorInstagram
+                    ? [
+                        {
+                          label: t('tours.operator.instagram'),
+                          href: getInstagramHref(data.operatorInstagram),
+                        },
+                      ]
+                    : []),
+                  ...(data.operatorWebsite
+                    ? [
+                        {
+                          label: t('tours.operator.website'),
+                          href: data.operatorWebsite,
+                        },
+                      ]
+                    : []),
+                ]}
+              />
+            </section>
+          </article>
         </div>
 
         <DetailSidebar title={t('tours.sidebar.title')}>
