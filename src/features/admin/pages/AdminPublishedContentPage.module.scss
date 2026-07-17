@@ -130,6 +130,27 @@
   margin-top: auto;
 }
 
+.flashRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.flashMessage {
+  margin: 0;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.dismissButton {
+  border: 0;
+  background: transparent;
+  color: var(--lagoon-teal);
+  cursor: pointer;
+  font: inherit;
+}
+
 .link {
   color: var(--lagoon-teal);
   font-weight: 700;
@@ -138,4 +159,38 @@
 .empty {
   margin: 0;
   color: var(--text-muted);
+}
+
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 48, 58, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.dialog {
+  width: min(100%, 440px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dialogTitle,
+.dialogCopy {
+  margin: 0;
+}
+
+.dialogCopy {
+  color: var(--text-muted);
+}
+
+@media (max-width: 720px) {
+  .flashRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
