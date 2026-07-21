@@ -10,7 +10,9 @@ import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
+import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
 import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
@@ -53,6 +55,7 @@ export function RestaurantDetailPage() {
   })
   const heroImages = [heroImage]
   const momentsLabel = formatRestaurantMoments(data.moments, t)
+  const hasContactActions = buildContactActions(data.contact, language).length > 0
   const backToListAction = {
     label: t('restaurants.backToList'),
     to: '/restaurants',
@@ -60,7 +63,9 @@ export function RestaurantDetailPage() {
   }
 
   return (
-    <section className={pageStyles.page}>
+    <section
+      className={`${pageStyles.page} ${hasContactActions ? pageStyles.pageWithStickyContact : ''}`.trim()}
+    >
       <Seo
         title={`${data.name} | ${t('shell.nav.restaurants')}`}
         description={data.description}
@@ -110,6 +115,13 @@ export function RestaurantDetailPage() {
         <div className={pageStyles.mainColumn}>
           <article className={pageStyles.bodyCard}>
             <p className={pageStyles.bodyCopy}>{data.description}</p>
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="restaurants"
+              listingName={data.name}
+              currentLanguage={language}
+            />
             {data.mapEmbedUrl ? (
               <section className={pageStyles.detailSection}>
                 <EmbeddedMapSection

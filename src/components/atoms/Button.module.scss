@@ -11,6 +11,22 @@
   border-radius: 999px;
   font-weight: 700;
   line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    box-shadow: none;
+    transform: none;
+  }
 }
 
 .fullWidth {
@@ -27,6 +43,7 @@
   background: var(--sun-gold);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: #003b62;
+  box-shadow: 0 10px 24px rgba(0, 59, 98, 0.16);
 }
 
 .secondary {

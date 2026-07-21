@@ -38,6 +38,7 @@ function createTourSeed(input: {
   operatorInstagram?: string
   operatorWebsite?: string
   operatorPrimaryContactMethod?: string
+  contact?: TourDetail['contact']
   route: string
   featuredOrder: number
   image?: { src: string; alt: string }
@@ -80,6 +81,13 @@ function createTourSeed(input: {
       operatorInstagram: input.operatorInstagram,
       operatorWebsite: input.operatorWebsite,
       operatorPrimaryContactMethod: input.operatorPrimaryContactMethod,
+      contact: input.contact ?? {
+        providerName: input.operatorName,
+        whatsapp: input.operatorWhatsapp,
+        website: input.operatorWebsite,
+        instagram: input.operatorInstagram,
+        mapsUrl: input.mapUrl,
+      },
       route: input.route,
       image: input.image,
     },
@@ -114,6 +122,13 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       operatorInstagram: '@lagunavela',
       operatorWebsite: 'https://lagunavela.example.com',
       operatorPrimaryContactMethod: 'WhatsApp',
+      contact: {
+        providerName: 'Laguna Vela',
+        whatsapp: '+52 983 123 4567',
+        website: 'https://lagunavela.example.com',
+        instagram: '@lagunavela',
+        mapsUrl: 'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
+      },
       route: '/tours/tour-sailing',
       featuredOrder: 0,
       image: {
@@ -162,6 +177,9 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
         'An active paddle through calmer edges of the lagoon for travelers who want a shorter outing.',
       operatorName: 'Manglar Guides',
       operatorPrimaryContactMethod: 'Instagram',
+      contact: {
+        providerName: 'Manglar Guides',
+      },
       route: '/tours/tour-kayak',
       featuredOrder: 2,
     }),
@@ -223,6 +241,13 @@ const tourSeedsByLanguage: Record<AppLanguage, TourSeed[]> = {
       operatorInstagram: '@lagunavela',
       operatorWebsite: 'https://lagunavela.example.com',
       operatorPrimaryContactMethod: 'WhatsApp',
+      contact: {
+        providerName: 'Laguna Vela',
+        whatsapp: '+52 983 123 4567',
+        website: 'https://lagunavela.example.com',
+        instagram: '@lagunavela',
+        mapsUrl: 'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
+      },
       route: '/tours/tour-sailing',
       featuredOrder: 0,
       image: {

@@ -1,6 +1,17 @@
 export type EventCategory = 'music' | 'wellness' | 'food'
 export type EventCategoryFilter = 'all' | EventCategory
 
+export type ContactInfo = {
+  providerName: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
+  mapsUrl?: string
+}
+
 export type Event = {
   id: string
   title: string
@@ -43,6 +54,7 @@ export type EventDetail = {
   startsAt?: string
   endsAt?: string
   route: string
+  contact?: ContactInfo
   image?: {
     src: string
     alt: string

@@ -1,6 +1,17 @@
 export type TourCategory = string
 export type TourCategoryFilter = 'all' | TourCategory
 
+export type ContactInfo = {
+  providerName: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
+  mapsUrl?: string
+}
+
 export type Tour = {
   id: string
   name: string
@@ -41,6 +52,7 @@ export type TourDetail = {
   operatorWebsite?: string
   operatorPrimaryContactMethod?: string
   route: string
+  contact?: ContactInfo
   image?: {
     src: string
     alt: string
