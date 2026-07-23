@@ -44,6 +44,13 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         mapUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
         mapEmbedUrl:
           'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.395!3d18.679!2m3!1f0!2f0!3f0',
+        contact: {
+          providerName: 'Cielo de Maiz',
+          whatsapp: '+52 983 101 0101',
+          website: 'https://cielodemaiz.example.com',
+          instagram: '@cielodemaiz',
+          mapsUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
+        },
         route: '/restaurants/rest-cielo',
         image: {
           src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
@@ -71,6 +78,11 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['lunch'],
         description:
           'A dependable lunch option when the day needs something grounded, regional, and easy to say yes to after a morning on the water.',
+        contact: {
+          providerName: 'Ixchel Cocina',
+          phone: '+52 983 555 1111',
+          mapsUrl: 'https://maps.google.com/?q=Ixchel+Cocina+Bacalar',
+        },
         route: '/restaurants/rest-ixchel',
         image: {
           src: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80',
@@ -98,6 +110,11 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['lunch', 'dinner'],
         description:
           'An evening pick for when the stay calls for one elevated meal, strong seafood, and a setting that makes sunset feel part of dinner.',
+        contact: {
+          providerName: 'Nao',
+          email: 'reservas@nao.example.com',
+          facebook: 'naobacalar',
+        },
         route: '/restaurants/rest-naao',
         image: {
           src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
@@ -125,6 +142,9 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['breakfast'],
         description:
           'A lighter breakfast or coffee stop when the morning wants something low-lift before heading back toward the lagoon.',
+        contact: {
+          providerName: 'Bruma Azul',
+        },
         route: '/restaurants/rest-bruma',
       },
     },
@@ -148,6 +168,10 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['dinner'],
         description:
           'A slower dinner option when the plan wants one more celebratory meal anchored around sunset and a longer table stay.',
+        contact: {
+          providerName: 'Orilla Comedor',
+          website: 'https://orilla.example.com',
+        },
         route: '/restaurants/rest-orilla',
       },
     },
@@ -177,6 +201,13 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         mapUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
         mapEmbedUrl:
           'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.395!3d18.679!2m3!1f0!2f0!3f0',
+        contact: {
+          providerName: 'Cielo de Maiz',
+          whatsapp: '+52 983 101 0101',
+          website: 'https://cielodemaiz.example.com',
+          instagram: '@cielodemaiz',
+          mapsUrl: 'https://maps.google.com/?q=Avenida+3+210+Bacalar',
+        },
         route: '/restaurants/rest-cielo',
         image: {
           src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
@@ -204,6 +235,11 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['lunch'],
         description:
           'Una opcion confiable para almorzar cuando el dia pide algo regional, cercano y facil de elegir despues de una manana en el agua.',
+        contact: {
+          providerName: 'Ixchel Cocina',
+          phone: '+52 983 555 1111',
+          mapsUrl: 'https://maps.google.com/?q=Ixchel+Cocina+Bacalar',
+        },
         route: '/restaurants/rest-ixchel',
         image: {
           src: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80',
@@ -231,6 +267,11 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['lunch', 'dinner'],
         description:
           'Una eleccion nocturna para cuando la estancia pide una comida mas especial, buenos mariscos y un entorno donde el atardecer acompana la cena.',
+        contact: {
+          providerName: 'Nao',
+          email: 'reservas@nao.example.com',
+          facebook: 'naobacalar',
+        },
         route: '/restaurants/rest-naao',
         image: {
           src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
@@ -258,6 +299,9 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         moments: ['breakfast'],
         description:
           'Una parada ligera para desayuno o cafe cuando la manana pide algo simple antes de volver hacia la laguna.',
+        contact: {
+          providerName: 'Bruma Azul',
+        },
         route: '/restaurants/rest-bruma',
       },
     },

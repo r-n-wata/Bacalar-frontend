@@ -12,19 +12,11 @@ import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadata
 import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ProviderCard } from '../../../components/molecules/ProviderCard'
+import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { buildContactActions } from '../../shared/lib/contact'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
 import { useTourDetail } from '../hooks/useTourDetail'
-
-function getWhatsappHref(value: string) {
-  const digits = value.replace(/\D/g, '')
-  return digits ? `https://wa.me/${digits}` : ''
-}
-
-function getInstagramHref(value: string) {
-  const handle = value.replace(/^@/, '').trim()
-  return handle ? `https://instagram.com/${handle}` : ''
-}
 
 function normalizeLongformText(value?: string) {
   return value?.replace(/\s+/g, ' ').trim().toLowerCase() ?? ''
@@ -84,31 +76,12 @@ export function TourDetailPage() {
     normalizeLongformText(data.description)
       ? undefined
       : data.operatorDescription
-  const primarySidebarActions = [
-    data.operatorWhatsapp
-      ? {
-          label: t('tours.actions.contactOperator'),
-          href: getWhatsappHref(data.operatorWhatsapp),
-        }
-      : data.operatorWebsite
-        ? {
-            label: t('tours.actions.checkAvailability'),
-            href: data.operatorWebsite,
-          }
-        : data.operatorInstagram
-          ? {
-              label: t('tours.actions.messageOnInstagram'),
-              href: getInstagramHref(data.operatorInstagram),
-            }
-          : {
-              label: t('tours.backToList'),
-              to: '/tours',
-              variant: 'secondary' as const,
-            },
-  ].filter((action) => ('href' in action ? Boolean(action.href) : true))
+  const hasContactActions = buildContactActions(data.contact, language).length > 0
 
   return (
-    <section className={pageStyles.page}>
+    <section
+      className={`${pageStyles.page} ${hasContactActions ? pageStyles.pageWithStickyContact : ''}`.trim()}
+    >
       <Seo
         title={`${data.name} | ${t('shell.nav.tours')}`}
         description={data.description}
@@ -176,6 +149,13 @@ export function TourDetailPage() {
           />
 
           <article className={pageStyles.bodyCard}>
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="tours"
+              listingName={data.name}
+              currentLanguage={language}
+            />
             {data.included ? (
               <section className={pageStyles.detailSection}>
                 <h2>{t('tours.sections.included')}</h2>
@@ -244,32 +224,6 @@ export function TourDetailPage() {
                 eyebrow={t('tours.providerEyebrow')}
                 title={data.operatorName}
                 description={operatorDescription}
-                actions={[
-                  ...(data.operatorWhatsapp
-                    ? [
-                        {
-                          label: t('tours.operator.whatsapp'),
-                          href: getWhatsappHref(data.operatorWhatsapp),
-                        },
-                      ]
-                    : []),
-                  ...(data.operatorInstagram
-                    ? [
-                        {
-                          label: t('tours.operator.instagram'),
-                          href: getInstagramHref(data.operatorInstagram),
-                        },
-                      ]
-                    : []),
-                  ...(data.operatorWebsite
-                    ? [
-                        {
-                          label: t('tours.operator.website'),
-                          href: data.operatorWebsite,
-                        },
-                      ]
-                    : []),
-                ]}
               />
             </section>
           </article>
@@ -287,20 +241,14 @@ export function TourDetailPage() {
                 <strong>{data.privateOrShared}</strong>
               </div>
             </div>
-            <DetailActions compact actions={primarySidebarActions} />
             <DetailActions
               compact
               actions={[
-                ...('to' in primarySidebarActions[0] &&
-                primarySidebarActions[0].to === '/tours'
-                  ? []
-                  : [
-                      {
-                        label: t('tours.backToList'),
-                        to: '/tours',
-                        variant: 'secondary' as const,
-                      },
-                    ]),
+                {
+                  label: t('tours.backToList'),
+                  to: '/tours',
+                  variant: 'secondary' as const,
+                },
               ]}
             />
           </DetailSidebar>

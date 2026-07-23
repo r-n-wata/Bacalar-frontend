@@ -32,7 +32,7 @@ function renderDetailRoute(path = '/tours/tour-sailing') {
 }
 
 describe('TourDetailPage', () => {
-  it('renders the editorial intro and operator actions on the detail page', async () => {
+  it('renders the editorial intro and shared contact actions on the detail page', async () => {
     await renderDetailRoute()
 
     expect(await screen.findByText('Private Sailing at Sunrise')).toBeVisible()
@@ -40,17 +40,21 @@ describe('TourDetailPage', () => {
     expect(screen.getAllByText('Laguna Vela').length).toBeGreaterThan(0)
     expect(screen.getByText('From MXN 2,800')).toBeVisible()
     expect(screen.getByText('4 hours')).toBeVisible()
-    expect(screen.getByRole('link', { name: 'Contact operator' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'WhatsApp' })[0]).toHaveAttribute(
       'href',
-      'https://wa.me/529831234567',
+      'https://wa.me/529831234567?text=Hi%21+I+found+your+business+on+Sue%C3%B1o+Bacalar+and+would+like+more+information.',
     )
-    expect(screen.getByRole('link', { name: 'Instagram' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'Instagram' })[0]).toHaveAttribute(
       'href',
       'https://instagram.com/lagunavela',
     )
-    expect(screen.getByRole('link', { name: 'Website' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'Website' })[0]).toHaveAttribute(
       'href',
       'https://lagunavela.example.com',
+    )
+    expect(screen.getAllByRole('link', { name: 'Google Maps' })[0]).toHaveAttribute(
+      'href',
+      'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
     )
     expect(screen.getByText('What is included')).toBeVisible()
     expect(screen.getByText('Meeting point')).toBeVisible()
@@ -78,6 +82,9 @@ describe('TourDetailPage', () => {
           imageUrls: [],
           operatorName: 'Manglar Guides',
           operatorPrimaryContactMethod: 'Instagram',
+          contact: {
+            providerName: 'Manglar Guides',
+          },
           route: '/tours/tour-kayak',
         }),
       ),
@@ -89,6 +96,7 @@ describe('TourDetailPage', () => {
     expect(screen.getByText('Provided by')).toBeVisible()
     expect(screen.getAllByText('Manglar Guides').length).toBeGreaterThan(0)
     expect(screen.queryByText('WhatsApp')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Contact')).not.toBeInTheDocument()
     expect(
       screen.getAllByRole('img', { name: 'Guided Mangrove Kayak' }).length,
     ).toBeGreaterThan(0)
@@ -114,6 +122,9 @@ describe('TourDetailPage', () => {
             'https://images.example.com/pontoon-gallery.jpg',
           ],
           operatorName: 'Casa Ponton',
+          contact: {
+            providerName: 'Casa Ponton',
+          },
           route: '/tours/tour-pontoon',
         }),
       ),

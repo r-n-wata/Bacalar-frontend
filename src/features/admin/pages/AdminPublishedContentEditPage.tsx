@@ -44,6 +44,13 @@ type EventFormState = {
   type: 'events'
   category: 'music' | 'wellness' | 'food'
   startsAt: string
+  organizerName: string
+  whatsapp: string
+  phone: string
+  website: string
+  instagram: string
+  facebook: string
+  email: string
   address: string
   mapUrl: string
   mapEmbedUrl: string
@@ -57,6 +64,12 @@ type RestaurantFormState = {
   type: 'restaurants'
   priceBand: '$' | '$$' | '$$$'
   moments: Array<'breakfast' | 'lunch' | 'dinner'>
+  whatsapp: string
+  phone: string
+  website: string
+  instagram: string
+  facebook: string
+  email: string
   address: string
   mapUrl: string
   mapEmbedUrl: string
@@ -76,6 +89,13 @@ type TourFormState = {
   difficulty: string
   suitableForKids: string
   meetingPoint: string
+  providerName: string
+  whatsapp: string
+  phone: string
+  website: string
+  instagram: string
+  facebook: string
+  email: string
   address: string
   mapUrl: string
   mapEmbedUrl: string
@@ -175,6 +195,13 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
         type: 'events',
         category: item.category,
         startsAt: item.startsAt.slice(0, 16),
+        organizerName: item.organizerName ?? '',
+        whatsapp: item.whatsapp ?? '',
+        phone: item.phone ?? '',
+        website: item.website ?? '',
+        instagram: item.instagram ?? '',
+        facebook: item.facebook ?? '',
+        email: item.email ?? '',
         address: item.address ?? '',
         mapUrl: item.mapUrl ?? '',
         mapEmbedUrl: item.mapEmbedUrl ?? '',
@@ -185,6 +212,12 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
         type: 'restaurants',
         priceBand: item.priceBand,
         moments: item.moments,
+        whatsapp: item.whatsapp ?? '',
+        phone: item.phone ?? '',
+        website: item.website ?? '',
+        instagram: item.instagram ?? '',
+        facebook: item.facebook ?? '',
+        email: item.email ?? '',
         address: item.address ?? '',
         mapUrl: item.mapUrl ?? '',
         mapEmbedUrl: item.mapEmbedUrl ?? '',
@@ -201,6 +234,13 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
         difficulty: item.difficulty,
         suitableForKids: item.suitableForKids,
         meetingPoint: item.meetingPoint ?? '',
+        providerName: item.providerName ?? item.operatorName,
+        whatsapp: item.whatsapp ?? item.operatorWhatsapp ?? '',
+        phone: item.phone ?? '',
+        website: item.website ?? item.operatorWebsite ?? '',
+        instagram: item.instagram ?? item.operatorInstagram ?? '',
+        facebook: item.facebook ?? '',
+        email: item.email ?? '',
         address: item.address ?? '',
         mapUrl: item.mapUrl ?? '',
         mapEmbedUrl: item.mapEmbedUrl ?? '',
@@ -231,6 +271,63 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
 
 function momentOptions() {
   return ['breakfast', 'lunch', 'dinner'] as const
+}
+
+function getValidationSummaryMessage(
+  t: ReturnType<typeof useTranslation>['t'],
+  fieldCount: number,
+) {
+  return t('admin.content.edit.validationSummary', {
+    count: fieldCount,
+  })
+}
+
+function getTrimmedLength(value: string) {
+  return value.trim().length
+}
+
+function isLocalizedBlockComplete(
+  fields: Record<string, string>,
+  minimumLengths: Record<string, number>,
+) {
+  return Object.entries(minimumLengths).every(
+    ([field, minimumLength]) => getTrimmedLength(fields[field] ?? '') >= minimumLength,
+  )
+}
+
+function getFilledFieldCount(fields: Record<string, string>) {
+  return Object.values(fields).filter((value) => getTrimmedLength(value) > 0).length
+}
+
+function getLocalizedFieldErrors(
+  values: { en: Record<string, string>; es: Record<string, string> },
+  minimumLengths: Record<string, number>,
+  message: string,
+  preferredLocale: 'en' | 'es',
+) {
+  if (
+    isLocalizedBlockComplete(values.en, minimumLengths) ||
+    isLocalizedBlockComplete(values.es, minimumLengths)
+  ) {
+    return {}
+  }
+
+  const enFilledCount = getFilledFieldCount(values.en)
+  const esFilledCount = getFilledFieldCount(values.es)
+  const localeToValidate =
+    enFilledCount === esFilledCount
+      ? preferredLocale
+      : enFilledCount > esFilledCount
+        ? 'en'
+        : 'es'
+
+  return Object.entries(minimumLengths).reduce<FieldErrors>((accumulator, [field, minimumLength]) => {
+    if (getTrimmedLength(values[localeToValidate][field] ?? '') < minimumLength) {
+      accumulator[`translations.${localeToValidate}.${field}`] = message
+    }
+
+    return accumulator
+  }, {})
 }
 
 export function AdminPublishedContentEditPage() {
@@ -337,10 +434,23 @@ export function AdminPublishedContentEditPage() {
   }
 
   function setTextError(key: string) {
-    setFieldErrors((current) => ({
-      ...current,
-      [key]: undefined,
-    }))
+    setFieldErrors((current) =>
+      Object.fromEntries(
+        Object.entries(current).filter(
+          ([field]) => field !== key && !field.startsWith(`${key}.`),
+        ),
+      ),
+    )
+  }
+
+  function getFieldError(key: string) {
+    return fieldErrors[key]
+  }
+
+  function getInputClassName(errorKey?: string, baseClassName?: string) {
+    return [baseClassName, errorKey && fieldErrors[errorKey] ? styles.fieldError : undefined]
+      .filter(Boolean)
+      .join(' ')
   }
 
   function handleFileSelection(event: ChangeEvent<HTMLInputElement>) {
@@ -489,26 +599,38 @@ export function AdminPublishedContentEditPage() {
 
     if (form.type === 'events') {
       if (!form.startsAt) nextErrors.startsAt = t('events.submit.validation.required')
-      if (!form.translations.en.title.trim()) nextErrors['translations.en.title'] = t('events.submit.validation.required')
-      if (!form.translations.en.dateLabel.trim()) nextErrors['translations.en.dateLabel'] = t('events.submit.validation.required')
-      if (!form.translations.en.venue.trim()) nextErrors['translations.en.venue'] = t('events.submit.validation.required')
-      if (!form.translations.en.description.trim()) nextErrors['translations.en.description'] = t('events.submit.validation.required')
-      if (!form.translations.es.title.trim()) nextErrors['translations.es.title'] = t('events.submit.validation.required')
-      if (!form.translations.es.dateLabel.trim()) nextErrors['translations.es.dateLabel'] = t('events.submit.validation.required')
-      if (!form.translations.es.venue.trim()) nextErrors['translations.es.venue'] = t('events.submit.validation.required')
-      if (!form.translations.es.description.trim()) nextErrors['translations.es.description'] = t('events.submit.validation.required')
+      Object.assign(
+        nextErrors,
+        getLocalizedFieldErrors(
+          form.translations as { en: Record<string, string>; es: Record<string, string> },
+          {
+            title: 3,
+            dateLabel: 2,
+            venue: 2,
+            description: 20,
+          },
+          t('events.submit.validation.required'),
+          locale,
+        ),
+      )
     }
 
     if (form.type === 'restaurants') {
       if (form.moments.length === 0) nextErrors.moments = t('restaurants.submit.validation.required')
-      if (!form.translations.en.name.trim()) nextErrors['translations.en.name'] = t('restaurants.submit.validation.required')
-      if (!form.translations.en.cuisine.trim()) nextErrors['translations.en.cuisine'] = t('restaurants.submit.validation.required')
-      if (!form.translations.en.vibe.trim()) nextErrors['translations.en.vibe'] = t('restaurants.submit.validation.required')
-      if (!form.translations.en.description.trim()) nextErrors['translations.en.description'] = t('restaurants.submit.validation.required')
-      if (!form.translations.es.name.trim()) nextErrors['translations.es.name'] = t('restaurants.submit.validation.required')
-      if (!form.translations.es.cuisine.trim()) nextErrors['translations.es.cuisine'] = t('restaurants.submit.validation.required')
-      if (!form.translations.es.vibe.trim()) nextErrors['translations.es.vibe'] = t('restaurants.submit.validation.required')
-      if (!form.translations.es.description.trim()) nextErrors['translations.es.description'] = t('restaurants.submit.validation.required')
+      Object.assign(
+        nextErrors,
+        getLocalizedFieldErrors(
+          form.translations as { en: Record<string, string>; es: Record<string, string> },
+          {
+            name: 2,
+            cuisine: 2,
+            vibe: 2,
+            description: 20,
+          },
+          t('restaurants.submit.validation.required'),
+          locale,
+        ),
+      )
     }
 
     if (form.type === 'tours') {
@@ -520,10 +642,18 @@ export function AdminPublishedContentEditPage() {
       if (!form.difficulty.trim()) nextErrors.difficulty = t('tours.submit.validation.required')
       if (!form.suitableForKids.trim()) nextErrors.suitableForKids = t('tours.submit.validation.required')
       if (!form.operatorName.trim()) nextErrors.operatorName = t('tours.submit.validation.required')
-      if (!form.translations.en.name.trim()) nextErrors['translations.en.name'] = t('tours.submit.validation.required')
-      if (!form.translations.en.description.trim()) nextErrors['translations.en.description'] = t('tours.submit.validation.required')
-      if (!form.translations.es.name.trim()) nextErrors['translations.es.name'] = t('tours.submit.validation.required')
-      if (!form.translations.es.description.trim()) nextErrors['translations.es.description'] = t('tours.submit.validation.required')
+      Object.assign(
+        nextErrors,
+        getLocalizedFieldErrors(
+          form.translations as { en: Record<string, string>; es: Record<string, string> },
+          {
+            name: 2,
+            description: 20,
+          },
+          t('tours.submit.validation.required'),
+          locale,
+        ),
+      )
     }
 
     return nextErrors
@@ -579,6 +709,9 @@ export function AdminPublishedContentEditPage() {
 
     if (Object.keys(nextErrors).length > 0 || !form) {
       setFieldErrors(nextErrors)
+      setRequestError(
+        getValidationSummaryMessage(t, Object.keys(nextErrors).length),
+      )
       return
     }
 
@@ -592,6 +725,13 @@ export function AdminPublishedContentEditPage() {
           ? {
               category: form.category,
               startsAt: new Date(form.startsAt).toISOString(),
+              organizerName: form.organizerName.trim() || undefined,
+              whatsapp: form.whatsapp.trim() || undefined,
+              phone: form.phone.trim() || undefined,
+              website: form.website.trim() || undefined,
+              instagram: form.instagram.trim() || undefined,
+              facebook: form.facebook.trim() || undefined,
+              email: form.email.trim() || undefined,
               address: form.address.trim() || undefined,
               mapUrl: form.mapUrl.trim() || undefined,
               mapEmbedUrl: form.mapEmbedUrl.trim() || undefined,
@@ -602,6 +742,12 @@ export function AdminPublishedContentEditPage() {
             ? {
                 priceBand: form.priceBand,
                 moments: form.moments,
+                whatsapp: form.whatsapp.trim() || undefined,
+                phone: form.phone.trim() || undefined,
+                website: form.website.trim() || undefined,
+                instagram: form.instagram.trim() || undefined,
+                facebook: form.facebook.trim() || undefined,
+                email: form.email.trim() || undefined,
                 address: form.address.trim() || undefined,
                 mapUrl: form.mapUrl.trim() || undefined,
                 mapEmbedUrl: form.mapEmbedUrl.trim() || undefined,
@@ -617,6 +763,13 @@ export function AdminPublishedContentEditPage() {
                 difficulty: form.difficulty.trim(),
                 suitableForKids: form.suitableForKids.trim(),
                 meetingPoint: form.meetingPoint.trim() || undefined,
+                providerName: form.providerName.trim() || undefined,
+                whatsapp: form.whatsapp.trim() || undefined,
+                phone: form.phone.trim() || undefined,
+                website: form.website.trim() || undefined,
+                instagram: form.instagram.trim() || undefined,
+                facebook: form.facebook.trim() || undefined,
+                email: form.email.trim() || undefined,
                 address: form.address.trim() || undefined,
                 mapUrl: form.mapUrl.trim() || undefined,
                 mapEmbedUrl: form.mapEmbedUrl.trim() || undefined,
@@ -698,10 +851,15 @@ export function AdminPublishedContentEditPage() {
                     <FormField label={t('admin.dashboard.meta.startsAt')}>
                       <TextInput
                         type="datetime-local"
+                        className={getInputClassName('startsAt')}
                         value={form.startsAt}
+                        aria-invalid={Boolean(getFieldError('startsAt'))}
                         onChange={(value) => updateEventField('startsAt', value.target.value)}
                       />
                       {fieldErrors.startsAt ? <span className={styles.errorText}>{fieldErrors.startsAt}</span> : null}
+                    </FormField>
+                    <FormField label={t('admin.content.edit.fields.organizerName')}>
+                      <TextInput value={form.organizerName} onChange={(value) => updateEventField('organizerName', value.target.value)} />
                     </FormField>
                   </>
                 ) : null}
@@ -720,7 +878,10 @@ export function AdminPublishedContentEditPage() {
                       </select>
                     </FormField>
                     <FormField label={t('admin.dashboard.meta.moment')}>
-                      <div className={styles.checkboxRow}>
+                      <div
+                        className={getInputClassName('moments', styles.checkboxRow)}
+                        aria-invalid={Boolean(getFieldError('moments'))}
+                      >
                         {momentOptions().map((moment) => (
                           <label key={moment} className={styles.checkbox}>
                             <input
@@ -747,31 +908,82 @@ export function AdminPublishedContentEditPage() {
                 {form.type === 'tours' ? (
                   <>
                     <FormField label={t('admin.dashboard.meta.category')}>
-                      <TextInput value={form.category} onChange={(value) => updateTourField('category', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('category')}
+                        value={form.category}
+                        aria-invalid={Boolean(getFieldError('category'))}
+                        onChange={(value) => updateTourField('category', value.target.value)}
+                      />
+                      {fieldErrors.category ? <span className={styles.errorText}>{fieldErrors.category}</span> : null}
                     </FormField>
                     <FormField label={t('admin.dashboard.meta.duration')}>
-                      <TextInput value={form.durationHours} onChange={(value) => updateTourField('durationHours', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('durationHours')}
+                        value={form.durationHours}
+                        aria-invalid={Boolean(getFieldError('durationHours'))}
+                        onChange={(value) => updateTourField('durationHours', value.target.value)}
+                      />
+                      {fieldErrors.durationHours ? <span className={styles.errorText}>{fieldErrors.durationHours}</span> : null}
                     </FormField>
                     <FormField label={t('admin.dashboard.meta.priceFrom')}>
-                      <TextInput value={form.priceFrom} onChange={(value) => updateTourField('priceFrom', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('priceFrom')}
+                        value={form.priceFrom}
+                        aria-invalid={Boolean(getFieldError('priceFrom'))}
+                        onChange={(value) => updateTourField('priceFrom', value.target.value)}
+                      />
+                      {fieldErrors.priceFrom ? <span className={styles.errorText}>{fieldErrors.priceFrom}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.privateOrShared')}>
-                      <TextInput value={form.privateOrShared} onChange={(value) => updateTourField('privateOrShared', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('privateOrShared')}
+                        value={form.privateOrShared}
+                        aria-invalid={Boolean(getFieldError('privateOrShared'))}
+                        onChange={(value) => updateTourField('privateOrShared', value.target.value)}
+                      />
+                      {fieldErrors.privateOrShared ? <span className={styles.errorText}>{fieldErrors.privateOrShared}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.bestFor')}>
-                      <TextInput value={form.bestFor} onChange={(value) => updateTourField('bestFor', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('bestFor')}
+                        value={form.bestFor}
+                        aria-invalid={Boolean(getFieldError('bestFor'))}
+                        onChange={(value) => updateTourField('bestFor', value.target.value)}
+                      />
+                      {fieldErrors.bestFor ? <span className={styles.errorText}>{fieldErrors.bestFor}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.difficulty')}>
-                      <TextInput value={form.difficulty} onChange={(value) => updateTourField('difficulty', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('difficulty')}
+                        value={form.difficulty}
+                        aria-invalid={Boolean(getFieldError('difficulty'))}
+                        onChange={(value) => updateTourField('difficulty', value.target.value)}
+                      />
+                      {fieldErrors.difficulty ? <span className={styles.errorText}>{fieldErrors.difficulty}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.suitableForKids')}>
-                      <TextInput value={form.suitableForKids} onChange={(value) => updateTourField('suitableForKids', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('suitableForKids')}
+                        value={form.suitableForKids}
+                        aria-invalid={Boolean(getFieldError('suitableForKids'))}
+                        onChange={(value) => updateTourField('suitableForKids', value.target.value)}
+                      />
+                      {fieldErrors.suitableForKids ? <span className={styles.errorText}>{fieldErrors.suitableForKids}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.meetingPoint')}>
                       <TextInput value={form.meetingPoint} onChange={(value) => updateTourField('meetingPoint', value.target.value)} />
                     </FormField>
+                    <FormField label={t('admin.content.edit.fields.providerName')}>
+                      <TextInput value={form.providerName} onChange={(value) => updateTourField('providerName', value.target.value)} />
+                    </FormField>
                     <FormField label={t('admin.content.edit.fields.operatorName')}>
-                      <TextInput value={form.operatorName} onChange={(value) => updateTourField('operatorName', value.target.value)} />
+                      <TextInput
+                        className={getInputClassName('operatorName')}
+                        value={form.operatorName}
+                        aria-invalid={Boolean(getFieldError('operatorName'))}
+                        onChange={(value) => updateTourField('operatorName', value.target.value)}
+                      />
+                      {fieldErrors.operatorName ? <span className={styles.errorText}>{fieldErrors.operatorName}</span> : null}
                     </FormField>
                     <FormField label={t('admin.content.edit.fields.operatorWhatsapp')}>
                       <TextInput value={form.operatorWhatsapp} onChange={(value) => updateTourField('operatorWhatsapp', value.target.value)} />
@@ -787,6 +999,79 @@ export function AdminPublishedContentEditPage() {
                     </FormField>
                   </>
                 ) : null}
+
+                <FormField label={t('admin.content.edit.fields.whatsapp')}>
+                  <TextInput
+                    value={form.whatsapp}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('whatsapp', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('whatsapp', value.target.value)
+                          : updateTourField('whatsapp', value.target.value)
+                    }
+                  />
+                </FormField>
+                <FormField label={t('admin.content.edit.fields.phone')}>
+                  <TextInput
+                    value={form.phone}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('phone', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('phone', value.target.value)
+                          : updateTourField('phone', value.target.value)
+                    }
+                  />
+                </FormField>
+                <FormField label={t('admin.content.edit.fields.website')}>
+                  <TextInput
+                    value={form.website}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('website', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('website', value.target.value)
+                          : updateTourField('website', value.target.value)
+                    }
+                  />
+                </FormField>
+                <FormField label={t('admin.content.edit.fields.instagram')}>
+                  <TextInput
+                    value={form.instagram}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('instagram', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('instagram', value.target.value)
+                          : updateTourField('instagram', value.target.value)
+                    }
+                  />
+                </FormField>
+                <FormField label={t('admin.content.edit.fields.facebook')}>
+                  <TextInput
+                    value={form.facebook}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('facebook', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('facebook', value.target.value)
+                          : updateTourField('facebook', value.target.value)
+                    }
+                  />
+                </FormField>
+                <FormField label={t('admin.content.edit.fields.email')}>
+                  <TextInput
+                    value={form.email}
+                    onChange={(value) =>
+                      form.type === 'events'
+                        ? updateEventField('email', value.target.value)
+                        : form.type === 'restaurants'
+                          ? updateRestaurantField('email', value.target.value)
+                          : updateTourField('email', value.target.value)
+                    }
+                  />
+                </FormField>
 
                 <FormField label={t('admin.dashboard.meta.address')}>
                   <TextInput
@@ -832,42 +1117,102 @@ export function AdminPublishedContentEditPage() {
                   {form.type === 'events' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.title')}>
-                        <TextInput value={form.translations.en.title} onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, title: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.title')}
+                          value={form.translations.en.title}
+                          aria-invalid={Boolean(getFieldError('translations.en.title'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, title: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.title'] ? <span className={styles.errorText}>{fieldErrors['translations.en.title']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.dateLabel')}>
-                        <TextInput value={form.translations.en.dateLabel} onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, dateLabel: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.dateLabel')}
+                          value={form.translations.en.dateLabel}
+                          aria-invalid={Boolean(getFieldError('translations.en.dateLabel'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, dateLabel: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.dateLabel'] ? <span className={styles.errorText}>{fieldErrors['translations.en.dateLabel']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.venue')}>
-                        <TextInput value={form.translations.en.venue} onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, venue: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.venue')}
+                          value={form.translations.en.venue}
+                          aria-invalid={Boolean(getFieldError('translations.en.venue'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, venue: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.venue'] ? <span className={styles.errorText}>{fieldErrors['translations.en.venue']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.en.description} onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.en.description', styles.textarea)}
+                          value={form.translations.en.description}
+                          aria-invalid={Boolean(getFieldError('translations.en.description'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.description'] ? <span className={styles.errorText}>{fieldErrors['translations.en.description']}</span> : null}
                       </FormField>
                     </>
                   ) : null}
                   {form.type === 'restaurants' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.name')}>
-                        <TextInput value={form.translations.en.name} onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, name: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.name')}
+                          value={form.translations.en.name}
+                          aria-invalid={Boolean(getFieldError('translations.en.name'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, name: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.name'] ? <span className={styles.errorText}>{fieldErrors['translations.en.name']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.dashboard.meta.cuisine')}>
-                        <TextInput value={form.translations.en.cuisine} onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, cuisine: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.cuisine')}
+                          value={form.translations.en.cuisine}
+                          aria-invalid={Boolean(getFieldError('translations.en.cuisine'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, cuisine: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.cuisine'] ? <span className={styles.errorText}>{fieldErrors['translations.en.cuisine']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.vibe')}>
-                        <TextInput value={form.translations.en.vibe} onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, vibe: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.vibe')}
+                          value={form.translations.en.vibe}
+                          aria-invalid={Boolean(getFieldError('translations.en.vibe'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, vibe: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.vibe'] ? <span className={styles.errorText}>{fieldErrors['translations.en.vibe']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.en.description} onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.en.description', styles.textarea)}
+                          value={form.translations.en.description}
+                          aria-invalid={Boolean(getFieldError('translations.en.description'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.description'] ? <span className={styles.errorText}>{fieldErrors['translations.en.description']}</span> : null}
                       </FormField>
                     </>
                   ) : null}
                   {form.type === 'tours' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.name')}>
-                        <TextInput value={form.translations.en.name} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, name: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.en.name')}
+                          value={form.translations.en.name}
+                          aria-invalid={Boolean(getFieldError('translations.en.name'))}
+                          onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, name: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.name'] ? <span className={styles.errorText}>{fieldErrors['translations.en.name']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.en.description} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.en.description', styles.textarea)}
+                          value={form.translations.en.description}
+                          aria-invalid={Boolean(getFieldError('translations.en.description'))}
+                          onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.en.description'] ? <span className={styles.errorText}>{fieldErrors['translations.en.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
                         <textarea className={styles.textareaSmall} value={form.translations.en.included} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, included: value.target.value } })} />
@@ -887,42 +1232,102 @@ export function AdminPublishedContentEditPage() {
                   {form.type === 'events' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.title')}>
-                        <TextInput value={form.translations.es.title} onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, title: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.title')}
+                          value={form.translations.es.title}
+                          aria-invalid={Boolean(getFieldError('translations.es.title'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, title: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.title'] ? <span className={styles.errorText}>{fieldErrors['translations.es.title']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.dateLabel')}>
-                        <TextInput value={form.translations.es.dateLabel} onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, dateLabel: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.dateLabel')}
+                          value={form.translations.es.dateLabel}
+                          aria-invalid={Boolean(getFieldError('translations.es.dateLabel'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, dateLabel: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.dateLabel'] ? <span className={styles.errorText}>{fieldErrors['translations.es.dateLabel']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.venue')}>
-                        <TextInput value={form.translations.es.venue} onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, venue: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.venue')}
+                          value={form.translations.es.venue}
+                          aria-invalid={Boolean(getFieldError('translations.es.venue'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, venue: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.venue'] ? <span className={styles.errorText}>{fieldErrors['translations.es.venue']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.es.description} onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.es.description', styles.textarea)}
+                          value={form.translations.es.description}
+                          aria-invalid={Boolean(getFieldError('translations.es.description'))}
+                          onChange={(value) => updateEventField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.description'] ? <span className={styles.errorText}>{fieldErrors['translations.es.description']}</span> : null}
                       </FormField>
                     </>
                   ) : null}
                   {form.type === 'restaurants' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.name')}>
-                        <TextInput value={form.translations.es.name} onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, name: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.name')}
+                          value={form.translations.es.name}
+                          aria-invalid={Boolean(getFieldError('translations.es.name'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, name: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.name'] ? <span className={styles.errorText}>{fieldErrors['translations.es.name']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.dashboard.meta.cuisine')}>
-                        <TextInput value={form.translations.es.cuisine} onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, cuisine: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.cuisine')}
+                          value={form.translations.es.cuisine}
+                          aria-invalid={Boolean(getFieldError('translations.es.cuisine'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, cuisine: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.cuisine'] ? <span className={styles.errorText}>{fieldErrors['translations.es.cuisine']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.vibe')}>
-                        <TextInput value={form.translations.es.vibe} onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, vibe: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.vibe')}
+                          value={form.translations.es.vibe}
+                          aria-invalid={Boolean(getFieldError('translations.es.vibe'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, vibe: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.vibe'] ? <span className={styles.errorText}>{fieldErrors['translations.es.vibe']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.es.description} onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.es.description', styles.textarea)}
+                          value={form.translations.es.description}
+                          aria-invalid={Boolean(getFieldError('translations.es.description'))}
+                          onChange={(value) => updateRestaurantField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.description'] ? <span className={styles.errorText}>{fieldErrors['translations.es.description']}</span> : null}
                       </FormField>
                     </>
                   ) : null}
                   {form.type === 'tours' ? (
                     <>
                       <FormField label={t('admin.content.edit.fields.name')}>
-                        <TextInput value={form.translations.es.name} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, name: value.target.value } })} />
+                        <TextInput
+                          className={getInputClassName('translations.es.name')}
+                          value={form.translations.es.name}
+                          aria-invalid={Boolean(getFieldError('translations.es.name'))}
+                          onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, name: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.name'] ? <span className={styles.errorText}>{fieldErrors['translations.es.name']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.description')}>
-                        <textarea className={styles.textarea} value={form.translations.es.description} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })} />
+                        <textarea
+                          className={getInputClassName('translations.es.description', styles.textarea)}
+                          value={form.translations.es.description}
+                          aria-invalid={Boolean(getFieldError('translations.es.description'))}
+                          onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, description: value.target.value } })}
+                        />
+                        {fieldErrors['translations.es.description'] ? <span className={styles.errorText}>{fieldErrors['translations.es.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
                         <textarea className={styles.textareaSmall} value={form.translations.es.included} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, included: value.target.value } })} />
@@ -1001,10 +1406,19 @@ export function AdminPublishedContentEditPage() {
                 </ul>
               </ContentPanel>
 
-              {requestError ? <p className={styles.errorText}>{requestError}</p> : null}
+              {requestError ? (
+                <div className={styles.errorPanel} role="alert">
+                  <p className={styles.errorText}>{requestError}</p>
+                </div>
+              ) : null}
 
               <div className={styles.actions}>
-                <Button type="submit" variant="accent" disabled={mutation.isPending}>
+                <Button
+                  type="submit"
+                  variant="accent"
+                  className={styles.saveButton}
+                  disabled={mutation.isPending}
+                >
                   {mutation.isPending
                     ? t('admin.content.edit.saving')
                     : t('admin.content.edit.save')}

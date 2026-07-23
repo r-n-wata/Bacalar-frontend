@@ -10,9 +10,11 @@ import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
+import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
 import { useEventDetail } from '../hooks/useEventDetail'
@@ -85,6 +87,7 @@ export function EventDetailPage() {
 
   const moodLabel = t(getMoodTranslationKey(data.category))
   const showUpcoming = isUpcomingEvent(data)
+  const hasContactActions = buildContactActions(data.contact, language).length > 0
   const heroImage = resolveFeatureImage({
     kind: 'event',
     id: data.id,
@@ -94,7 +97,9 @@ export function EventDetailPage() {
   const heroImages = [heroImage]
 
   return (
-    <section className={pageStyles.page}>
+    <section
+      className={`${pageStyles.page} ${hasContactActions ? pageStyles.pageWithStickyContact : ''}`.trim()}
+    >
       <Seo
         title={`${data.title} | ${t('shell.nav.events')}`}
         description={data.description}
@@ -155,6 +160,13 @@ export function EventDetailPage() {
                 : t('events.detailNote.thisWeek')}
             </p>
             <p className={pageStyles.bodyCopy}>{data.description}</p>
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="events"
+              listingName={data.title}
+              currentLanguage={language}
+            />
             {data.mapEmbedUrl ? (
               <section className={pageStyles.detailSection}>
                 <EmbeddedMapSection

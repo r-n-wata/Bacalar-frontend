@@ -187,6 +187,13 @@ export type AdminPublishedEventDetail = AdminPublishedContentDetailBase & {
   type: 'events'
   category: 'music' | 'wellness' | 'food'
   startsAt: string
+  organizerName?: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string
@@ -203,6 +210,12 @@ export type AdminPublishedRestaurantDetail = AdminPublishedContentDetailBase & {
   type: 'restaurants'
   priceBand: '$' | '$$' | '$$$'
   moments: RestaurantMoment[]
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string
@@ -225,6 +238,13 @@ export type AdminPublishedTourDetail = AdminPublishedContentDetailBase & {
   difficulty: string
   suitableForKids: string
   meetingPoint?: string
+  providerName?: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string
@@ -255,6 +275,13 @@ export type AdminPublishedContentDetailResponse = {
 export type UpdateAdminPublishedEventRequest = {
   category: 'music' | 'wellness' | 'food'
   startsAt: string
+  organizerName?: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string
@@ -265,6 +292,12 @@ export type UpdateAdminPublishedEventRequest = {
 export type UpdateAdminPublishedRestaurantRequest = {
   priceBand: '$' | '$$' | '$$$'
   moments: RestaurantMoment[]
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string
@@ -281,6 +314,13 @@ export type UpdateAdminPublishedTourRequest = {
   difficulty: string
   suitableForKids: string
   meetingPoint?: string
+  providerName?: string
+  whatsapp?: string
+  phone?: string
+  website?: string
+  instagram?: string
+  facebook?: string
+  email?: string
   address?: string
   mapUrl?: string
   mapEmbedUrl?: string

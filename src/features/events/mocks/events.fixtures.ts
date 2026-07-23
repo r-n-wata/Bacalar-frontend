@@ -38,6 +38,11 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         mapUrl: 'https://maps.google.com/?q=Costera+12+Bacalar',
         mapEmbedUrl:
           'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14926.451857871018!2d-88.390!3d18.680!2m3!1f0!2f0!3f0',
+        contact: {
+          providerName: 'Casa Laguna Deck',
+          whatsapp: '+52 983 777 1212',
+          mapsUrl: 'https://maps.google.com/?q=Costera+12+Bacalar',
+        },
         description:
           'An easy, high-reward evening add-on with live music, open air, and a sunset window that works especially well after a lighter afternoon.',
         startsAt: '2026-05-29T19:00:00-05:00',
@@ -70,6 +75,9 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         venue: 'Centro Bacalar',
         description:
           'A social daytime option for travelers who want to spend one morning in town and fold local flavors into the trip without a fixed formal meal.',
+        contact: {
+          providerName: 'Centro Bacalar',
+        },
         startsAt: '2026-05-30T10:30:00-05:00',
         endsAt: '2026-05-30T13:00:00-05:00',
         route: '/events/event-market-brunch',
@@ -100,6 +108,10 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         venue: 'Isla Yoga Garden',
         description:
           'A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.',
+        contact: {
+          providerName: 'Isla Yoga Garden',
+          email: 'hello@islayoga.example.com',
+        },
         startsAt: '2026-05-31T08:00:00-05:00',
         endsAt: '2026-05-31T09:30:00-05:00',
         route: '/events/event-breathwork',
