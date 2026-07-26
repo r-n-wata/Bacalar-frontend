@@ -1,5 +1,6 @@
 import cardStyles from '../../../styles/FeatureCards.module.scss'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import featuredSectionStyles from '../../restaurants/components/FeaturedRestaurantsSection.module.scss'
 
 type ListingCardsPlaceholderProps = {
   count?: number
@@ -90,7 +91,7 @@ export function FeaturedSectionPlaceholder({
     <section
       aria-hidden="true"
       data-testid={testId}
-      style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}
+      className={featuredSectionStyles.section}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div
@@ -106,7 +107,45 @@ export function FeaturedSectionPlaceholder({
           style={{ width: '58%', height: '16px' }}
         />
       </div>
-      <ListingCardsPlaceholder count={cardCount} />
+      <div className={featuredSectionStyles.scroller}>
+        {Array.from({ length: cardCount }, (_, index) => (
+          <div
+            key={index}
+            className={`${featuredSectionStyles.cardWrap} sb-skeleton-panel`}
+          >
+            <div
+              className="sb-skeleton"
+              style={{ height: '180px', borderRadius: '24px 24px 18px 18px' }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                padding: '18px',
+                minHeight: '198px',
+              }}
+            >
+              <div
+                className="sb-skeleton sb-skeleton-line"
+                style={{ width: '34%', height: '14px' }}
+              />
+              <div
+                className="sb-skeleton sb-skeleton-line"
+                style={{ width: '72%', height: '22px' }}
+              />
+              <div
+                className="sb-skeleton sb-skeleton-line"
+                style={{ width: '88%', height: '16px' }}
+              />
+              <div
+                className="sb-skeleton sb-skeleton-line"
+                style={{ width: '48%', height: '16px', marginTop: 'auto' }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   )
 }

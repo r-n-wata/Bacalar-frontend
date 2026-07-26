@@ -2,10 +2,12 @@ import type { ResolvedFeatureImage } from '../lib/featureImage'
 
 type ResponsiveFeatureImageProps = {
   image: ResolvedFeatureImage
+  priority?: boolean
 }
 
 export function ResponsiveFeatureImage({
   image,
+  priority = false,
 }: ResponsiveFeatureImageProps) {
   const width = image.width ?? 1600
   const height = image.height ?? 900
@@ -34,7 +36,8 @@ export function ResponsiveFeatureImage({
         width={width}
         height={height}
         alt={image.alt}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
         style={{ aspectRatio }}
       />

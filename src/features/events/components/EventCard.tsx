@@ -10,9 +10,14 @@ import styles from './EventCard.module.scss'
 type EventCardProps = {
   event: Event
   featured?: boolean
+  priorityImage?: boolean
 }
 
-export function EventCard({ event, featured = false }: EventCardProps) {
+export function EventCard({
+  event,
+  featured = false,
+  priorityImage = false,
+}: EventCardProps) {
   const { t } = useTranslation()
   const panelClassName = featured
     ? `${styles.card} ${styles.featuredCard}`
@@ -28,7 +33,7 @@ export function EventCard({ event, featured = false }: EventCardProps) {
     <Link className={styles.cardLink} to={event.route}>
       <ContentPanel as="article" compact className={panelClassName}>
         <div className={styles.media}>
-          <ResponsiveFeatureImage image={image} />
+          <ResponsiveFeatureImage image={image} priority={priorityImage} />
         </div>
         <div className={styles.topRow}>
           {featured ? (

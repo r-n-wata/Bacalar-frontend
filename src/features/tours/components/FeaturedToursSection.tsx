@@ -39,6 +39,7 @@ export function FeaturedToursSection({ tours }: FeaturedToursSectionProps) {
                 image: tour.image,
                 fallbackAlt: tour.name,
               })}
+              priorityImage={tour.id === tours[0]?.id}
               placeholderLabel={tour.category}
             />
           </div>
