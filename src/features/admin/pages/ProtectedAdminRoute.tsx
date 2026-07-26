@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { ApiError } from '../../../services/http'
+import { AdminGatePlaceholder } from '../components/AdminPagePlaceholders'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { useAdminSession } from '../hooks/useAdminSession'
 
@@ -24,7 +24,7 @@ export function ProtectedAdminRoute() {
   }, [authError, logout])
 
   if (isLoading) {
-    return <LoadingSpinner label={t('admin.auth.checking')} />
+    return <AdminGatePlaceholder testIdPrefix="admin-auth-gate" />
   }
 
   if (!session) {
@@ -38,7 +38,7 @@ export function ProtectedAdminRoute() {
   }
 
   if (adminSessionQuery.isLoading) {
-    return <LoadingSpinner label={t('admin.auth.checking')} />
+    return <AdminGatePlaceholder testIdPrefix="admin-session-gate" />
   }
 
   if (authError && (authError.status === 401 || authError.status === 403)) {

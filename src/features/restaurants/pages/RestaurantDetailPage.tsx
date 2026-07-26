@@ -4,7 +4,6 @@ import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { DetailActions } from '../../../components/molecules/DetailActions'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
@@ -12,6 +11,7 @@ import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
@@ -25,13 +25,17 @@ export function RestaurantDetailPage() {
 
   if (isLoading) {
     return (
-      <>
+      <section className={pageStyles.page}>
         <Seo
           title={t('shell.nav.restaurants')}
           description={t('restaurants.loading')}
         />
-        <LoadingSpinner label={t('restaurants.loading')} />
-      </>
+        <DetailPagePlaceholder
+          eyebrow={t('restaurants.detailEyebrow')}
+          testIdPrefix="restaurant-detail"
+          showMetaGrid={false}
+        />
+      </section>
     )
   }
 

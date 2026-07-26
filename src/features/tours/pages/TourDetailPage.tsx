@@ -4,7 +4,6 @@ import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildTourStructuredData } from '../../../app/seo/structuredDataSchema'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { DetailActions } from '../../../components/molecules/DetailActions'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
@@ -14,6 +13,7 @@ import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSec
 import { ProviderCard } from '../../../components/molecules/ProviderCard'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
 import { useTourDetail } from '../hooks/useTourDetail'
@@ -30,13 +30,16 @@ export function TourDetailPage() {
 
   if (isLoading) {
     return (
-      <>
+      <section className={pageStyles.page}>
         <Seo
           title={t('shell.nav.tours')}
           description={t('tours.loading')}
         />
-        <LoadingSpinner label={t('tours.loading')} />
-      </>
+        <DetailPagePlaceholder
+          eyebrow={t('tours.detailEyebrow')}
+          testIdPrefix="tour-detail"
+        />
+      </section>
     )
   }
 

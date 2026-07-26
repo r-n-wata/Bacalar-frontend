@@ -424,12 +424,9 @@ describe('admin access flow', () => {
         name: 'Edit published listing',
       }),
     ).toBeVisible()
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading published listing...'),
-      ).not.toBeInTheDocument()
-    })
-    expect(screen.getByDisplayValue('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(
+      await screen.findByDisplayValue('Sunset Jazz by the Lagoon'),
+    ).toBeVisible()
     expect(screen.getByDisplayValue('Jazz al atardecer')).toBeVisible()
     expect(screen.getByDisplayValue('Casa Laguna Deck')).toBeVisible()
   })

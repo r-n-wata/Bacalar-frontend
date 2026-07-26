@@ -7,7 +7,6 @@ import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
@@ -16,6 +15,7 @@ import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { archiveAdminPublishedContent } from '../api/archiveAdminPublishedContent'
 import { updateAdminPublishedContentFeature } from '../api/updateAdminPublishedContentFeature'
+import { AdminCollectionPlaceholder } from '../components/AdminPagePlaceholders'
 import { useAdminPublishedContent } from '../hooks/useAdminPublishedContent'
 import type { AdminPublishedContentItem, AdminPublishedContentType } from '../types/admin'
 import styles from './AdminPublishedContentPage.module.scss'
@@ -181,7 +181,10 @@ export function AdminPublishedContentPage() {
         ) : null}
 
         {contentQuery.isLoading ? (
-          <LoadingSpinner label={t('admin.content.loading')} />
+          <AdminCollectionPlaceholder
+            cardCount={3}
+            testIdPrefix="admin-content"
+          />
         ) : null}
         {contentQuery.isError ? (
           <ContentPanel>
@@ -196,7 +199,7 @@ export function AdminPublishedContentPage() {
           </ContentPanel>
         ) : null}
 
-        {items.length > 0 ? (
+        {!contentQuery.isLoading && items.length > 0 ? (
           <div className={styles.cards}>
             {items.map((item) => {
               const isBusy =

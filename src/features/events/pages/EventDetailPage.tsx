@@ -4,7 +4,6 @@ import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { DetailActions } from '../../../components/molecules/DetailActions'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
@@ -14,6 +13,7 @@ import { ListingContactSection } from '../../../components/organisms/ListingCont
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import { ApiError } from '../../../services/http'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
+import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
@@ -27,13 +27,17 @@ export function EventDetailPage() {
 
   if (isLoading) {
     return (
-      <>
+      <section className={pageStyles.page}>
         <Seo
           title={t('shell.nav.events')}
           description={t('events.loading')}
         />
-        <LoadingSpinner label={t('events.loading')} />
-      </>
+        <DetailPagePlaceholder
+          eyebrow={t('events.detailEyebrow')}
+          testIdPrefix="event-detail"
+          showMetaGrid={false}
+        />
+      </section>
     )
   }
 
