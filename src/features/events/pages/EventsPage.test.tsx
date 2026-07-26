@@ -187,6 +187,15 @@ describe('EventsPage', () => {
     expect(
       screen.queryByText('Submit an event for review'),
     ).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('events-featured-placeholder'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('events-list-placeholder'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('events-submit-placeholder'),
+    ).not.toBeInTheDocument()
   })
 
   it('shows an error state with retry when the handler fails', async () => {
