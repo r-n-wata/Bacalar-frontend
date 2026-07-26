@@ -7,7 +7,15 @@ type HomeHeroProps = {
   eyebrow: string
   title: string
   description: string
-  image?: HomeImage
+  image?: HomeImage & {
+    avifSrcSet?: string
+    srcSet?: string
+    webpSrcSet?: string
+    sizes?: string
+    width?: number
+    height?: number
+    priority?: boolean
+  }
   ctaLabel: string
 }
 
@@ -31,7 +39,34 @@ export function HomeHero({
 
       <div className={styles.visualColumn}>
         {image ? (
-          <img className={styles.image} src={image.src} alt={image.alt} />
+          <picture>
+            {image.avifSrcSet ? (
+              <source
+                type="image/avif"
+                srcSet={image.avifSrcSet}
+                sizes={image.sizes}
+              />
+            ) : null}
+            {image.webpSrcSet ? (
+              <source
+                type="image/webp"
+                srcSet={image.webpSrcSet}
+                sizes={image.sizes}
+              />
+            ) : null}
+            <img
+              className={styles.image}
+              src={image.src}
+              srcSet={image.srcSet}
+              sizes={image.sizes}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading={image.priority ? 'eager' : 'lazy'}
+              fetchPriority={image.priority ? 'high' : 'auto'}
+              decoding={image.priority ? 'sync' : 'async'}
+            />
+          </picture>
         ) : null}
         <div className={styles.overlay} />
       </div>

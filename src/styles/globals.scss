@@ -76,3 +76,36 @@ input:focus-visible {
 #root {
   min-height: 100vh;
 }
+
+.sb-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 48, 58, 0.07) 0%,
+    rgba(16, 48, 58, 0.12) 50%,
+    rgba(16, 48, 58, 0.07) 100%
+  );
+  background-size: 220% 100%;
+  animation: sb-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.sb-skeleton-panel {
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.78);
+}
+
+.sb-skeleton-line {
+  border-radius: 999px;
+}
+
+@keyframes sb-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}

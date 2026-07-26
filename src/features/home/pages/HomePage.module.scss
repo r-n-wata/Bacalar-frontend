@@ -3,3 +3,107 @@
   flex-direction: column;
   gap: clamp(2rem, 4vw, 3.5rem);
 }
+
+.loadingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loadingHeaderRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+
+  @media (max-width: 920px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.loadingHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  > :nth-child(1) {
+    width: 112px;
+    height: 16px;
+  }
+
+  > :nth-child(2) {
+    width: min(380px, 78%);
+    height: 28px;
+  }
+
+  > :nth-child(3) {
+    width: min(560px, 92%);
+    height: 16px;
+  }
+}
+
+.loadingLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-subtle);
+  color: var(--text-strong);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.loadingGrid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(264px, 24vw, 320px);
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 920px) {
+    grid-auto-columns: clamp(248px, 76vw, 320px);
+  }
+}
+
+.loadingMedia {
+  aspect-ratio: 1 / 1;
+  border-radius: 26px 26px 0 0;
+}
+
+.loadingBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.loadingKicker {
+  width: 42%;
+  height: 14px;
+}
+
+.loadingTitle {
+  width: 72%;
+  height: 24px;
+}
+
+.loadingCopy {
+  width: 84%;
+  height: 16px;
+}
+
+.loadingMeta {
+  width: 48%;
+  height: 16px;
+  margin-top: 12px;
+}
