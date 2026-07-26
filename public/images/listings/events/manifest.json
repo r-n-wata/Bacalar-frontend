@@ -1,0 +1,22 @@
+[
+  {
+    "base": "community",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "base": "community2",
+    "width": 1600,
+    "height": 2400
+  },
+  {
+    "base": "music",
+    "width": 1600,
+    "height": 1068
+  },
+  {
+    "base": "music2",
+    "width": 1600,
+    "height": 1280
+  }
+]

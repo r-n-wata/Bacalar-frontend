@@ -1,24 +1,18 @@
-import eventCommunityPlaceholder from '../../../assets/events-placeholder/community.jpg'
-import eventCommunityTwoPlaceholder from '../../../assets/events-placeholder/community2.jpg'
-import eventMusicPlaceholder from '../../../assets/events-placeholder/music.jpg'
-import eventMusicTwoPlaceholder from '../../../assets/events-placeholder/music2.jpg'
-import restaurantPlaceholderOne from '../../../assets/restaurant-placeholder/p1.jpg'
-import restaurantPlaceholderTwo from '../../../assets/restaurant-placeholder/p2.jpg'
-import restaurantPlaceholderThree from '../../../assets/restaurant-placeholder/p3.jpg'
-import restaurantPlaceholderFour from '../../../assets/restaurant-placeholder/p4.jpg'
-import restaurantPlaceholderFive from '../../../assets/restaurant-placeholder/p5.jpg'
-import restaurantPlaceholderSix from '../../../assets/restaurant-placeholder/p6.jpg'
-import tourPlaceholderOne from '../../../assets/tours-placeholder/p1.jpg'
-import tourPlaceholderTwo from '../../../assets/tours-placeholder/p2.jpg'
-import tourPlaceholderThree from '../../../assets/tours-placeholder/p3.jpg'
-import tourPlaceholderFour from '../../../assets/tours-placeholder/p4.jpg'
-import tourPlaceholderFive from '../../../assets/tours-placeholder/p5.jpg'
-import tourPlaceholderSix from '../../../assets/tours-placeholder/p6.jpg'
-import tourPlaceholderSeven from '../../../assets/tours-placeholder/p7.jpg'
-
 type FeatureImage = {
   src: string
   alt: string
+  width?: number
+  height?: number
+}
+
+export type ResolvedFeatureImage = FeatureImage & {
+  srcSet?: string
+  webpSrcSet?: string
+  avifSrcSet?: string
+  sizes?: string
+  width?: number
+  height?: number
+  aspectRatio?: string
 }
 
 type FeatureImageKind = 'event' | 'restaurant' | 'tour'
@@ -30,30 +24,100 @@ type ResolveFeatureImageOptions = {
   fallbackAlt: string
 }
 
-const placeholderImagesByKind: Record<FeatureImageKind, string[]> = {
+type PlaceholderAsset = {
+  base: string
+  width: number
+  height: number
+}
+
+type DefaultImageDimensions = {
+  width: number
+  height: number
+}
+
+const LISTING_CARD_SIZES =
+  '(max-width: 767px) calc(100vw - 3rem), (max-width: 1199px) calc(50vw - 3rem), 360px'
+
+const placeholderImagesByKind: Record<FeatureImageKind, PlaceholderAsset[]> = {
   event: [
-    eventCommunityPlaceholder,
-    eventCommunityTwoPlaceholder,
-    eventMusicPlaceholder,
-    eventMusicTwoPlaceholder,
+    { base: 'community', width: 1600, height: 1120 },
+    { base: 'community2', width: 1600, height: 1067 },
+    { base: 'music', width: 1600, height: 1067 },
+    { base: 'music2', width: 1600, height: 1067 },
   ],
   restaurant: [
-    restaurantPlaceholderOne,
-    restaurantPlaceholderTwo,
-    restaurantPlaceholderThree,
-    restaurantPlaceholderFour,
-    restaurantPlaceholderFive,
-    restaurantPlaceholderSix,
+    { base: 'p1', width: 1600, height: 1067 },
+    { base: 'p2', width: 1600, height: 900 },
+    { base: 'p3', width: 1600, height: 1200 },
+    { base: 'p4', width: 1600, height: 900 },
+    { base: 'p5', width: 1600, height: 1067 },
+    { base: 'p6', width: 1600, height: 1067 },
   ],
   tour: [
-    tourPlaceholderOne,
-    tourPlaceholderTwo,
-    tourPlaceholderThree,
-    tourPlaceholderFour,
-    tourPlaceholderFive,
-    tourPlaceholderSix,
-    tourPlaceholderSeven,
+    { base: 'p1', width: 1600, height: 1234 },
+    { base: 'p2', width: 1600, height: 900 },
+    { base: 'p3', width: 1600, height: 2402 },
+    { base: 'p4', width: 1600, height: 1200 },
+    { base: 'p5', width: 1600, height: 2324 },
+    { base: 'p6', width: 1600, height: 1067 },
+    { base: 'p7', width: 1600, height: 1000 },
   ],
+}
+
+const defaultImageDimensionsByKind: Record<
+  FeatureImageKind,
+  DefaultImageDimensions
+> = {
+  event: {
+    width: 1600,
+    height: 1067,
+  },
+  restaurant: {
+    width: 1600,
+    height: 1067,
+  },
+  tour: {
+    width: 1600,
+    height: 1000,
+  },
+}
+
+function toAspectRatio(width: number, height: number) {
+  return `${width} / ${height}`
+}
+
+function buildListingPlaceholderPath(
+  kind: FeatureImageKind,
+  base: string,
+  width: number,
+  extension: 'avif' | 'jpg' | 'webp',
+) {
+  const folderByKind: Record<FeatureImageKind, string> = {
+    event: 'events',
+    restaurant: 'restaurants',
+    tour: 'tours',
+  }
+
+  return `/images/listings/${folderByKind[kind]}/${base}-${width}.${extension}`
+}
+
+function buildPlaceholderImage(kind: FeatureImageKind, asset: PlaceholderAsset) {
+  return {
+    src: buildListingPlaceholderPath(kind, asset.base, 800, 'jpg'),
+    srcSet: [400, 800]
+      .map((width) => `${buildListingPlaceholderPath(kind, asset.base, width, 'jpg')} ${width}w`)
+      .join(', '),
+    webpSrcSet: [400, 800]
+      .map((width) => `${buildListingPlaceholderPath(kind, asset.base, width, 'webp')} ${width}w`)
+      .join(', '),
+    avifSrcSet: [400, 800]
+      .map((width) => `${buildListingPlaceholderPath(kind, asset.base, width, 'avif')} ${width}w`)
+      .join(', '),
+    sizes: LISTING_CARD_SIZES,
+    width: asset.width,
+    height: asset.height,
+    aspectRatio: toAspectRatio(asset.width, asset.height),
+  }
 }
 
 function getStableIndex(seed: string, poolSize: number) {
@@ -70,12 +134,13 @@ export function getFeaturePlaceholderImage({
   kind,
   id,
   fallbackAlt,
-}: Omit<ResolveFeatureImageOptions, 'image'>): FeatureImage {
+}: Omit<ResolveFeatureImageOptions, 'image'>): ResolvedFeatureImage {
   const placeholders = placeholderImagesByKind[kind]
   const index = getStableIndex(id, placeholders.length)
+  const placeholder = buildPlaceholderImage(kind, placeholders[index])
 
   return {
-    src: placeholders[index],
+    ...placeholder,
     alt: fallbackAlt,
   }
 }
@@ -85,9 +150,18 @@ export function resolveFeatureImage({
   id,
   image,
   fallbackAlt,
-}: ResolveFeatureImageOptions): FeatureImage {
+}: ResolveFeatureImageOptions): ResolvedFeatureImage {
   if (image?.src) {
-    return image
+    const defaultDimensions = defaultImageDimensionsByKind[kind]
+    const width = image.width ?? defaultDimensions.width
+    const height = image.height ?? defaultDimensions.height
+
+    return {
+      ...image,
+      width,
+      height,
+      aspectRatio: toAspectRatio(width, height),
+    }
   }
 
   return getFeaturePlaceholderImage({

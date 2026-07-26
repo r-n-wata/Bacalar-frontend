@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { server } from '../../../test/msw/server'
 import { renderWithProviders } from '../../../test/renderWithProviders'
+import { defaultMockDelayMs } from '../../../test/msw/core'
 import {
   emptyToursCategoryHandler,
   toursErrorHandler,
@@ -90,6 +91,21 @@ describe('ToursPage', () => {
       'href',
       '/tours/submit',
     )
+  })
+
+  it('keeps intro, featured, and list placeholders mounted during initial loading', async () => {
+    setViewportPosition()
+    await renderToursRoute()
+
+    expect(screen.getByTestId('tours-page-intro-placeholder')).toBeVisible()
+    expect(screen.getByTestId('tours-featured-placeholder')).toBeVisible()
+    expect(screen.getByTestId('tours-list-placeholder')).toBeVisible()
+
+    expect(
+      await screen.findByText('Discover the best tours in Bacalar', {}, {
+        timeout: defaultMockDelayMs * 4,
+      }),
+    ).toBeVisible()
   })
 
   it('renders localized tours, paginates, and refetches when the language changes', async () => {

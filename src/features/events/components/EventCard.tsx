@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { ResponsiveFeatureImage } from '../../shared/components/ResponsiveFeatureImage'
 import type { Event } from '../types/event'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getMoodTranslationKey } from '../lib/presentation'
@@ -27,7 +28,7 @@ export function EventCard({ event, featured = false }: EventCardProps) {
     <Link className={styles.cardLink} to={event.route}>
       <ContentPanel as="article" compact className={panelClassName}>
         <div className={styles.media}>
-          <img src={image.src} alt={image.alt} />
+          <ResponsiveFeatureImage image={image} />
         </div>
         <div className={styles.topRow}>
           {featured ? (

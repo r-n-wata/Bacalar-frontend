@@ -1,0 +1,32 @@
+[
+  {
+    "base": "p1",
+    "width": 1600,
+    "height": 1066
+  },
+  {
+    "base": "p2",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "base": "p3",
+    "width": 1600,
+    "height": 1201
+  },
+  {
+    "base": "p4",
+    "width": 1600,
+    "height": 1065
+  },
+  {
+    "base": "p5",
+    "width": 1600,
+    "height": 2000
+  },
+  {
+    "base": "p6",
+    "width": 1600,
+    "height": 1200
+  }
+]

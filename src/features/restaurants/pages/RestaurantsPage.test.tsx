@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { server } from '../../../test/msw/server'
 import { renderWithProviders } from '../../../test/renderWithProviders'
+import { defaultMockDelayMs } from '../../../test/msw/core'
 import {
   emptyRestaurantsCategoryHandler,
   restaurantsErrorHandler,
@@ -83,6 +84,23 @@ describe('RestaurantsPage', () => {
     expect(
       screen.getByRole('link', { name: 'Submit a restaurant' }),
     ).toHaveAttribute('href', '/restaurants/submit')
+  })
+
+  it('keeps intro, featured, and list placeholders mounted during initial loading', async () => {
+    setViewportPosition()
+    await renderRestaurantsRoute()
+
+    expect(
+      screen.getByTestId('restaurants-page-intro-placeholder'),
+    ).toBeVisible()
+    expect(screen.getByTestId('restaurants-featured-placeholder')).toBeVisible()
+    expect(screen.getByTestId('restaurants-list-placeholder')).toBeVisible()
+
+    expect(
+      await screen.findByText('Where to eat in Bacalar', {}, {
+        timeout: defaultMockDelayMs * 4,
+      }),
+    ).toBeVisible()
   })
 
   it('renders localized restaurants, paginates, and refetches when the language changes', async () => {
