@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { Button } from '../../../components/atoms/Button'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
@@ -14,6 +13,7 @@ import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { moderateSubmission } from '../api/moderateSubmission'
 import { AdminSubmissionCard } from '../components/AdminSubmissionCard'
+import { AdminCollectionPlaceholder } from '../components/AdminPagePlaceholders'
 import { useAdminSubmissions } from '../hooks/useAdminSubmissions'
 import type {
   AdminSubmissionFilter,
@@ -141,7 +141,10 @@ export function AdminDashboardPage() {
         </ContentPanel>
 
         {submissionsQuery.isLoading ? (
-          <LoadingSpinner label={t('admin.dashboard.loading')} />
+          <AdminCollectionPlaceholder
+            cardCount={3}
+            testIdPrefix="admin-dashboard"
+          />
         ) : null}
         {submissionsQuery.isError ? (
           <ContentPanel>
@@ -157,7 +160,7 @@ export function AdminDashboardPage() {
           </ContentPanel>
         ) : null}
 
-        {items.length > 0 ? (
+        {!submissionsQuery.isLoading && items.length > 0 ? (
           <div className={styles.cards}>
             {items.map((submission) => {
               const currentMutation = moderationMutation.variables

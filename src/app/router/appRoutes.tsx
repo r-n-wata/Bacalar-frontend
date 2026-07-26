@@ -57,11 +57,11 @@ export const appRoutes = [
       },
       {
         path: 'events/:id',
-        element: withSuspense(<EventDetailPage />),
+        element: withoutSuspense(<EventDetailPage />),
       },
       {
         path: 'admin/login',
-        element: withSuspense(<AdminLoginPage />),
+        element: withoutSuspense(<AdminLoginPage />),
       },
       {
         path: 'admin',
@@ -69,19 +69,19 @@ export const appRoutes = [
         children: [
           {
             path: 'submissions',
-            element: withSuspense(<AdminDashboardPage />),
+            element: withoutSuspense(<AdminDashboardPage />),
           },
           {
             path: 'content',
-            element: withSuspense(<AdminPublishedContentPage />),
+            element: withoutSuspense(<AdminPublishedContentPage />),
           },
           {
             path: 'content/:type/:id/edit',
-            element: withSuspense(<AdminPublishedContentEditPage />),
+            element: withoutSuspense(<AdminPublishedContentEditPage />),
           },
           {
             path: 'submissions/:type/:id',
-            element: withSuspense(<AdminSubmissionDetailPage />),
+            element: withoutSuspense(<AdminSubmissionDetailPage />),
           },
         ],
       },
@@ -95,7 +95,7 @@ export const appRoutes = [
       },
       {
         path: 'restaurants/:id',
-        element: withSuspense(<RestaurantDetailPage />),
+        element: withoutSuspense(<RestaurantDetailPage />),
       },
       {
         path: 'tours',
@@ -107,7 +107,7 @@ export const appRoutes = [
       },
       {
         path: 'tours/:id',
-        element: withSuspense(<TourDetailPage />),
+        element: withoutSuspense(<TourDetailPage />),
       },
       {
         path: '*',

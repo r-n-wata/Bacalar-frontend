@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
@@ -11,6 +10,7 @@ import posthog from '../../../services/posthog'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { moderateSubmission } from '../api/moderateSubmission'
+import { AdminDetailPlaceholder } from '../components/AdminPagePlaceholders'
 import { useAdminSubmissionDetail } from '../hooks/useAdminSubmissionDetail'
 import type { AdminSubmissionDetail, AdminSubmissionType } from '../types/admin'
 import styles from './AdminSubmissionDetailPage.module.scss'
@@ -209,7 +209,7 @@ export function AdminSubmissionDetailPage() {
         </div>
 
         {detailQuery.isLoading ? (
-          <LoadingSpinner label={t('admin.detail.loading')} />
+          <AdminDetailPlaceholder testIdPrefix="admin-submission-detail" />
         ) : null}
         {detailQuery.isError ? (
           <ContentPanel>
@@ -219,7 +219,7 @@ export function AdminSubmissionDetailPage() {
           </ContentPanel>
         ) : null}
 
-        {submission ? (
+        {!detailQuery.isLoading && submission ? (
           <>
             <ContentPanel className={styles.summaryPanel}>
               <div className={styles.headerRow}>

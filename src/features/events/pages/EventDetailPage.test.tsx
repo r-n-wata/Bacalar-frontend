@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
+import { defaultMockDelayMs } from '../../../test/msw/core'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { EventDetailPage } from './EventDetailPage'
 import { server } from '../../../test/msw/server'
@@ -33,6 +34,20 @@ function renderDetailRoute(path = '/events/event-breathwork') {
 }
 
 describe('EventDetailPage', () => {
+  it('keeps the detail scaffold mounted during initial loading', async () => {
+    await renderDetailRoute('/events/event-sunset-jazz')
+
+    expect(screen.getByTestId('event-detail-hero-placeholder')).toBeVisible()
+    expect(screen.getByTestId('event-detail-intro-placeholder')).toBeVisible()
+    expect(screen.getByTestId('event-detail-layout-placeholder')).toBeVisible()
+
+    expect(
+      await screen.findByText('Sunset Jazz by the Lagoon', {}, {
+        timeout: defaultMockDelayMs * 4,
+      }),
+    ).toBeVisible()
+  })
+
   it('renders the embedded map section when map data exists', async () => {
     await renderDetailRoute('/events/event-sunset-jazz')
 

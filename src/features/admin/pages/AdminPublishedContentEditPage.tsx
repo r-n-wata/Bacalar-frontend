@@ -7,7 +7,6 @@ import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { TextInput } from '../../../components/atoms/TextInput'
 import { FormField } from '../../../components/molecules/FormField'
 import { PageIntro } from '../../../components/molecules/PageIntro'
@@ -29,6 +28,7 @@ import { prepareRestaurantSubmissionUpload } from '../../restaurants/api/prepare
 import { prepareTourSubmissionUpload } from '../../tours/api/prepareTourSubmissionUpload'
 import { updateAdminPublishedContent } from '../api/updateAdminPublishedContent'
 import { useAdminAuth } from '../auth/useAdminAuth'
+import { AdminEditPlaceholder } from '../components/AdminPagePlaceholders'
 import { useAdminPublishedContentDetail } from '../hooks/useAdminPublishedContentDetail'
 import type {
   AdminPublishedContentDetail,
@@ -826,7 +826,9 @@ export function AdminPublishedContentEditPage() {
           </Link>
         </ContentPanel>
 
-        {query.isLoading ? <LoadingSpinner label={t('admin.content.edit.loading')} /> : null}
+        {query.isLoading ? (
+          <AdminEditPlaceholder testIdPrefix="admin-content-edit" />
+        ) : null}
         {query.isError ? (
           <ContentPanel>
             <p role="alert" className={styles.errorText}>

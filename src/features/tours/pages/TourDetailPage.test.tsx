@@ -5,7 +5,7 @@ import { AppShell } from '../../../components/templates/AppShell'
 import { renderWithProviders } from '../../../test/renderWithProviders'
 import { server } from '../../../test/msw/server'
 import { http } from 'msw'
-import { jsonSuccess } from '../../../test/msw/core'
+import { defaultMockDelayMs, jsonSuccess } from '../../../test/msw/core'
 import { TourDetailPage } from './TourDetailPage'
 import { tourDetailApiPath } from '../api/getTourDetail'
 
@@ -32,6 +32,20 @@ function renderDetailRoute(path = '/tours/tour-sailing') {
 }
 
 describe('TourDetailPage', () => {
+  it('keeps the detail scaffold mounted during initial loading', async () => {
+    await renderDetailRoute()
+
+    expect(screen.getByTestId('tour-detail-hero-placeholder')).toBeVisible()
+    expect(screen.getByTestId('tour-detail-intro-placeholder')).toBeVisible()
+    expect(screen.getByTestId('tour-detail-layout-placeholder')).toBeVisible()
+
+    expect(
+      await screen.findByText('Private Sailing at Sunrise', {}, {
+        timeout: defaultMockDelayMs * 4,
+      }),
+    ).toBeVisible()
+  })
+
   it('renders the editorial intro and shared contact actions on the detail page', async () => {
     await renderDetailRoute()
 
