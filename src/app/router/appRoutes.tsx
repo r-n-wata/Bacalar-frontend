@@ -1,21 +1,79 @@
+import { lazy, Suspense, type ReactNode } from 'react'
 import { AppShell } from '../../components/templates/AppShell'
-import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage'
-import { AdminLoginPage } from '../../features/admin/pages/AdminLoginPage'
-import { AdminPublishedContentEditPage } from '../../features/admin/pages/AdminPublishedContentEditPage'
-import { AdminPublishedContentPage } from '../../features/admin/pages/AdminPublishedContentPage'
-import { AdminSubmissionDetailPage } from '../../features/admin/pages/AdminSubmissionDetailPage'
+import { LoadingSpinner } from '../../components/atoms/LoadingSpinner'
 import { ProtectedAdminRoute } from '../../features/admin/pages/ProtectedAdminRoute'
-import { EventDetailPage } from '../../features/events/pages/EventDetailPage'
-import { EventsPage } from '../../features/events/pages/EventsPage'
-import { EventSubmissionPage } from '../../features/events/pages/EventSubmissionPage'
-import { HomePage } from '../../features/home/pages/HomePage'
-import { RestaurantDetailPage } from '../../features/restaurants/pages/RestaurantDetailPage'
-import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
-import { RestaurantSubmissionPage } from '../../features/restaurants/pages/RestaurantSubmissionPage'
-import { TourDetailPage } from '../../features/tours/pages/TourDetailPage'
-import { ToursPage } from '../../features/tours/pages/ToursPage'
-import { TourSubmissionPage } from '../../features/tours/pages/TourSubmissionPage'
 import { PublicRouteStatusPage } from './PublicRouteStatusPage'
+
+const HomePage = lazy(async () => ({
+  default: (await import('../../features/home/pages/HomePage')).HomePage,
+}))
+const EventsPage = lazy(async () => ({
+  default: (await import('../../features/events/pages/EventsPage')).EventsPage,
+}))
+const EventSubmissionPage = lazy(async () => ({
+  default: (await import('../../features/events/pages/EventSubmissionPage'))
+    .EventSubmissionPage,
+}))
+const EventDetailPage = lazy(async () => ({
+  default: (await import('../../features/events/pages/EventDetailPage'))
+    .EventDetailPage,
+}))
+const AdminLoginPage = lazy(async () => ({
+  default: (await import('../../features/admin/pages/AdminLoginPage'))
+    .AdminLoginPage,
+}))
+const AdminDashboardPage = lazy(async () => ({
+  default: (await import('../../features/admin/pages/AdminDashboardPage'))
+    .AdminDashboardPage,
+}))
+const AdminPublishedContentPage = lazy(async () => ({
+  default: (
+    await import('../../features/admin/pages/AdminPublishedContentPage')
+  ).AdminPublishedContentPage,
+}))
+const AdminPublishedContentEditPage = lazy(async () => ({
+  default: (
+    await import('../../features/admin/pages/AdminPublishedContentEditPage')
+  ).AdminPublishedContentEditPage,
+}))
+const AdminSubmissionDetailPage = lazy(async () => ({
+  default: (
+    await import('../../features/admin/pages/AdminSubmissionDetailPage')
+  ).AdminSubmissionDetailPage,
+}))
+const RestaurantsPage = lazy(async () => ({
+  default: (await import('../../features/restaurants/pages/RestaurantsPage'))
+    .RestaurantsPage,
+}))
+const RestaurantSubmissionPage = lazy(async () => ({
+  default: (
+    await import('../../features/restaurants/pages/RestaurantSubmissionPage')
+  ).RestaurantSubmissionPage,
+}))
+const RestaurantDetailPage = lazy(async () => ({
+  default: (
+    await import('../../features/restaurants/pages/RestaurantDetailPage')
+  ).RestaurantDetailPage,
+}))
+const ToursPage = lazy(async () => ({
+  default: (await import('../../features/tours/pages/ToursPage')).ToursPage,
+}))
+const TourSubmissionPage = lazy(async () => ({
+  default: (await import('../../features/tours/pages/TourSubmissionPage'))
+    .TourSubmissionPage,
+}))
+const TourDetailPage = lazy(async () => ({
+  default: (await import('../../features/tours/pages/TourDetailPage'))
+    .TourDetailPage,
+}))
+
+function withSuspense(element: ReactNode) {
+  return (
+    <Suspense fallback={<LoadingSpinner label="Loading..." />}>
+      {element}
+    </Suspense>
+  )
+}
 
 export const appRoutes = [
   {
@@ -29,23 +87,23 @@ export const appRoutes = [
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: withSuspense(<HomePage />),
       },
       {
         path: 'events',
-        element: <EventsPage />,
+        element: withSuspense(<EventsPage />),
       },
       {
         path: 'events/submit',
-        element: <EventSubmissionPage />,
+        element: withSuspense(<EventSubmissionPage />),
       },
       {
         path: 'events/:id',
-        element: <EventDetailPage />,
+        element: withSuspense(<EventDetailPage />),
       },
       {
         path: 'admin/login',
-        element: <AdminLoginPage />,
+        element: withSuspense(<AdminLoginPage />),
       },
       {
         path: 'admin',
@@ -53,45 +111,45 @@ export const appRoutes = [
         children: [
           {
             path: 'submissions',
-            element: <AdminDashboardPage />,
+            element: withSuspense(<AdminDashboardPage />),
           },
           {
             path: 'content',
-            element: <AdminPublishedContentPage />,
+            element: withSuspense(<AdminPublishedContentPage />),
           },
           {
             path: 'content/:type/:id/edit',
-            element: <AdminPublishedContentEditPage />,
+            element: withSuspense(<AdminPublishedContentEditPage />),
           },
           {
             path: 'submissions/:type/:id',
-            element: <AdminSubmissionDetailPage />,
+            element: withSuspense(<AdminSubmissionDetailPage />),
           },
         ],
       },
       {
         path: 'restaurants',
-        element: <RestaurantsPage />,
+        element: withSuspense(<RestaurantsPage />),
       },
       {
         path: 'restaurants/submit',
-        element: <RestaurantSubmissionPage />,
+        element: withSuspense(<RestaurantSubmissionPage />),
       },
       {
         path: 'restaurants/:id',
-        element: <RestaurantDetailPage />,
+        element: withSuspense(<RestaurantDetailPage />),
       },
       {
         path: 'tours',
-        element: <ToursPage />,
+        element: withSuspense(<ToursPage />),
       },
       {
         path: 'tours/submit',
-        element: <TourSubmissionPage />,
+        element: withSuspense(<TourSubmissionPage />),
       },
       {
         path: 'tours/:id',
-        element: <TourDetailPage />,
+        element: withSuspense(<TourDetailPage />),
       },
       {
         path: '*',

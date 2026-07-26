@@ -35,6 +35,21 @@
     />
     <meta name="twitter:image" content="https://suenobacalar.com/social-preview.png" />
     <title>A calmer way to experience Bacalar | Sueno Bacalar</title>
+    <script>
+      if (window.location.pathname === '/') {
+        const preload = document.createElement('link')
+        preload.rel = 'preload'
+        preload.as = 'image'
+        preload.href = '/images/home/hero-home-1600.webp'
+        preload.type = 'image/webp'
+        preload.setAttribute(
+          'imagesrcset',
+          '/images/home/hero-home-960.webp 960w, /images/home/hero-home-1600.webp 1600w',
+        )
+        preload.setAttribute('imagesizes', '(max-width: 920px) 100vw, 42vw')
+        document.head.append(preload)
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

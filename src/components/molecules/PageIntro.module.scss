@@ -2,6 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-block-size: 188px;
+
+  @media (max-width: 920px) {
+    min-block-size: 168px;
+  }
 }
 
 .title {

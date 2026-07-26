@@ -4,16 +4,48 @@ import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDataSchema'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import cardStyles from '../../../styles/FeatureCards.module.scss'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { FeaturedToursSection } from '../components/FeaturedToursSection'
 import { TourCategoryNav } from '../components/TourCategoryNav'
 import { TourList } from '../components/TourList'
 import { TourSubmitCta } from '../components/TourSubmitCta'
 import { useTours } from '../hooks/useTours'
-import type { TourCategoryFilter } from '../types/tour'
+import type { TourCategory, TourCategoryFilter } from '../types/tour'
+
+const FALLBACK_TOUR_CATEGORIES: TourCategory[] = ['premium', 'group', 'adventure']
+
+function PageIntroPlaceholder() {
+  return (
+    <div aria-hidden="true" style={{ display: 'flex', flexDirection: 'column', gap: '12px', minBlockSize: '188px' }}>
+      <div className="sb-skeleton sb-skeleton-line" style={{ width: '120px', height: '16px' }} />
+      <div className="sb-skeleton sb-skeleton-line" style={{ width: '68%', height: '52px' }} />
+      <div className="sb-skeleton sb-skeleton-line" style={{ width: '84%', height: '18px' }} />
+    </div>
+  )
+}
+
+function ToursListPlaceholder() {
+  return (
+    <section aria-hidden="true">
+      <div className={cardStyles.grid}>
+        {Array.from({ length: 6 }, (_, index) => (
+          <div key={index} className="sb-skeleton-panel">
+            <div className="sb-skeleton" style={{ aspectRatio: '16 / 10', borderRadius: '24px 24px 18px 18px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '18px' }}>
+              <div className="sb-skeleton sb-skeleton-line" style={{ width: '34%', height: '14px' }} />
+              <div className="sb-skeleton sb-skeleton-line" style={{ width: '72%', height: '22px' }} />
+              <div className="sb-skeleton sb-skeleton-line" style={{ width: '88%', height: '16px' }} />
+              <div className="sb-skeleton sb-skeleton-line" style={{ width: '48%', height: '16px' }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
 
 export function ToursPage() {
   const { t, i18n } = useTranslation()
@@ -76,17 +108,31 @@ export function ToursPage() {
           title={firstPage.title}
           description={firstPage.description}
         />
+      ) : (
+        <PageIntroPlaceholder />
+      )}
+
+      {!isError ? (
+        featuredItems.length > 0 ? (
+          <FeaturedToursSection tours={featuredItems} />
+        ) : (
+          <>
+            <div>
+              <p>{t('tours.featured.eyebrow')}</p>
+              <h2>{t('tours.featured.title')}</h2>
+              <p>{t('tours.featured.description')}</p>
+            </div>
+            <ToursListPlaceholder />
+          </>
+        )
       ) : null}
 
-      {!isLoading && !isError ? <FeaturedToursSection tours={featuredItems} /> : null}
-
       <TourCategoryNav
-        categories={categories}
+        categories={categories.length > 0 ? categories : FALLBACK_TOUR_CATEGORIES}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
 
-      {isLoading ? <LoadingSpinner label={t('tours.loading')} /> : null}
       {isError ? <p role="alert">{t('tours.error')}</p> : null}
       {tours.length > 0 && !isLoading && !isError ? (
         <TourList
@@ -95,6 +141,8 @@ export function ToursPage() {
           isFetchingMore={isFetchingNextPage}
           onLoadMore={() => void fetchNextPage()}
         />
+      ) : !isError ? (
+        <ToursListPlaceholder />
       ) : null}
       {!isLoading && !isError && tours.length === 0 ? (
         <div>

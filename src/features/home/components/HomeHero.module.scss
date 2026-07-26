@@ -60,6 +60,7 @@
   position: relative;
   overflow: hidden;
   min-height: 420px;
+  aspect-ratio: 3992 / 2242;
   border-radius: 34px;
   border: 1px solid var(--border-strong);
   background: linear-gradient(135deg, rgba(7, 64, 74, 0.3), rgba(7, 64, 74, 0.08));
@@ -75,6 +76,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .overlay {
