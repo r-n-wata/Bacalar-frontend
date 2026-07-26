@@ -5,6 +5,7 @@ import { describe, it, expect } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { server } from '../../../test/msw/server'
 import { renderWithProviders } from '../../../test/renderWithProviders'
+import { defaultMockDelayMs } from '../../../test/msw/core'
 import { EventsPage } from './EventsPage'
 import {
   emptyEventsCategoryHandler,
@@ -94,6 +95,23 @@ describe('EventsPage', () => {
     expect(
       screen.getByRole('link', { name: 'Submit an event' }),
     ).toHaveAttribute('href', '/events/submit')
+  })
+
+  it('uses reserved placeholders instead of a spinner during initial loading', async () => {
+    setViewportPosition()
+    await renderEventsRoute()
+
+    expect(screen.getByTestId('events-page-intro-placeholder')).toBeVisible()
+    expect(screen.getByTestId('events-featured-placeholder')).toBeVisible()
+    expect(screen.getByTestId('events-list-placeholder')).toBeVisible()
+    expect(screen.getByTestId('events-submit-placeholder')).toBeVisible()
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+
+    expect(
+      await screen.findByText('Events happening this week', {}, {
+        timeout: defaultMockDelayMs * 4,
+      }),
+    ).toBeVisible()
   })
 
   it('renders localized events, paginates, and refetches when the language changes', async () => {

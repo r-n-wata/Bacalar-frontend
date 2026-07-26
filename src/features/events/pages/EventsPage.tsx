@@ -4,10 +4,15 @@ import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { buildCollectionPageStructuredData } from '../../../app/seo/structuredDataSchema'
-import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import {
+  CalloutCardPlaceholder,
+  FeaturedSectionPlaceholder,
+  ListingCardsPlaceholder,
+  PageIntroPlaceholder,
+} from '../../shared/components/ListingPagePlaceholders'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { EventCategoryNav } from '../components/EventCategoryNav'
 import { EventList } from '../components/EventList'
@@ -69,16 +74,26 @@ export function EventsPage() {
           title={firstPage.title}
           description={firstPage.description}
         />
-      ) : null}
+      ) : (
+        <PageIntroPlaceholder testId="events-page-intro-placeholder" />
+      )}
 
-      {!isLoading && !isError ? <FeaturedEventsSection events={featuredItems} /> : null}
+      {!isError ? (
+        featuredItems.length > 0 ? (
+          <FeaturedEventsSection events={featuredItems} />
+        ) : (
+          <FeaturedSectionPlaceholder
+            cardCount={5}
+            testId="events-featured-placeholder"
+          />
+        )
+      ) : null}
 
       <EventCategoryNav
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
 
-      {isLoading ? <LoadingSpinner label={t('events.loading')} /> : null}
       {isError ? (
         <PublicStatusPanel
           role="alert"
@@ -101,6 +116,8 @@ export function EventsPage() {
           isFetchingMore={isFetchingNextPage}
           onLoadMore={() => void fetchNextPage()}
         />
+      ) : !isError ? (
+        <ListingCardsPlaceholder testId="events-list-placeholder" />
       ) : null}
       {!isLoading && !isError && events.length === 0 ? (
         <PublicStatusPanel
@@ -117,7 +134,13 @@ export function EventsPage() {
         />
       ) : null}
 
-      {!isLoading && !isError && events.length > 0 ? <EventSubmitCta /> : null}
+      {!isError ? (
+        events.length > 0 && !isLoading ? (
+          <EventSubmitCta />
+        ) : (
+          <CalloutCardPlaceholder testId="events-submit-placeholder" />
+        )
+      ) : null}
     </section>
   )
 }

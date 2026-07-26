@@ -50,6 +50,9 @@ describe('featureImage', () => {
     expect(image).toEqual({
       src: 'https://images.example.com/sailing.jpg',
       alt: 'Real sailing image',
+      width: 1600,
+      height: 1000,
+      aspectRatio: '1600 / 1000',
     })
   })
 })

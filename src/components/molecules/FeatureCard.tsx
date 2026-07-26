@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ContentPanel } from '../atoms/ContentPanel'
+import { ResponsiveFeatureImage } from '../../features/shared/components/ResponsiveFeatureImage'
+import type { ResolvedFeatureImage } from '../../features/shared/lib/featureImage'
 import styles from './FeatureCard.module.scss'
 
 type FeatureCardProps = {
@@ -9,10 +11,7 @@ type FeatureCardProps = {
   meta: string
   secondaryMeta?: string
   to?: string
-  image?: {
-    src: string
-    alt: string
-  }
+  image?: ResolvedFeatureImage
   placeholderLabel?: string
 }
 
@@ -30,7 +29,7 @@ export function FeatureCard({
     <ContentPanel as="article" compact>
       {image ? (
         <div className={styles.media}>
-          <img src={image.src} alt={image.alt} />
+          <ResponsiveFeatureImage image={image} />
         </div>
       ) : (
         <div className={styles.mediaFallback} aria-hidden="true">
