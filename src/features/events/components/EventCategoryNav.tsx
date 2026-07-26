@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '../../../components/atoms/Button'
+import posthog from '../../../services/posthog'
 import type { EventCategoryFilter } from '../types/event'
 import styles from './EventCategoryNav.module.scss'
 
@@ -22,7 +23,13 @@ export function EventCategoryNav({
         <Button
           key={category}
           variant={selectedCategory === category ? 'chipActive' : 'chip'}
-          onClick={() => onSelectCategory(category)}
+          onClick={() => {
+            onSelectCategory(category)
+            posthog.capture('listing_category_selected', {
+              category,
+              listing_type: 'events',
+            })
+          }}
           aria-pressed={selectedCategory === category}
         >
           {t(`events.categories.${category}`)}

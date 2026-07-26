@@ -9,6 +9,7 @@ import { TextInput } from '../../../components/atoms/TextInput'
 import { FormField } from '../../../components/molecules/FormField'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { getAdminSession } from '../api/getAdminSession'
@@ -60,6 +61,7 @@ export function AdminLoginPage() {
       }
 
       await getAdminSession(nextSession.access_token)
+      posthog.capture('admin_login_completed')
       navigate(destination, { replace: true })
     } catch (error) {
       await logout()

@@ -11,6 +11,7 @@ import { PageIntro } from '../../../components/molecules/PageIntro'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import { createRestaurantSubmission } from '../api/createRestaurantSubmission'
 import { prepareRestaurantSubmissionUpload } from '../api/prepareRestaurantSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
@@ -326,6 +327,12 @@ export function RestaurantSubmissionPage() {
         ],
       })
 
+      posthog.capture('restaurant_submission_completed', {
+        locale: language,
+        media_count: totalMediaCount,
+        moment: form.moment,
+        price_band: form.priceBand,
+      })
       setIsSubmitted(true)
       setForm(initialFormState)
       setSelectedFiles([])

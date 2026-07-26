@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import { AppProviders } from './app/providers/AppProviders'
 import { startMockServiceWorker } from './test/msw/start'
+import './services/posthog'
 import './styles/globals.scss'
 
 async function bootstrap() {

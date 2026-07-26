@@ -117,9 +117,7 @@ export function RestaurantDetailPage() {
             <p className={pageStyles.bodyCopy}>{data.description}</p>
             <ListingContactSection
               contact={data.contact}
-              listingId={data.id}
               listingType="restaurants"
-              listingName={data.name}
               currentLanguage={language}
             />
             {data.mapEmbedUrl ? (

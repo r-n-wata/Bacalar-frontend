@@ -7,6 +7,7 @@ import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { moderateSubmission } from '../api/moderateSubmission'
@@ -149,7 +150,11 @@ export function AdminSubmissionDetailPage() {
   const moderationMutation = useMutation({
     mutationFn: (action: 'approve' | 'reject') =>
       moderateSubmission(type ?? 'events', id, action, token ?? ''),
-    onSuccess: async () => {
+    onSuccess: async (_, action) => {
+      posthog.capture('submission_moderated', {
+        action,
+        submission_type: type ?? 'events',
+      })
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: queryKeys.admin.submissionsRoot }),
         queryClient.invalidateQueries({

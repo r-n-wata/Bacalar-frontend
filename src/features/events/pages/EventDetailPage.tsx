@@ -162,9 +162,7 @@ export function EventDetailPage() {
             <p className={pageStyles.bodyCopy}>{data.description}</p>
             <ListingContactSection
               contact={data.contact}
-              listingId={data.id}
               listingType="events"
-              listingName={data.title}
               currentLanguage={language}
             />
             {data.mapEmbedUrl ? (
