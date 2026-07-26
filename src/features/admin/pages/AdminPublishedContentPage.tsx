@@ -11,6 +11,7 @@ import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { archiveAdminPublishedContent } from '../api/archiveAdminPublishedContent'
@@ -81,7 +82,11 @@ export function AdminPublishedContentPage() {
       id: string
       isFeatured: boolean
     }) => updateAdminPublishedContentFeature(activeType, id, isFeatured, token ?? ''),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
+      posthog.capture('published_content_feature_updated', {
+        content_type: activeType,
+        is_featured: variables.isFeatured,
+      })
       setFlashMessage(t('admin.content.featureUpdated'))
       await queryClient.invalidateQueries({
         queryKey: queryKeys.admin.content(language, activeType),
@@ -106,7 +111,10 @@ export function AdminPublishedContentPage() {
   const archiveMutation = useMutation({
     mutationFn: ({ type, id }: { type: AdminPublishedContentType; id: string }) =>
       archiveAdminPublishedContent(type, id, token ?? ''),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
+      posthog.capture('published_content_archived', {
+        content_type: variables.type,
+      })
       setDeleteTarget(null)
       setFlashMessage(t('admin.content.delete.success'))
       await Promise.all([

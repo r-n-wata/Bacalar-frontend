@@ -11,6 +11,7 @@ import { PageIntro } from '../../../components/molecules/PageIntro'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import { createTourSubmission } from '../api/createTourSubmission'
 import { prepareTourSubmissionUpload } from '../api/prepareTourSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
@@ -329,6 +330,11 @@ export function TourSubmissionPage() {
         ],
       })
 
+      posthog.capture('tour_submission_completed', {
+        category: form.category,
+        locale: language,
+        media_count: totalMediaCount,
+      })
       setIsSubmitted(true)
       setForm(initialFormState)
       setSelectedFiles([])

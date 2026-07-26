@@ -151,9 +151,7 @@ export function TourDetailPage() {
           <article className={pageStyles.bodyCard}>
             <ListingContactSection
               contact={data.contact}
-              listingId={data.id}
               listingType="tours"
-              listingName={data.name}
               currentLanguage={language}
             />
             {data.included ? (

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { trackCustomEvent } from '../../services/analytics'
+import posthog from '../../services/posthog'
 import type { AppLanguage } from '../../app/i18n/config'
 import {
   buildContactActions,
@@ -10,9 +10,7 @@ import styles from './ListingContactSection.module.scss'
 
 type ListingContactSectionProps = {
   contact?: ContactInfo
-  listingId: string
   listingType: ListingType
-  listingName: string
   currentLanguage: AppLanguage
 }
 
@@ -48,9 +46,7 @@ function ContactLink({
 
 export function ListingContactSection({
   contact,
-  listingId,
   listingType,
-  listingName,
   currentLanguage,
 }: ListingContactSectionProps) {
   const { t } = useTranslation()
@@ -60,19 +56,16 @@ export function ListingContactSection({
     return null
   }
 
-  const payload = {
-    listingId,
-    listingType,
-    listingName,
-    providerName: contact.providerName,
-    currentLanguage,
-  }
   const primaryAction = actions.find((action) => action.key === 'whatsapp')
   const secondaryActions = actions.filter((action) => action.key !== 'whatsapp')
 
   const renderLabel = (key: string) => t(`common.contact.methods.${key}`)
-  const handleTrack = (eventName: string) => {
-    trackCustomEvent(eventName, payload)
+  const handleTrack = (contactMethod: string) => {
+    posthog.capture('listing_contact_clicked', {
+      contact_method: contactMethod,
+      listing_type: listingType,
+      locale: currentLanguage,
+    })
   }
 
   return (
@@ -93,7 +86,7 @@ export function ListingContactSection({
               label={renderLabel(primaryAction.key)}
               className={styles.primaryAction}
               external={primaryAction.external}
-              onClick={() => handleTrack(primaryAction.eventName)}
+              onClick={() => handleTrack(primaryAction.key)}
             />
           ) : null}
 
@@ -106,7 +99,7 @@ export function ListingContactSection({
                   label={renderLabel(action.key)}
                   className={styles.secondaryAction}
                   external={action.external}
-                  onClick={() => handleTrack(action.eventName)}
+                  onClick={() => handleTrack(action.key)}
                 />
               ))}
             </div>
@@ -122,7 +115,7 @@ export function ListingContactSection({
             label={renderLabel(action.key)}
             className={`${styles.stickyAction} ${action.key === 'whatsapp' ? styles.stickyPrimary : ''}`.trim()}
             external={action.external}
-            onClick={() => handleTrack(action.eventName)}
+            onClick={() => handleTrack(action.key)}
           />
         ))}
       </div>

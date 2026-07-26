@@ -11,6 +11,7 @@ import { PageIntro } from '../../../components/molecules/PageIntro'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import { createEventSubmission } from '../api/createEventSubmission'
 import { prepareEventSubmissionUpload } from '../api/prepareEventSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
@@ -331,6 +332,11 @@ export function EventSubmissionPage() {
         ],
       })
 
+      posthog.capture('event_submission_completed', {
+        category: form.category,
+        locale: language,
+        media_count: totalMediaCount,
+      })
       setIsSubmitted(true)
       setForm(initialFormState)
       setSelectedFiles([])

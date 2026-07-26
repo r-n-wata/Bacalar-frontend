@@ -13,6 +13,7 @@ import { FormField } from '../../../components/molecules/FormField'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import { queryKeys } from '../../../lib/queryKeys'
 import { ApiError } from '../../../services/http'
+import posthog from '../../../services/posthog'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { prepareEventSubmissionUpload } from '../../events/api/prepareEventSubmissionUpload'
 import { uploadSubmissionImage } from '../../events/api/uploadSubmissionImage'
@@ -378,6 +379,9 @@ export function AdminPublishedContentEditPage() {
     mutationFn: async (payload: UpdateAdminPublishedContentRequest) =>
       updateAdminPublishedContent(contentType ?? 'events', id, payload, token ?? ''),
     onSuccess: async () => {
+      posthog.capture('published_content_updated', {
+        content_type: contentType ?? 'events',
+      })
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: queryKeys.admin.contentRoot }),
         queryClient.invalidateQueries({ queryKey: queryKeys.admin.contentDetail(contentType ?? 'events', id) }),
