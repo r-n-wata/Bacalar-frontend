@@ -46,6 +46,7 @@ export function FeaturedRestaurantsSection({
                 image: restaurant.image,
                 fallbackAlt: restaurant.name,
               })}
+              priorityImage={restaurant.id === restaurants[0]?.id}
               placeholderLabel={restaurant.cuisine}
             />
           </div>

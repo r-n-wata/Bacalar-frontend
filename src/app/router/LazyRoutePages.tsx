@@ -1,12 +1,8 @@
 import { lazy } from 'react'
-
-export const HomePage = lazy(async () => ({
-  default: (await import('../../features/home/pages/HomePage')).HomePage,
-}))
-
-export const EventsPage = lazy(async () => ({
-  default: (await import('../../features/events/pages/EventsPage')).EventsPage,
-}))
+export { HomePage } from '../../features/home/pages/HomePage'
+export { EventsPage } from '../../features/events/pages/EventsPage'
+export { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage'
+export { ToursPage } from '../../features/tours/pages/ToursPage'
 
 export const EventSubmissionPage = lazy(async () => ({
   default: (await import('../../features/events/pages/EventSubmissionPage'))
@@ -46,11 +42,6 @@ export const AdminSubmissionDetailPage = lazy(async () => ({
   ).AdminSubmissionDetailPage,
 }))
 
-export const RestaurantsPage = lazy(async () => ({
-  default: (await import('../../features/restaurants/pages/RestaurantsPage'))
-    .RestaurantsPage,
-}))
-
 export const RestaurantSubmissionPage = lazy(async () => ({
   default: (
     await import('../../features/restaurants/pages/RestaurantSubmissionPage')
@@ -61,10 +52,6 @@ export const RestaurantDetailPage = lazy(async () => ({
   default: (
     await import('../../features/restaurants/pages/RestaurantDetailPage')
   ).RestaurantDetailPage,
-}))
-
-export const ToursPage = lazy(async () => ({
-  default: (await import('../../features/tours/pages/ToursPage')).ToursPage,
 }))
 
 export const TourSubmissionPage = lazy(async () => ({

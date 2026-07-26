@@ -25,7 +25,11 @@ export function FeaturedEventsSection({ events }: FeaturedEventsSectionProps) {
       <div className={styles.scroller}>
         {events.map((event) => (
           <div key={event.id} className={styles.cardWrap}>
-            <EventCard event={event} featured />
+            <EventCard
+              event={event}
+              featured
+              priorityImage={event.id === events[0]?.id}
+            />
           </div>
         ))}
       </div>

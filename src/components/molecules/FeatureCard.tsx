@@ -12,6 +12,7 @@ type FeatureCardProps = {
   secondaryMeta?: string
   to?: string
   image?: ResolvedFeatureImage
+  priorityImage?: boolean
   placeholderLabel?: string
 }
 
@@ -23,13 +24,14 @@ export function FeatureCard({
   secondaryMeta,
   to,
   image,
+  priorityImage = false,
   placeholderLabel,
 }: FeatureCardProps) {
   const card = (
     <ContentPanel as="article" compact>
       {image ? (
         <div className={styles.media}>
-          <ResponsiveFeatureImage image={image} />
+          <ResponsiveFeatureImage image={image} priority={priorityImage} />
         </div>
       ) : (
         <div className={styles.mediaFallback} aria-hidden="true">

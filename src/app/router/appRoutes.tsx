@@ -29,6 +29,10 @@ function withSuspense(element: ReactNode) {
   )
 }
 
+function withoutSuspense(element: ReactNode) {
+  return element
+}
+
 export const appRoutes = [
   {
     path: '/',
@@ -41,11 +45,11 @@ export const appRoutes = [
     children: [
       {
         index: true,
-        element: withSuspense(<HomePage />),
+        element: withoutSuspense(<HomePage />),
       },
       {
         path: 'events',
-        element: withSuspense(<EventsPage />),
+        element: withoutSuspense(<EventsPage />),
       },
       {
         path: 'events/submit',
@@ -83,7 +87,7 @@ export const appRoutes = [
       },
       {
         path: 'restaurants',
-        element: withSuspense(<RestaurantsPage />),
+        element: withoutSuspense(<RestaurantsPage />),
       },
       {
         path: 'restaurants/submit',
@@ -95,7 +99,7 @@ export const appRoutes = [
       },
       {
         path: 'tours',
-        element: withSuspense(<ToursPage />),
+        element: withoutSuspense(<ToursPage />),
       },
       {
         path: 'tours/submit',
