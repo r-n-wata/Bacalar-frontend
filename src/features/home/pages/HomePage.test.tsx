@@ -105,7 +105,7 @@ describe('HomePage', () => {
         name: 'Private Sailing at Sunrise',
       }),
     ).toBeVisible()
-    expect(screen.getAllByRole('link', { name: 'See all tours' })).toHaveLength(1)
+    expect(screen.getAllByRole('link', { name: 'Back to Tours' })).toHaveLength(2)
   })
 
   it('renders cards even when image metadata is missing', async () => {

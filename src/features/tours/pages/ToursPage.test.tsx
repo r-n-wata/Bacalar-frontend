@@ -12,6 +12,19 @@ import {
 } from '../mocks/handlers'
 import { ToursPage } from './ToursPage'
 
+async function openFilters() {
+  await userEvent.click(await screen.findByRole('button', { name: 'Filters' }))
+  expect(
+    await screen.findByRole('dialog', { name: 'Filter tours' }),
+  ).toBeVisible()
+}
+
+async function applyCategoryFilter(category: string, applyLabel = /Show \d+ tours?/) {
+  await openFilters()
+  await userEvent.selectOptions(screen.getByLabelText('Category'), category)
+  await userEvent.click(await screen.findByRole('button', { name: applyLabel }))
+}
+
 describe('ToursPage', () => {
   function setViewportPosition({
     scrollY = 0,
@@ -66,23 +79,25 @@ describe('ToursPage', () => {
       'Discover the best tours in Bacalar',
     )
     const featuredTitle = screen.getByText('Our top recommendations')
-    const categoryFilter = screen.getByRole('button', { name: 'All' })
+    const filterControls = screen.getByLabelText('Tour search and filters')
     const toursList = screen.getByLabelText('Tours list')
     const submitTitle = screen.getByText('Know a tour we should feature?')
 
     expect(heroTitle.compareDocumentPosition(featuredTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(featuredTitle.compareDocumentPosition(categoryFilter)).toBe(
+    expect(featuredTitle.compareDocumentPosition(filterControls)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(categoryFilter.compareDocumentPosition(toursList)).toBe(
+    expect(filterControls.compareDocumentPosition(toursList)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
     expect(toursList.compareDocumentPosition(submitTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
 
+    expect(screen.getByRole('textbox', { name: 'Search tours' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeVisible()
     const featuredSection = screen.getByLabelText('Featured tours')
     expect(within(featuredSection).getAllByRole('link')).toHaveLength(3)
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
@@ -126,7 +141,8 @@ describe('ToursPage', () => {
     expect(
       within(localizedToursList).getByText('Paseo de avistamiento en la laguna'),
     ).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Boat Tour' })).toBeVisible()
+    expect(screen.getByRole('textbox', { name: 'Buscar tours' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Filtros' })).toBeVisible()
     expect(screen.getByText('Nuestras recomendaciones principales')).toBeVisible()
     expect(screen.queryByText('Lagoon Birdwatching Drift')).not.toBeInTheDocument()
   })
@@ -135,31 +151,45 @@ describe('ToursPage', () => {
     setViewportPosition()
     await renderToursRoute()
 
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Boat Tour' }),
-    )
+    await applyCategoryFilter('Boat Tour')
 
     const featuredSection = await screen.findByLabelText('Featured tours')
     expect(within(featuredSection).getByText('Private Sailing at Sunrise')).toBeVisible()
     const toursList = await screen.findByLabelText('Tours list')
     expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
     expect(within(toursList).queryByText('Family Pontoon Loop')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Remove filter Boat Tour' })).toBeVisible()
   })
 
-  it('resets paginated results when the category changes', async () => {
+  it('applies search filters automatically once the query reaches three characters', async () => {
     setViewportPosition()
     await renderToursRoute()
 
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Adventure' }),
-    )
-    expect(await screen.findByText('Shallow Snorkel Circuit')).toBeVisible()
+    const searchInput = await screen.findByRole('textbox', { name: 'Search tours' })
+    await userEvent.type(searchInput, 'bi')
 
-    await userEvent.click(screen.getByRole('button', { name: 'Boat Tour' }))
+    let toursList = await screen.findByLabelText('Tours list')
+    expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
+    expect(within(toursList).getByText('Shallow Snorkel Circuit')).toBeVisible()
 
-    const toursList = await screen.findByLabelText('Tours list')
+    await userEvent.type(searchInput, 'rdwatching')
+
+    await screen.findByRole('button', { name: 'Remove filter Search: birdwatching' })
+
+    toursList = await screen.findByLabelText('Tours list')
     expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
     expect(within(toursList).queryByText('Shallow Snorkel Circuit')).not.toBeInTheDocument()
+    expect(screen.getAllByText('Showing 1 tour').length).toBeGreaterThan(0)
+
+    const updatedSearchInput = await screen.findByRole('textbox', {
+      name: 'Search tours',
+    })
+    await userEvent.clear(updatedSearchInput)
+    await screen.findAllByText('Showing 2 tours')
+
+    toursList = await screen.findByLabelText('Tours list')
+    expect(within(toursList).getByText('Lagoon Birdwatching Drift')).toBeVisible()
+    expect(within(toursList).getByText('Shallow Snorkel Circuit')).toBeVisible()
   })
 
   it('shows an empty state for a category with no results', async () => {
@@ -167,16 +197,14 @@ describe('ToursPage', () => {
 
     setViewportPosition()
     await renderToursRoute()
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Kayak Tour' }),
-    )
+    await applyCategoryFilter('Kayak Tour', /Show \d+ tours?/)
 
     expect(
       await screen.findByText('No tours match this category right now.'),
     ).toBeVisible()
     expect(
       screen.getByText(
-        'Try another category or come back later for more Kayak Tour options.',
+        'Try widening your search or clearing one of the active filters.',
       ),
     ).toBeVisible()
   })

@@ -13,12 +13,22 @@ export const toursHandlers = [
     const cursor = url.searchParams.get('cursor')
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
     const category = (url.searchParams.get('category') ?? 'all') as TourCategoryFilter
+    const priceMin = Number.parseInt(url.searchParams.get('priceMin') ?? '', 10)
+    const priceMax = Number.parseInt(url.searchParams.get('priceMax') ?? '', 10)
+    const durationHours = url.searchParams
+      .getAll('durationHours')
+      .map((value) => Number.parseInt(value, 10))
+      .filter((value) => Number.isFinite(value) && value > 0)
 
     return jsonSuccess(
       getToursFixture(resolveMockLanguage(request), {
         category,
         cursor,
         limit: Number.isFinite(limit) ? limit : 10,
+        search: url.searchParams.get('search') ?? undefined,
+        priceMin: Number.isFinite(priceMin) ? priceMin : undefined,
+        priceMax: Number.isFinite(priceMax) ? priceMax : undefined,
+        durationHours: durationHours.length > 0 ? durationHours : undefined,
       }),
     )
   }),
@@ -77,6 +87,12 @@ export function emptyToursCategoryHandler(category: TourCategoryFilter) {
     const selectedCategory = (url.searchParams.get('category') ??
       'all') as TourCategoryFilter
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
+    const priceMin = Number.parseInt(url.searchParams.get('priceMin') ?? '', 10)
+    const priceMax = Number.parseInt(url.searchParams.get('priceMax') ?? '', 10)
+    const durationHours = url.searchParams
+      .getAll('durationHours')
+      .map((value) => Number.parseInt(value, 10))
+      .filter((value) => Number.isFinite(value) && value > 0)
 
     return jsonSuccess(
       getToursFixture(resolveMockLanguage(request), {
@@ -84,6 +100,10 @@ export function emptyToursCategoryHandler(category: TourCategoryFilter) {
         cursor: url.searchParams.get('cursor'),
         limit: Number.isFinite(limit) ? limit : 10,
         forceEmpty: selectedCategory === category,
+        search: url.searchParams.get('search') ?? undefined,
+        priceMin: Number.isFinite(priceMin) ? priceMin : undefined,
+        priceMax: Number.isFinite(priceMax) ? priceMax : undefined,
+        durationHours: durationHours.length > 0 ? durationHours : undefined,
       }),
     )
   })

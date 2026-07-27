@@ -1,26 +1,28 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import arrowLeftIcon from '../../../assets/icons/arrow-left.png'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildTourStructuredData } from '../../../app/seo/structuredDataSchema'
 import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailSection } from '../../../components/molecules/DetailSection'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
-import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
-import { ProviderCard } from '../../../components/molecules/ProviderCard'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
+import bestForIcon from '../../../assets/icons/bestFor.png'
+import checkIcon from '../../../assets/icons/check.png'
+import clockIcon from '../../../assets/icons/clock.svg'
+import difficultyIcon from '../../../assets/icons/difficulty.png'
+import startFromIcon from '../../../assets/icons/start-from.png'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
+import { buildMapEmbedUrl, buildMapUrl } from '../../shared/lib/maps'
 import { useTourDetail } from '../hooks/useTourDetail'
-
-function normalizeLongformText(value?: string) {
-  return value?.replace(/\s+/g, ' ').trim().toLowerCase() ?? ''
-}
 
 export function TourDetailPage() {
   const { t } = useTranslation()
@@ -74,12 +76,53 @@ export function TourDetailPage() {
     src: url,
     alt: index === 0 ? data.name : `${data.name} ${index + 1}`,
   }))
-  const operatorDescription =
-    normalizeLongformText(data.operatorDescription) ===
-    normalizeLongformText(data.description)
-      ? undefined
-      : data.operatorDescription
   const hasContactActions = buildContactActions(data.contact, language).length > 0
+  const includedItems = data.includedItems ?? []
+  const includedFallback = t('tours.sections.includedFallback')
+  const resolvedMapUrl = data.mapUrl ?? buildMapUrl(data.address ?? data.meetingPoint)
+  const resolvedMapEmbedUrl =
+    data.mapEmbedUrl ?? buildMapEmbedUrl(data.address ?? data.meetingPoint)
+  const planningFacts = [
+    {
+      label: t('tours.meta.category'),
+      value: data.category,
+    },
+    {
+      label: t('tours.meta.privateOrShared'),
+      value: data.privateOrShared,
+    },
+  ]
+  const factItems = [
+    {
+      label: t('tours.meta.price'),
+      value: data.priceFrom,
+      iconSrc: startFromIcon,
+    },
+    {
+      label: t('tours.meta.duration'),
+      value: data.duration,
+      iconSrc: clockIcon,
+    },
+    {
+      label: t('tours.meta.difficulty'),
+      value: data.difficulty,
+      iconSrc: difficultyIcon,
+    },
+    {
+      label: t('tours.meta.bestFor'),
+      value: data.bestFor,
+      iconSrc: bestForIcon,
+    },
+    {
+      label: t('tours.meta.suitableForKids'),
+      value: data.suitableForKids,
+      iconSrc: checkIcon,
+    },
+    {
+      label: t('tours.meta.privateOrShared'),
+      value: data.privateOrShared,
+    },
+  ]
 
   return (
     <section
@@ -102,158 +145,163 @@ export function TourDetailPage() {
           address: data.address,
         })}
       />
-      <DetailHero
-        eyebrow={t('tours.detailEyebrow')}
-        images={galleryImages}
-        galleryAriaLabel={t('tours.galleryAriaLabel')}
-        viewAllLabel={t('common.gallery.viewAllPhotos')}
-        closeLabel={t('common.gallery.close')}
-        previousLabel={t('common.gallery.previous')}
-        nextLabel={t('common.gallery.next')}
-        countLabel={(current, total) =>
-          t('common.gallery.count', { current, total })
-        }
-      />
-
-      <DetailIntro
-        title={data.name}
-        summary={data.description}
-        badges={[data.category]}
-        highlights={[
-          {
-            label: t('tours.meta.price'),
-            value: data.priceFrom,
-          },
-          {
-            label: t('tours.meta.duration'),
-            value: data.duration,
-          },
-        ]}
-      />
+      <div className={pageStyles.backLinkRow}>
+        <Link className={pageStyles.backLink} to="/tours">
+          <img
+            className={pageStyles.backLinkIcon}
+            src={arrowLeftIcon}
+            alt=""
+            aria-hidden="true"
+          />
+          {t('tours.backToList')}
+        </Link>
+      </div>
 
       <div className={pageStyles.layout}>
         <div className={pageStyles.mainColumn}>
+          <DetailHero
+            eyebrow={t('tours.detailEyebrow')}
+            images={galleryImages}
+            galleryAriaLabel={t('tours.galleryAriaLabel')}
+            closeLabel={t('common.gallery.close')}
+            countLabel={(current, total) =>
+              t('common.gallery.count', { current, total })
+            }
+          />
+
+          <DetailIntro
+            title={data.name}
+            summary={data.description}
+            badges={[data.category]}
+          />
+
           <DetailMetadataGrid
             ariaLabel={t('tours.detailMetaAriaLabel')}
-            items={[
-              {
-                label: t('tours.meta.difficulty'),
-                value: data.difficulty,
-              },
-              {
-                label: t('tours.meta.bestFor'),
-                value: data.bestFor,
-              },
-              {
-                label: t('tours.meta.suitableForKids'),
-                value: data.suitableForKids,
-              },
-            ]}
+            items={factItems}
           />
 
           <article className={pageStyles.bodyCard}>
-            <ListingContactSection
-              contact={data.contact}
-              listingType="tours"
-              currentLanguage={language}
-            />
-            {data.included ? (
-              <section className={pageStyles.detailSection}>
-                <h2>{t('tours.sections.included')}</h2>
-                <p className={pageStyles.bodyCopy}>{data.included}</p>
-              </section>
-            ) : null}
-            {data.whatToBring ? (
-              <section className={pageStyles.detailSection}>
-                <h2>{t('tours.sections.whatToBring')}</h2>
-                <p className={pageStyles.bodyCopy}>{data.whatToBring}</p>
-              </section>
-            ) : null}
-            {data.meetingPoint ? (
-              <section className={pageStyles.detailSection}>
-                <h2>{t('tours.sections.meetingPoint')}</h2>
-                <p className={pageStyles.bodyCopy}>
-                  {data.address ?? data.meetingPoint}
-                </p>
-              </section>
-            ) : null}
-            {data.mapEmbedUrl ? (
-              <section className={pageStyles.detailSection}>
+            <DetailSection title={t('tours.sections.about')}>
+              <p className={pageStyles.bodyCopy}>{data.description}</p>
+            </DetailSection>
+
+            <section className={`${pageStyles.detailSection} ${pageStyles.mobileOnlySection}`}>
+              <h2>{t('tours.sections.included')}</h2>
+              {includedItems.length > 0 ? (
+                <ul className={pageStyles.checklist}>
+                  {includedItems.map((item) => (
+                    <li key={item}>
+                      <img
+                        className={pageStyles.checkIcon}
+                        src={checkIcon}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={pageStyles.bodyCopy}>{includedFallback}</p>
+              )}
+            </section>
+
+            {data.meetingPoint || data.address || resolvedMapEmbedUrl ? (
+              <section className={`${pageStyles.detailSection} ${pageStyles.mobileOnlySection}`}>
                 <EmbeddedMapSection
-                  title={t('common.labels.location')}
+                  title={t('tours.sections.meetingPoint')}
                   description={data.address ?? data.meetingPoint}
-                  embedUrl={data.mapEmbedUrl}
-                  mapUrl={data.mapUrl}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
                   frameTitle={`${data.name} map`}
                 />
               </section>
             ) : null}
-            <section className={pageStyles.detailSection}>
-              <h2>{t('tours.sections.operator')}</h2>
-              <div className={pageStyles.metaGrid}>
-                <article className={pageStyles.metaCard}>
-                  <span>{t('tours.operator.name')}</span>
-                  <strong>{data.operatorName}</strong>
-                </article>
-                {data.operatorPrimaryContactMethod ? (
-                  <article className={pageStyles.metaCard}>
-                    <span>{t('tours.operator.primaryContactMethod')}</span>
-                    <strong>{data.operatorPrimaryContactMethod}</strong>
-                  </article>
-                ) : null}
-                {data.operatorWhatsapp ? (
-                  <article className={pageStyles.metaCard}>
-                    <span>{t('tours.operator.whatsapp')}</span>
-                    <strong>{data.operatorWhatsapp}</strong>
-                  </article>
-                ) : null}
-                {data.operatorInstagram ? (
-                  <article className={pageStyles.metaCard}>
-                    <span>{t('tours.operator.instagram')}</span>
-                    <strong>{data.operatorInstagram}</strong>
-                  </article>
-                ) : null}
-                {data.operatorWebsite ? (
-                  <article className={pageStyles.metaCard}>
-                    <span>{t('tours.operator.website')}</span>
-                    <strong>{data.operatorWebsite}</strong>
-                  </article>
-                ) : null}
-              </div>
-             
-              <ProviderCard
-                eyebrow={t('tours.providerEyebrow')}
-                title={data.operatorName}
-                description={operatorDescription}
-              />
-            </section>
+
+            {data.whatToBring ? (
+              <DetailSection title={t('tours.sections.whatToBring')}>
+                <p className={pageStyles.bodyCopy}>{data.whatToBring}</p>
+              </DetailSection>
+            ) : null}
+
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="tours"
+              listingName={data.name}
+              currentLanguage={language}
+              eyebrow={t('tours.providerEyebrow')}
+              title={data.operatorName}
+            />
           </article>
         </div>
 
-        <div className={pageStyles.hideOnNarrow}>
-          <DetailSidebar title={t('tours.sidebar.title')}>
-            <div className={pageStyles.sidebarFacts}>
-              <div className={pageStyles.sidebarFact}>
-                <span>{t('tours.meta.category')}</span>
-                <strong>{data.category}</strong>
+        <aside className={`${pageStyles.sidebarColumn} ${pageStyles.hideOnNarrow}`}>
+          <div className={pageStyles.sidebarStickyStack}>
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>{t('tours.sidebar.title')}</h2>
+              <div className={pageStyles.sidebarFacts}>
+                {planningFacts.map((item) => (
+                  <div
+                    key={`${item.label}-${item.value}`}
+                    className={pageStyles.sidebarFact}
+                  >
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
-              <div className={pageStyles.sidebarFact}>
-                <span>{t('tours.meta.privateOrShared')}</span>
-                <strong>{data.privateOrShared}</strong>
-              </div>
-            </div>
-            <DetailActions
-              compact
-              actions={[
-                {
-                  label: t('tours.backToList'),
-                  to: '/tours',
-                  variant: 'secondary' as const,
-                },
-              ]}
-            />
-          </DetailSidebar>
-        </div>
+            </section>
+
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>
+                {t('tours.sections.included')}
+              </h2>
+              {includedItems.length > 0 ? (
+                <ul className={pageStyles.checklist}>
+                  {includedItems.map((item) => (
+                    <li key={item}>
+                      <img
+                        className={pageStyles.checkIcon}
+                        src={checkIcon}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={pageStyles.bodyCopy}>{includedFallback}</p>
+              )}
+            </section>
+
+            {data.meetingPoint || data.address || resolvedMapEmbedUrl ? (
+              <section className={pageStyles.sidebarCard}>
+                <EmbeddedMapSection
+                  title={t('tours.sections.meetingPoint')}
+                  description={data.address ?? data.meetingPoint}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
+
+            <section className={pageStyles.sidebarCard}>
+              <DetailActions
+                compact
+                actions={[
+                  {
+                    label: t('tours.backToList'),
+                    to: '/tours',
+                    variant: 'secondary' as const,
+                  },
+                ]}
+              />
+            </section>
+          </div>
+        </aside>
       </div>
     </section>
   )

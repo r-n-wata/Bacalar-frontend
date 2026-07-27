@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next'
-import pageStyles from '../../styles/FeatureDetailPage.module.scss'
 import styles from './EmbeddedMapSection.module.scss'
 
 type EmbeddedMapSectionProps = {
@@ -14,11 +12,8 @@ export function EmbeddedMapSection({
   title,
   description,
   embedUrl,
-  mapUrl,
   frameTitle,
 }: EmbeddedMapSectionProps) {
-  const { t } = useTranslation()
-
   if (!embedUrl) {
     return null
   }
@@ -37,18 +32,6 @@ export function EmbeddedMapSection({
           allowFullScreen
         />
       </div>
-      {mapUrl ? (
-        <div className={pageStyles.actions}>
-          <a
-            className={pageStyles.secondaryAction}
-            href={mapUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t('common.actions.viewOnMap')}
-          </a>
-        </div>
-      ) : null}
     </section>
   )
 }

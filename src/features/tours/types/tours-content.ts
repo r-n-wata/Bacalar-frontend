@@ -10,7 +10,9 @@ export type ToursContent = {
   title: string
   description: string
   categories: string[]
+  durationOptions: number[]
   featuredItems: Tour[]
   items: Tour[]
+  totalCount: number
   pagination: ToursPagination
 }

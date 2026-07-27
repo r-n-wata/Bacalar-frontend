@@ -5,11 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { server } from '../../../test/msw/server'
 import { renderWithProviders } from '../../../test/renderWithProviders'
-import { defaultMockDelayMs } from '../../../test/msw/core'
-import {
-  emptyRestaurantsCategoryHandler,
-  restaurantsErrorHandler,
-} from '../mocks/handlers'
+import { restaurantsErrorHandler } from '../mocks/handlers'
 import { RestaurantsPage } from './RestaurantsPage'
 
 describe('RestaurantsPage', () => {
@@ -58,62 +54,47 @@ describe('RestaurantsPage', () => {
     })
   }
 
-  it('renders hero, featured strip, filters, and list in order', async () => {
+  async function openFilters() {
+    await userEvent.click(await screen.findByRole('button', { name: 'Filters' }))
+    return screen.findByRole('dialog', { name: 'Filter restaurants' })
+  }
+
+  it('renders hero, featured strip, compact filter controls, and list in order', async () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
     const heroTitle = await screen.findByText('Where to eat in Bacalar')
     const featuredTitle = screen.getByText('Start with the strongest meal picks')
-    const categoryFilter = screen.getByRole('button', { name: 'All' })
+    const searchInput = await screen.findByRole('textbox', {
+      name: 'Search restaurants',
+    })
+    const filtersButton = screen.getByRole('button', { name: 'Filters' })
     const restaurantList = screen.getByLabelText('Restaurants list')
 
     expect(heroTitle.compareDocumentPosition(featuredTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(featuredTitle.compareDocumentPosition(categoryFilter)).toBe(
+    expect(featuredTitle.compareDocumentPosition(searchInput)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(categoryFilter.compareDocumentPosition(restaurantList)).toBe(
+    expect(searchInput.compareDocumentPosition(filtersButton)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+    expect(filtersButton.compareDocumentPosition(restaurantList)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
 
-    const featuredSection = screen.getByLabelText('Featured restaurants')
-    expect(within(featuredSection).getAllByRole('link')).toHaveLength(3)
-    expect(within(featuredSection).getByText('Cielo de Maiz')).toBeVisible()
-    expect(within(featuredSection).getByText('Lunch / Dinner')).toBeVisible()
+    expect((await screen.findAllByText('Showing 2 restaurants'))[0]).toBeVisible()
     expect(
       screen.getByRole('link', { name: 'Submit a restaurant' }),
     ).toHaveAttribute('href', '/restaurants/submit')
   })
 
-  it('keeps intro, featured, and list placeholders mounted during initial loading', async () => {
+  it('renders localized restaurants and localized filter controls after language change', async () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
-    expect(
-      screen.getByTestId('restaurants-page-intro-placeholder'),
-    ).toBeVisible()
-    expect(screen.getByTestId('restaurants-featured-placeholder')).toBeVisible()
-    expect(screen.getByTestId('restaurants-list-placeholder')).toBeVisible()
-
-    expect(
-      await screen.findByText('Where to eat in Bacalar', {}, {
-        timeout: defaultMockDelayMs * 4,
-      }),
-    ).toBeVisible()
-  })
-
-  it('renders localized restaurants, paginates, and refetches when the language changes', async () => {
-    setViewportPosition()
-    await renderRestaurantsRoute()
-
-    const restaurantsList = await screen.findByLabelText('Restaurants list')
     expect(await screen.findByText('Bruma Azul')).toBeVisible()
-    expect(screen.getByRole('img', { name: 'Bruma Azul' })).toBeVisible()
-    expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
-    expect(
-      screen.queryByRole('button', { name: 'Load more restaurants' }),
-    ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
@@ -123,55 +104,81 @@ describe('RestaurantsPage', () => {
     expect(
       within(localizedRestaurantsList).getByText('Pausa lenta de media manana'),
     ).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Desayuno' })).toBeVisible()
     expect(
-      screen.getByText('Conoces un restaurante que deberiamos destacar?'),
+      screen.getByRole('textbox', { name: 'Buscar restaurantes' }),
     ).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Filtros' })).toBeVisible()
   })
 
   it('keeps featured restaurants global while filters change the main list', async () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Dinner' }))
+    const dialog = await openFilters()
+    const selects = within(dialog).getAllByRole('combobox')
+    await userEvent.selectOptions(selects[0], 'dinner')
+    await userEvent.click(
+      await within(dialog).findByRole('button', { name: 'Show 1 restaurant' }),
+    )
 
     const featuredSection = await screen.findByLabelText('Featured restaurants')
     expect(within(featuredSection).getByText('Cielo de Maiz')).toBeVisible()
+
     const restaurantsList = await screen.findByLabelText('Restaurants list')
     expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
+    expect(within(restaurantsList).queryByText('Bruma Azul')).not.toBeInTheDocument()
+    expect((await screen.findAllByText('Showing 1 restaurant'))[0]).toBeVisible()
     expect(
-      within(restaurantsList).getByRole('img', { name: 'Orilla Comedor' }),
+      screen.getByRole('button', { name: 'Remove filter Dinner' }),
     ).toBeVisible()
-    expect(within(restaurantsList).queryByText('Ixchel Cocina')).not.toBeInTheDocument()
   })
 
-  it('resets paginated results when the category changes', async () => {
+  it('filters restaurants automatically once the query reaches three characters', async () => {
     setViewportPosition()
     await renderRestaurantsRoute()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Dinner' }))
-    expect(await screen.findByText('Orilla Comedor')).toBeVisible()
+    const searchInput = await screen.findByRole('textbox', {
+      name: 'Search restaurants',
+    })
+    await userEvent.type(searchInput, 'wo')
 
-    await userEvent.click(screen.getByRole('button', { name: 'Breakfast' }))
-
-    const restaurantsList = await screen.findByLabelText('Restaurants list')
+    let restaurantsList = await screen.findByLabelText('Restaurants list')
     expect(within(restaurantsList).getByText('Bruma Azul')).toBeVisible()
-    expect(within(restaurantsList).queryByText('Orilla Comedor')).not.toBeInTheDocument()
+    expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
+
+    await userEvent.type(searchInput, 'od-fired')
+
+    await screen.findByRole('button', { name: 'Remove filter Search: wood-fired' })
+
+    restaurantsList = await screen.findByLabelText('Restaurants list')
+    expect(within(restaurantsList).getByText('Orilla Comedor')).toBeVisible()
+    expect(within(restaurantsList).queryByText('Bruma Azul')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove filter Search: wood-fired' }))
+
+    expect(await screen.findByText('Bruma Azul')).toBeVisible()
+    expect((await screen.findAllByText('Showing 2 restaurants'))[0]).toBeVisible()
   })
 
-  it('shows an empty state for a category with no results', async () => {
-    server.use(emptyRestaurantsCategoryHandler('lunch'))
-
+  it('shows a filtered empty state when no restaurants match the active filters', async () => {
     setViewportPosition()
     await renderRestaurantsRoute()
-    await userEvent.click(screen.getByRole('button', { name: 'Lunch' }))
+    await screen.findByLabelText('Restaurants list')
+
+    const dialog = await openFilters()
+    const selects = within(dialog).getAllByRole('combobox')
+    await userEvent.selectOptions(selects[0], 'lunch')
+    await userEvent.selectOptions(selects[1], '$$$')
+    await userEvent.click(
+      await within(dialog).findByRole('button', { name: 'Show 0 restaurants' }),
+    )
 
     expect(
-      await screen.findByText('No restaurants match this moment right now.'),
+      await screen.findByText('No restaurants match these filters right now.'),
     ).toBeVisible()
     expect(
       screen.getByText(
-        'Try another category or come back later for more Lunch options.',
+        'Try widening your search or clearing one of the active filters.',
       ),
     ).toBeVisible()
   })

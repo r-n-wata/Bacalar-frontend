@@ -16,20 +16,42 @@ export const queryKeys = {
     content: (language: string) => ['home', 'content', language] as const,
   },
   events: {
-    list: (language: string, category: string, limit: number) =>
-      ['events', 'list', language, category, limit] as const,
+    list: (
+      language: string,
+      filters: {
+        category?: string
+        search?: string
+      },
+      limit: number,
+    ) => ['events', 'list', language, filters, limit] as const,
     detail: (id: string, language: string) =>
       ['events', 'detail', id, language] as const,
   },
   restaurants: {
-    list: (language: string, category: string, limit: number) =>
-      ['restaurants', 'list', language, category, limit] as const,
+    list: (
+      language: string,
+      filters: {
+        category?: string
+        search?: string
+        priceBand?: '$' | '$$' | '$$$'
+      },
+      limit: number,
+    ) => ['restaurants', 'list', language, filters, limit] as const,
     detail: (id: string, language: string) =>
       ['restaurants', 'detail', id, language] as const,
   },
   tours: {
-    list: (language: string, category: string, limit: number) =>
-      ['tours', 'list', language, category, limit] as const,
+    list: (
+      language: string,
+      filters: {
+        category?: string
+        search?: string
+        priceMin?: number
+        priceMax?: number
+        durationHours?: number[]
+      },
+      limit: number,
+    ) => ['tours', 'list', language, filters, limit] as const,
     detail: (id: string, language: string) =>
       ['tours', 'detail', id, language] as const,
   },

@@ -17,6 +17,7 @@ export type Event = {
   title: string
   dateLabel: string
   venue: string
+  description: string
   category: EventCategory
   startsAt?: string
   endsAt?: string
@@ -38,6 +39,7 @@ export type EventsContent = {
   description: string
   featuredItems: Event[]
   items: Event[]
+  totalCount: number
   pagination: EventsPagination
 }
 

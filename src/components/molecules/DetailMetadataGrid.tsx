@@ -3,6 +3,8 @@ import styles from '../../styles/FeatureDetailPage.module.scss'
 type DetailMetadataItem = {
   label: string
   value: string
+  iconSrc?: string
+  iconAlt?: string
 }
 
 type DetailMetadataGridProps = {
@@ -26,7 +28,17 @@ export function DetailMetadataGrid({
             key={`${item.label}-${item.value}`}
             className={styles.metaCard}
           >
-            <dt>{item.label}</dt>
+            <dt>
+              {item.iconSrc ? (
+                <img
+                  className={styles.metaIcon}
+                  src={item.iconSrc}
+                  alt={item.iconAlt ?? ''}
+                  aria-hidden={item.iconAlt ? undefined : 'true'}
+                />
+              ) : null}
+              <span className={styles.metaLabel}>{item.label}</span>
+            </dt>
             <dd>{item.value}</dd>
           </div>
         ))}

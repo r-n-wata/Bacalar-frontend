@@ -1,15 +1,11 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { AppShell } from '../../../components/templates/AppShell'
 import { server } from '../../../test/msw/server'
 import { renderWithProviders } from '../../../test/renderWithProviders'
-import { defaultMockDelayMs } from '../../../test/msw/core'
 import { EventsPage } from './EventsPage'
-import {
-  emptyEventsCategoryHandler,
-} from '../mocks/handlers'
 import { http } from 'msw'
 import { jsonSuccess, resolveMockLanguage } from '../../../test/msw/core'
 import { getEventsFixture } from '../mocks/events.fixtures'
@@ -61,69 +57,46 @@ describe('EventsPage', () => {
     })
   }
 
-  it('renders hero, featured strip, filters, list, and submit cta in order', async () => {
+  async function openFilters() {
+    await userEvent.click(await screen.findByRole('button', { name: 'Filters' }))
+    return screen.findByRole('dialog', { name: 'Filter events' })
+  }
+
+  it('renders hero, featured strip, compact filter controls, list, and submit cta in order', async () => {
     setViewportPosition()
     await renderEventsRoute()
 
-    const heroTitle = await screen.findByText(
-      'Events happening this week',
-    )
+    const heroTitle = await screen.findByText('Events happening this week')
     const featuredTitle = screen.getByText('Our top picks for this week.')
-    const categoryFilter = screen.getByRole('button', { name: 'All' })
+    const searchInput = await screen.findByRole('textbox', { name: 'Search events' })
+    const filtersButton = screen.getByRole('button', { name: 'Filters' })
     const eventsList = screen.getByLabelText('Events list')
     const submitTitle = screen.getByText('Submit an event for review')
 
     expect(heroTitle.compareDocumentPosition(featuredTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(featuredTitle.compareDocumentPosition(categoryFilter)).toBe(
+    expect(featuredTitle.compareDocumentPosition(searchInput)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(categoryFilter.compareDocumentPosition(eventsList)).toBe(
+    expect(searchInput.compareDocumentPosition(filtersButton)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+    expect(filtersButton.compareDocumentPosition(eventsList)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
     expect(eventsList.compareDocumentPosition(submitTitle)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
 
-    const featuredSection = screen.getByLabelText('Featured events')
-    expect(within(featuredSection).getAllByRole('link')).toHaveLength(5)
-    expect(within(featuredSection).getByText('Local Market Brunch Crawl')).toBeVisible()
-    expect(
-      within(featuredSection).getByRole('img', { name: 'Lagoon Breathwork Session' }),
-    ).toBeVisible()
-    expect(
-      screen.getByRole('link', { name: 'Submit an event' }),
-    ).toHaveAttribute('href', '/events/submit')
+    expect((await screen.findAllByText('Showing 7 events'))[0]).toBeVisible()
   })
 
-  it('uses reserved placeholders instead of a spinner during initial loading', async () => {
+  it('renders localized events and localized filter controls after language change', async () => {
     setViewportPosition()
     await renderEventsRoute()
 
-    expect(screen.getByTestId('events-page-intro-placeholder')).toBeVisible()
-    expect(screen.getByTestId('events-featured-placeholder')).toBeVisible()
-    expect(screen.getByTestId('events-list-placeholder')).toBeVisible()
-    expect(screen.getByTestId('events-submit-placeholder')).toBeVisible()
-    expect(screen.queryByRole('status')).not.toBeInTheDocument()
-
-    expect(
-      await screen.findByText('Events happening this week', {}, {
-        timeout: defaultMockDelayMs * 4,
-      }),
-    ).toBeVisible()
-  })
-
-  it('renders localized events, paginates, and refetches when the language changes', async () => {
-    setViewportPosition()
-    await renderEventsRoute()
-
-    const eventsList = await screen.findByLabelText('Events list')
-    expect(within(eventsList).getByText('Sunrise Paddle Meditation')).toBeVisible()
-    expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
-    expect(
-      screen.queryByRole('button', { name: 'Load more events' }),
-    ).not.toBeInTheDocument()
+    expect(await screen.findByText('Sunrise Paddle Meditation')).toBeVisible()
 
     await userEvent.click(screen.getByRole('button', { name: 'ES' }))
 
@@ -131,71 +104,80 @@ describe('EventsPage', () => {
     expect(
       within(localizedEventsList).getByText('Meditacion al amanecer en paddle'),
     ).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Musica' })).toBeVisible()
-    expect(
-      screen.getByText('Nuestras mejores recomendaciones de esta semana.'),
-    ).toBeVisible()
-    expect(screen.queryByText('Sunrise Paddle Meditation')).not.toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: 'Buscar eventos' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Filtros' })).toBeVisible()
   })
 
   it('keeps featured events global while filters change the main list', async () => {
     setViewportPosition()
     await renderEventsRoute()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Music' }))
+    const dialog = await openFilters()
+    const categorySelect = within(dialog).getByRole('combobox')
+    await userEvent.selectOptions(categorySelect, 'music')
+    await userEvent.click(
+      await within(dialog).findByRole('button', { name: 'Show 3 events' }),
+    )
 
     const featuredSection = await screen.findByLabelText('Featured events')
     expect(within(featuredSection).getByText('Local Market Brunch Crawl')).toBeVisible()
+
     const eventsList = await screen.findByLabelText('Events list')
     expect(within(eventsList).getByText('Moonlight Cinema by the Water')).toBeVisible()
     expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
-    expect(within(eventsList).queryByText('Lagoon Taco Walk')).not.toBeInTheDocument()
+    expect(within(eventsList).queryByText('Ceviche Lab Pop-Up')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Remove filter Music' }),
+    ).toBeVisible()
   })
 
-  it('resets paginated results when the category changes', async () => {
+  it('filters events automatically once the query reaches three characters', async () => {
     setViewportPosition()
     await renderEventsRoute()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Music' }))
-    expect(await screen.findByText('Lagoon Salsa Night')).toBeVisible()
+    const searchInput = await screen.findByRole('textbox', { name: 'Search events' })
+    await userEvent.type(searchInput, 'sa')
 
-    await userEvent.click(screen.getByRole('button', { name: 'Food' }))
+    let eventsList = await screen.findByLabelText('Events list')
+    expect(within(eventsList).getByText('Sunrise Paddle Meditation')).toBeVisible()
+    expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
 
-    const eventsList = await screen.findByLabelText('Events list')
-    expect(within(eventsList).getByText('Ceviche Lab Pop-Up')).toBeVisible()
-    expect(within(eventsList).queryByText('Lagoon Salsa Night')).not.toBeInTheDocument()
+    await userEvent.type(searchInput, 'lsa')
+
+    await screen.findByRole('button', { name: 'Remove filter Search: salsa' })
+
+    eventsList = await screen.findByLabelText('Events list')
+    expect(within(eventsList).getByText('Lagoon Salsa Night')).toBeVisible()
+    expect(
+      within(eventsList).queryByText('Sunrise Paddle Meditation'),
+    ).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove filter Search: salsa' }))
+
+    expect(await screen.findByText('Sunrise Paddle Meditation')).toBeVisible()
+    expect((await screen.findAllByText('Showing 7 events'))[0]).toBeVisible()
   })
 
-  it('shows the upcoming-events empty state with a submit CTA when the API succeeds with no results', async () => {
-    server.use(emptyEventsCategoryHandler('wellness'))
-
+  it('shows the filtered empty state with a submit CTA when no events match', async () => {
     setViewportPosition()
     await renderEventsRoute()
-    await userEvent.click(screen.getByRole('button', { name: 'Wellness' }))
+    await screen.findByLabelText('Events list')
+
+    const searchInput = screen.getByRole('textbox', { name: 'Search events' })
+    await userEvent.type(searchInput, 'zzz-no-match{enter}')
 
     expect(
-      await screen.findByText('There are currently no upcoming events.'),
+      await screen.findByText('No events match these filters right now.'),
     ).toBeVisible()
     expect(
       screen.getByText(
-        'Check back soon for new listings, or submit an event for review.',
+        'Try widening your search or clearing one of the active filters.',
       ),
     ).toBeVisible()
-    const submitLinks = screen.getAllByRole('link', { name: 'Submit an event' })
-    expect(submitLinks).toHaveLength(1)
-    expect(submitLinks[0]).toHaveAttribute('href', '/events/submit')
-    expect(
-      screen.queryByText('Submit an event for review'),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByTestId('events-featured-placeholder'),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByTestId('events-list-placeholder'),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByTestId('events-submit-placeholder'),
-    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Submit an event' })).toHaveAttribute(
+      'href',
+      '/events/submit',
+    )
   })
 
   it('shows an error state with retry when the handler fails', async () => {

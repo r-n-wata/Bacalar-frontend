@@ -17,12 +17,16 @@ export const restaurantsHandlers = [
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
     const category = (url.searchParams.get('category') ??
       'all') as RestaurantCategoryFilter
+    const search = url.searchParams.get('search') ?? undefined
+    const priceBand = (url.searchParams.get('priceBand') ?? undefined) as '$' | '$$' | '$$$' | undefined
 
     return jsonSuccess(
       getRestaurantsFixture(resolveMockLanguage(request), {
         category,
         cursor,
         limit: Number.isFinite(limit) ? limit : 10,
+        search,
+        priceBand,
       }),
     )
   }),
@@ -88,6 +92,8 @@ export function emptyRestaurantsCategoryHandler(
     const selectedCategory = (url.searchParams.get('category') ??
       'all') as RestaurantCategoryFilter
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
+    const search = url.searchParams.get('search') ?? undefined
+    const priceBand = (url.searchParams.get('priceBand') ?? undefined) as '$' | '$$' | '$$$' | undefined
 
     return jsonSuccess(
       getRestaurantsFixture(resolveMockLanguage(request), {
@@ -95,6 +101,8 @@ export function emptyRestaurantsCategoryHandler(
         cursor: url.searchParams.get('cursor'),
         limit: Number.isFinite(limit) ? limit : 10,
         forceEmpty: selectedCategory === category,
+        search,
+        priceBand,
       }),
     )
   })

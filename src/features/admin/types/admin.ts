@@ -103,6 +103,7 @@ export type AdminTourSubmissionDetail = AdminSubmissionDetailBase & {
   durationHours: number
   priceFrom: number
   description: string
+  includedItems?: string[]
 }
 
 export type AdminSubmissionDetail =
@@ -258,6 +259,7 @@ export type AdminPublishedTourDetail = AdminPublishedContentDetailBase & {
     name: string
     description: string
     included?: string
+    includedItems?: string[]
     whatToBring?: string
     operatorDescription?: string
   }>

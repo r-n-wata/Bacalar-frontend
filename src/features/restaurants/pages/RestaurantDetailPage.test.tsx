@@ -43,7 +43,10 @@ describe('RestaurantDetailPage', () => {
     ).toBeVisible()
 
     expect(
-      await screen.findByText('Cielo de Maiz', {}, {
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Cielo de Maiz',
+      }, {
         timeout: defaultMockDelayMs * 4,
       }),
     ).toBeVisible()
@@ -52,21 +55,26 @@ describe('RestaurantDetailPage', () => {
   it('renders the embedded map section when map data exists', async () => {
     await renderDetailRoute('/restaurants/rest-cielo')
 
-    expect(await screen.findByText('Cielo de Maiz')).toBeVisible()
-    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
-      'href',
-      'https://maps.google.com/?q=Avenida+3+210+Bacalar',
-    )
-    expect(screen.getByTitle('Cielo de Maiz map')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Cielo de Maiz' }),
+    ).toBeVisible()
+    expect(screen.getAllByText('Cielo de Maiz').length).toBeGreaterThan(0)
+    expect(
+      screen.getByText(
+        'Contact the operator directly for pricing, availability and questions',
+      ),
+    ).toBeVisible()
+    expect(screen.getAllByTitle('Cielo de Maiz map').length).toBeGreaterThan(0)
   })
 
   it('renders a placeholder hero image when the restaurant has no image', async () => {
     await renderDetailRoute()
 
-    expect(await screen.findByText('Bruma Azul')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Bruma Azul' }),
+    ).toBeVisible()
     expect(
       screen.getAllByRole('img', { name: 'Bruma Azul' }).length,
     ).toBeGreaterThan(0)
-    expect(screen.queryByRole('link', { name: 'View on map' })).not.toBeInTheDocument()
   })
 })

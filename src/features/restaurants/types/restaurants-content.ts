@@ -11,5 +11,6 @@ export type RestaurantsContent = {
   description: string
   featuredItems: Restaurant[]
   items: Restaurant[]
+  totalCount: number
   pagination: RestaurantsPagination
 }

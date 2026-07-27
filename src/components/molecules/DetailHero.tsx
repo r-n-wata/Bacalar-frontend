@@ -18,10 +18,7 @@ type DetailHeroProps = {
   eyebrow: string
   images?: GalleryImage[]
   galleryAriaLabel: string
-  viewAllLabel: string
   closeLabel: string
-  previousLabel: string
-  nextLabel: string
   countLabel: (current: number, total: number) => string
 }
 
@@ -36,10 +33,7 @@ export function DetailHero({
   eyebrow,
   images = [],
   galleryAriaLabel,
-  viewAllLabel,
   closeLabel,
-  previousLabel,
-  nextLabel,
   countLabel,
 }: DetailHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -57,7 +51,6 @@ export function DetailHero({
   const closeButtonRef = useRef<HTMLButtonElement | null>(null)
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null)
   const desktopVisibleCount = getDesktopVisibleCount(images.length)
-  const hasOverflowImages = images.length > desktopVisibleCount
   const isSingleImageGallery = images.length === 1
 
   useEffect(() => {
@@ -257,44 +250,14 @@ export function DetailHero({
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchPriority={index === 0 ? 'high' : undefined}
                 />
+                {images.length > 1 && index === currentIndex ? (
+                  <span className={styles.mobileGalleryCountOverlay}>
+                    {countLabel(currentIndex + 1, images.length)}
+                  </span>
+                ) : null}
               </button>
             ))}
           </div>
-
-          {images.length > 1 ? (
-            <>
-              <div className={styles.mobileGalleryControls}>
-                <button
-                  type="button"
-                  className={styles.galleryControl}
-                  onClick={() => goToMobileIndex(currentIndex - 1)}
-                  aria-controls={galleryId}
-                  aria-label={previousLabel}
-                >
-                  &#8592;
-                </button>
-                <span className={styles.galleryCounter}>
-                  {countLabel(currentIndex + 1, images.length)}
-                </span>
-                <button
-                  type="button"
-                  className={styles.galleryControl}
-                  onClick={() => goToMobileIndex(currentIndex + 1)}
-                  aria-controls={galleryId}
-                  aria-label={nextLabel}
-                >
-                  &#8594;
-                </button>
-              </div>
-              <button
-                type="button"
-                className={styles.mobileViewAllLink}
-                onClick={(event) => openLightbox(currentIndex, event.currentTarget)}
-              >
-                {viewAllLabel}
-              </button>
-            </>
-          ) : null}
         </div>
 
         <div
@@ -306,9 +269,6 @@ export function DetailHero({
         >
           {images.map((image, index) => {
             const isHiddenOnDesktop = index >= desktopVisibleCount
-            const showOverflowLabel =
-              hasOverflowImages && index === desktopVisibleCount - 1
-
             return (
               <button
                 key={`${image.src}-${index}`}
@@ -327,11 +287,6 @@ export function DetailHero({
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchPriority={index === 0 ? 'high' : undefined}
                 />
-                {showOverflowLabel ? (
-                  <span className={styles.viewAllOverlay}>
-                    {viewAllLabel}
-                  </span>
-                ) : null}
               </button>
             )
           })}
@@ -371,39 +326,11 @@ export function DetailHero({
             </div>
 
             <div className={styles.lightboxBody}>
-              {images.length > 1 ? (
-                <button
-                  type="button"
-                  className={styles.galleryControl}
-                  onClick={() =>
-                    setLightboxIndex(
-                      (lightboxIndex - 1 + images.length) % images.length,
-                    )
-                  }
-                  aria-label={previousLabel}
-                >
-                  &#8592;
-                </button>
-              ) : null}
-
               <img
                 src={images[lightboxIndex].src}
                 alt={images[lightboxIndex].alt}
                 className={styles.lightboxImage}
               />
-
-              {images.length > 1 ? (
-                <button
-                  type="button"
-                  className={styles.galleryControl}
-                  onClick={() =>
-                    setLightboxIndex((lightboxIndex + 1) % images.length)
-                  }
-                  aria-label={nextLabel}
-                >
-                  &#8594;
-                </button>
-              ) : null}
             </div>
           </div>
         </div>

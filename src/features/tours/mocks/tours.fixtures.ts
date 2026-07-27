@@ -1,4 +1,5 @@
 import type { AppLanguage } from '../../../app/i18n/config'
+import { parseIncludedItemsInput } from '../lib/includedItems'
 import type { Tour, TourCategoryFilter, TourDetail } from '../types/tour'
 import type { ToursContent } from '../types/tours-content'
 
@@ -13,6 +14,10 @@ type GetToursFixtureOptions = {
   cursor?: string | null
   limit?: number
   forceEmpty?: boolean
+  search?: string
+  priceMin?: number
+  priceMax?: number
+  durationHours?: number[]
 }
 
 function createTourSeed(input: {
@@ -27,6 +32,7 @@ function createTourSeed(input: {
   suitableForKids: string
   description: string
   included?: string
+  includedItems?: string[]
   whatToBring?: string
   meetingPoint?: string
   address?: string
@@ -51,8 +57,12 @@ function createTourSeed(input: {
       name: input.name,
       category: input.category,
       duration: input.duration,
+      durationHoursValue: Number.parseInt(input.duration, 10) || 1,
       priceFrom: input.priceFrom,
+      priceFromValue:
+        Number.parseInt(input.priceFrom.replace(/,/g, '').match(/\d+/)?.[0] ?? '1', 10) || 1,
       bestFor: input.bestFor,
+      description: input.description,
       operatorName: input.operatorName,
       route: input.route,
       image: input.image,
@@ -68,7 +78,8 @@ function createTourSeed(input: {
       difficulty: input.difficulty,
       suitableForKids: input.suitableForKids,
       description: input.description,
-      included: input.included,
+      includedItems:
+        input.includedItems ?? (input.included ? parseIncludedItemsInput(input.included) : undefined),
       whatToBring: input.whatToBring,
       meetingPoint: input.meetingPoint,
       address: input.address,
@@ -338,7 +349,16 @@ function encodeCursor(sortOrder: number, slug: string) {
 
 export function getToursFixture(
   language: AppLanguage,
-  { category = 'all', cursor, limit = 10, forceEmpty = false }: GetToursFixtureOptions = {},
+  {
+    category = 'all',
+    cursor,
+    limit = 10,
+    forceEmpty = false,
+    search,
+    priceMin,
+    priceMax,
+    durationHours,
+  }: GetToursFixtureOptions = {},
 ): ToursContent {
   const seeds = tourSeedsByLanguage[language]
   const featuredItems = seeds
@@ -352,6 +372,35 @@ export function getToursFixture(
         .filter((seed) => seed.featuredOrder >= 3)
         .map((seed) => seed.item)
         .filter((item) => (category === 'all' ? true : item.category === category))
+        .filter((item) =>
+          typeof priceMin === 'number' ? item.priceFromValue >= priceMin : true,
+        )
+        .filter((item) =>
+          typeof priceMax === 'number' ? item.priceFromValue <= priceMax : true,
+        )
+        .filter((item) =>
+          durationHours && durationHours.length > 0
+            ? durationHours.includes(item.durationHoursValue)
+            : true,
+        )
+        .filter((item) => {
+          const searchTerm = search?.trim().toLowerCase()
+
+          if (!searchTerm) {
+            return true
+          }
+
+          return [
+            item.name,
+            item.operatorName,
+            item.category,
+            item.bestFor,
+            item.description,
+          ]
+            .join(' ')
+            .toLowerCase()
+            .includes(searchTerm)
+        })
 
   const startIndex = cursor
     ? filteredItems.findIndex((item, index) => encodeCursor(index, item.id) === cursor) + 1
@@ -375,8 +424,12 @@ export function getToursFixture(
         ? 'Explora actividades, aventuras y salidas en la laguna por tour.'
         : 'Browse lagoon outings, water activities, and local adventures by tour.',
     categories: [...new Set(seeds.map((seed) => seed.item.category))],
+    durationOptions: [
+      ...new Set(seeds.map((seed) => seed.item.durationHoursValue)),
+    ].sort((left, right) => left - right),
     featuredItems,
     items,
+    totalCount: filteredItems.length,
     pagination: {
       hasMore,
       nextCursor,
