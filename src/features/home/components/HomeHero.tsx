@@ -39,7 +39,7 @@ export function HomeHero({
 
       <div className={styles.visualColumn}>
         {image ? (
-          <picture>
+          <picture className={styles.picture}>
             {image.avifSrcSet ? (
               <source
                 type="image/avif"
