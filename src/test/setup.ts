@@ -10,6 +10,7 @@ import.meta.env.VITE_SUPABASE_ANON_KEY =
   import.meta.env.VITE_SUPABASE_ANON_KEY ?? 'test-anon-key'
 import.meta.env.VITE_API_BASE_URL = ''
 window.scrollTo = vi.fn()
+window.HTMLElement.prototype.scrollIntoView = vi.fn()
 
 beforeAll(() => {
   server.listen({

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http } from 'msw'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
@@ -142,6 +142,18 @@ describe('RestaurantSubmissionPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Send submission' }))
 
     expect(await screen.findByText('This field is required.')).toBeVisible()
+  })
+
+  it('focuses the first invalid field on submit', async () => {
+    await renderRestaurantsRouter(['/restaurants/submit'])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Send submission' }))
+
+    const nameInput = screen.getByLabelText('Restaurant name')
+    expect(await screen.findAllByText('This field is required.')).not.toHaveLength(0)
+    await waitFor(() => {
+      expect(nameInput).toHaveFocus()
+    })
   })
 
   it('renders server-side submission errors when the final save fails', async () => {

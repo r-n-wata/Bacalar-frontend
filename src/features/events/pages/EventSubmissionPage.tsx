@@ -5,6 +5,7 @@ import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { TextInput } from '../../../components/atoms/TextInput'
 import { FormField } from '../../../components/molecules/FormField'
 import { PageIntro } from '../../../components/molecules/PageIntro'
@@ -12,6 +13,7 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { ApiError } from '../../../services/http'
 import posthog from '../../../services/posthog'
+import { useFocusFirstInvalidField } from '../../shared/lib/useFocusFirstInvalidField'
 import { createEventSubmission } from '../api/createEventSubmission'
 import { prepareEventSubmissionUpload } from '../api/prepareEventSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
@@ -42,6 +44,20 @@ type SubmissionFormState = {
 }
 
 type FieldErrors = Partial<Record<string, string>>
+
+const fieldOrder = [
+  'title',
+  'startsAt',
+  'location',
+  'address',
+  'mapUrl',
+  'mapEmbedUrl',
+  'contactName',
+  'contactMethod',
+  'description',
+  'mediaUrl',
+  'media',
+] as const
 
 const initialFormState: SubmissionFormState = {
   title: '',
@@ -125,6 +141,7 @@ export function EventSubmissionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const registerFieldRef = useFocusFirstInvalidField(fieldErrors, fieldOrder)
 
   const totalMediaCount = selectedFiles.length + externalImageUrls.length
   const mediaSummary = useMemo(
@@ -396,10 +413,11 @@ export function EventSubmissionPage() {
       />
 
       <ContentPanel>
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate aria-busy={isSubmitting}>
           <div className={styles.grid}>
             <FormField label={t('events.submit.fields.title')}>
               <TextInput
+                ref={registerFieldRef('title')}
                 aria-label={t('events.submit.fields.title')}
                 value={form.title}
                 onChange={(event) => updateField('title', event.target.value)}
@@ -410,6 +428,7 @@ export function EventSubmissionPage() {
 
             <FormField label={t('events.submit.fields.startsAt')}>
               <TextInput
+                ref={registerFieldRef('startsAt')}
                 type="datetime-local"
                 aria-label={t('events.submit.fields.startsAt')}
                 value={form.startsAt}
@@ -423,6 +442,7 @@ export function EventSubmissionPage() {
 
             <FormField label={t('events.submit.fields.location')}>
               <TextInput
+                ref={registerFieldRef('location')}
                 aria-label={t('events.submit.fields.location')}
                 value={form.location}
                 onChange={(event) => updateField('location', event.target.value)}
@@ -434,6 +454,7 @@ export function EventSubmissionPage() {
             </FormField>
             <FormField label={t('events.submit.fields.address')} hint={t('events.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('address')}
                 aria-label={t('events.submit.fields.address')}
                 value={form.address}
                 onChange={(event) => updateField('address', event.target.value)}
@@ -445,6 +466,7 @@ export function EventSubmissionPage() {
             </FormField>
             <FormField label={t('events.submit.fields.mapUrl')} hint={t('events.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('mapUrl')}
                 aria-label={t('events.submit.fields.mapUrl')}
                 value={form.mapUrl}
                 onChange={(event) => updateField('mapUrl', event.target.value)}
@@ -456,6 +478,7 @@ export function EventSubmissionPage() {
             </FormField>
             <FormField label={t('events.submit.fields.mapEmbedUrl')} hint={t('events.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('mapEmbedUrl')}
                 aria-label={t('events.submit.fields.mapEmbedUrl')}
                 value={form.mapEmbedUrl}
                 onChange={(event) => updateField('mapEmbedUrl', event.target.value)}
@@ -481,6 +504,7 @@ export function EventSubmissionPage() {
 
             <FormField label={t('events.submit.fields.contactName')}>
               <TextInput
+                ref={registerFieldRef('contactName')}
                 aria-label={t('events.submit.fields.contactName')}
                 value={form.contactName}
                 onChange={(event) => updateField('contactName', event.target.value)}
@@ -493,6 +517,7 @@ export function EventSubmissionPage() {
 
             <FormField label={t('events.submit.fields.contactMethod')}>
               <TextInput
+                ref={registerFieldRef('contactMethod')}
                 aria-label={t('events.submit.fields.contactMethod')}
                 value={form.contactMethod}
                 onChange={(event) => updateField('contactMethod', event.target.value)}
@@ -523,6 +548,7 @@ export function EventSubmissionPage() {
 
           <FormField label={t('events.submit.fields.description')}>
             <textarea
+              ref={registerFieldRef('description')}
               className={styles.textarea}
               aria-label={t('events.submit.fields.description')}
               value={form.description}
@@ -555,7 +581,10 @@ export function EventSubmissionPage() {
                 hint={t('events.submit.media.uploadHint')}
               >
                 <input
-                  ref={fileInputRef}
+                  ref={(element) => {
+                    fileInputRef.current = element
+                    registerFieldRef('media')(element)
+                  }}
                   className={styles.fileInput}
                   type="file"
                   aria-label={t('events.submit.media.uploadLabel')}
@@ -571,6 +600,9 @@ export function EventSubmissionPage() {
               >
                 <div className={styles.inlineField}>
                   <TextInput
+                    ref={(element) => {
+                      registerFieldRef('mediaUrl')(element)
+                    }}
                     aria-label={t('events.submit.media.externalUrlLabel')}
                     value={draftExternalUrl}
                     onChange={(event) => {
@@ -629,6 +661,12 @@ export function EventSubmissionPage() {
               </div>
             </div>
           </ContentPanel>
+
+          {isSubmitting ? (
+            <div className={styles.submittingState}>
+              <LoadingSpinner label={t('events.submit.submitting')} />
+            </div>
+          ) : null}
 
           {requestError ? <p className={styles.error}>{requestError}</p> : null}
 
