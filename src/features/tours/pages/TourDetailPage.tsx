@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import arrowLeftIcon from '../../../assets/icons/arrow-left.png'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
@@ -11,15 +12,17 @@ import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
+import bestForIcon from '../../../assets/icons/bestFor.png'
+import checkIcon from '../../../assets/icons/check.png'
+import clockIcon from '../../../assets/icons/clock.svg'
+import difficultyIcon from '../../../assets/icons/difficulty.png'
+import startFromIcon from '../../../assets/icons/start-from.png'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { getFeaturePlaceholderImage } from '../../shared/lib/featureImage'
+import { buildMapEmbedUrl, buildMapUrl } from '../../shared/lib/maps'
 import { useTourDetail } from '../hooks/useTourDetail'
-
-function normalizeLongformText(value?: string) {
-  return value?.replace(/\s+/g, ' ').trim().toLowerCase() ?? ''
-}
 
 export function TourDetailPage() {
   const { t } = useTranslation()
@@ -73,14 +76,12 @@ export function TourDetailPage() {
     src: url,
     alt: index === 0 ? data.name : `${data.name} ${index + 1}`,
   }))
-  const operatorDescription =
-    normalizeLongformText(data.operatorDescription) ===
-    normalizeLongformText(data.description)
-      ? undefined
-      : data.operatorDescription
   const hasContactActions = buildContactActions(data.contact, language).length > 0
   const includedItems = data.includedItems ?? []
   const includedFallback = t('tours.sections.includedFallback')
+  const resolvedMapUrl = data.mapUrl ?? buildMapUrl(data.address ?? data.meetingPoint)
+  const resolvedMapEmbedUrl =
+    data.mapEmbedUrl ?? buildMapEmbedUrl(data.address ?? data.meetingPoint)
   const planningFacts = [
     {
       label: t('tours.meta.category'),
@@ -95,22 +96,27 @@ export function TourDetailPage() {
     {
       label: t('tours.meta.price'),
       value: data.priceFrom,
+      iconSrc: startFromIcon,
     },
     {
       label: t('tours.meta.duration'),
       value: data.duration,
+      iconSrc: clockIcon,
     },
     {
       label: t('tours.meta.difficulty'),
       value: data.difficulty,
+      iconSrc: difficultyIcon,
     },
     {
       label: t('tours.meta.bestFor'),
       value: data.bestFor,
+      iconSrc: bestForIcon,
     },
     {
       label: t('tours.meta.suitableForKids'),
       value: data.suitableForKids,
+      iconSrc: checkIcon,
     },
     {
       label: t('tours.meta.privateOrShared'),
@@ -141,6 +147,12 @@ export function TourDetailPage() {
       />
       <div className={pageStyles.backLinkRow}>
         <Link className={pageStyles.backLink} to="/tours">
+          <img
+            className={pageStyles.backLinkIcon}
+            src={arrowLeftIcon}
+            alt=""
+            aria-hidden="true"
+          />
           {t('tours.backToList')}
         </Link>
       </div>
@@ -151,10 +163,7 @@ export function TourDetailPage() {
             eyebrow={t('tours.detailEyebrow')}
             images={galleryImages}
             galleryAriaLabel={t('tours.galleryAriaLabel')}
-            viewAllLabel={t('common.gallery.viewAllPhotos')}
             closeLabel={t('common.gallery.close')}
-            previousLabel={t('common.gallery.previous')}
-            nextLabel={t('common.gallery.next')}
             countLabel={(current, total) =>
               t('common.gallery.count', { current, total })
             }
@@ -171,23 +180,6 @@ export function TourDetailPage() {
             items={factItems}
           />
 
-          <div className={pageStyles.mobileOnlySection}>
-            <section className={pageStyles.sidebarCard}>
-              <h2 className={pageStyles.sidebarTitle}>{t('tours.sidebar.title')}</h2>
-              <div className={pageStyles.sidebarFacts}>
-                {planningFacts.map((item) => (
-                  <div
-                    key={`${item.label}-${item.value}`}
-                    className={pageStyles.sidebarFact}
-                  >
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-
           <article className={pageStyles.bodyCard}>
             <DetailSection title={t('tours.sections.about')}>
               <p className={pageStyles.bodyCopy}>{data.description}</p>
@@ -198,13 +190,33 @@ export function TourDetailPage() {
               {includedItems.length > 0 ? (
                 <ul className={pageStyles.checklist}>
                   {includedItems.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item}>
+                      <img
+                        className={pageStyles.checkIcon}
+                        src={checkIcon}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
               ) : (
                 <p className={pageStyles.bodyCopy}>{includedFallback}</p>
               )}
             </section>
+
+            {data.meetingPoint || data.address || resolvedMapEmbedUrl ? (
+              <section className={`${pageStyles.detailSection} ${pageStyles.mobileOnlySection}`}>
+                <EmbeddedMapSection
+                  title={t('tours.sections.meetingPoint')}
+                  description={data.address ?? data.meetingPoint}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
 
             {data.whatToBring ? (
               <DetailSection title={t('tours.sections.whatToBring')}>
@@ -214,36 +226,13 @@ export function TourDetailPage() {
 
             <ListingContactSection
               contact={data.contact}
+              listingId={data.id}
               listingType="tours"
+              listingName={data.name}
               currentLanguage={language}
               eyebrow={t('tours.providerEyebrow')}
               title={data.operatorName}
-              description={
-                operatorDescription ??
-                t('common.contact.provider', {
-                  providerName: data.operatorName,
-                })
-              }
             />
-
-            {data.meetingPoint || data.mapEmbedUrl ? (
-              <DetailSection title={t('tours.sections.meetingPoint')}>
-                {data.meetingPoint || data.address ? (
-                  <p className={pageStyles.bodyCopy}>
-                    {data.address ?? data.meetingPoint}
-                  </p>
-                ) : null}
-                {data.mapEmbedUrl ? (
-                  <EmbeddedMapSection
-                    title={t('common.labels.location')}
-                    description={data.address ?? data.meetingPoint}
-                    embedUrl={data.mapEmbedUrl}
-                    mapUrl={data.mapUrl}
-                    frameTitle={`${data.name} map`}
-                  />
-                ) : null}
-              </DetailSection>
-            ) : null}
           </article>
         </div>
 
@@ -271,13 +260,33 @@ export function TourDetailPage() {
               {includedItems.length > 0 ? (
                 <ul className={pageStyles.checklist}>
                   {includedItems.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item}>
+                      <img
+                        className={pageStyles.checkIcon}
+                        src={checkIcon}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
               ) : (
                 <p className={pageStyles.bodyCopy}>{includedFallback}</p>
               )}
             </section>
+
+            {data.meetingPoint || data.address || resolvedMapEmbedUrl ? (
+              <section className={pageStyles.sidebarCard}>
+                <EmbeddedMapSection
+                  title={t('tours.sections.meetingPoint')}
+                  description={data.address ?? data.meetingPoint}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
 
             <section className={pageStyles.sidebarCard}>
               <DetailActions

@@ -57,11 +57,15 @@ describe('EventDetailPage', () => {
         name: 'Sunset Jazz by the Lagoon',
       }),
     ).toBeVisible()
-    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
-      'href',
-      'https://maps.google.com/?q=Costera+12+Bacalar',
-    )
-    expect(screen.getByTitle('Sunset Jazz by the Lagoon map')).toBeVisible()
+    expect(screen.getAllByText('Casa Laguna Deck').length).toBeGreaterThan(0)
+    expect(
+      screen.getByText(
+        'Contact the operator directly for pricing, availability and questions',
+      ),
+    ).toBeVisible()
+    expect(
+      screen.getAllByTitle('Sunset Jazz by the Lagoon map').length,
+    ).toBeGreaterThan(0)
   })
 
   it('renders a placeholder hero image when the event has no image', async () => {
@@ -93,7 +97,7 @@ describe('EventDetailPage', () => {
     expect(
       await screen.findByText('This event is no longer available.'),
     ).toBeVisible()
-    expect(screen.getByRole('link', { name: 'See all events' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Back to Events' })).toHaveAttribute(
       'href',
       '/events',
     )

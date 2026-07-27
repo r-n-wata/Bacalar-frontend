@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import arrowLeftIcon from '../../../assets/icons/arrow-left.png'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
@@ -17,6 +18,7 @@ import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
+import { buildMapEmbedUrl, buildMapUrl } from '../../shared/lib/maps'
 import { getMoodTranslationKey, isUpcomingEvent } from '../lib/presentation'
 import { useEventDetail } from '../hooks/useEventDetail'
 
@@ -93,6 +95,9 @@ export function EventDetailPage() {
   const moodLabel = t(getMoodTranslationKey(data.category))
   const showUpcoming = isUpcomingEvent(data)
   const hasContactActions = buildContactActions(data.contact, language).length > 0
+  const resolvedMapUrl = data.mapUrl ?? buildMapUrl(data.address ?? data.venue)
+  const resolvedMapEmbedUrl =
+    data.mapEmbedUrl ?? buildMapEmbedUrl(data.address ?? data.venue)
   const heroImage = resolveFeatureImage({
     kind: 'event',
     id: data.id,
@@ -126,6 +131,12 @@ export function EventDetailPage() {
       />
       <div className={pageStyles.backLinkRow}>
         <Link className={pageStyles.backLink} to="/events">
+          <img
+            className={pageStyles.backLinkIcon}
+            src={arrowLeftIcon}
+            alt=""
+            aria-hidden="true"
+          />
           {t('events.backToList')}
         </Link>
       </div>
@@ -136,10 +147,7 @@ export function EventDetailPage() {
             eyebrow={t('events.detailEyebrow')}
             images={heroImages}
             galleryAriaLabel={t('events.galleryAriaLabel')}
-            viewAllLabel={t('common.gallery.viewAllPhotos')}
             closeLabel={t('common.gallery.close')}
-            previousLabel={t('common.gallery.previous')}
-            nextLabel={t('common.gallery.next')}
             countLabel={(current, total) =>
               t('common.gallery.count', { current, total })
             }
@@ -190,6 +198,7 @@ export function EventDetailPage() {
                 </div>
               </div>
             </section>
+
           </div>
 
           <article className={pageStyles.bodyCard}>
@@ -201,23 +210,24 @@ export function EventDetailPage() {
               </p>
               <p className={pageStyles.bodyCopy}>{data.description}</p>
             </DetailSection>
-            <ListingContactSection
-              contact={data.contact}
-              listingType="events"
-              currentLanguage={language}
-              title={t('common.contact.title')}
-            />
-            {data.mapEmbedUrl ? (
-              <DetailSection title={t('common.labels.location')}>
+            {resolvedMapEmbedUrl ? (
+              <section className={`${pageStyles.detailSection} ${pageStyles.mobileOnlySection}`}>
                 <EmbeddedMapSection
                   title={t('common.labels.location')}
                   description={data.address ?? data.venue}
-                  embedUrl={data.mapEmbedUrl}
-                  mapUrl={data.mapUrl}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
                   frameTitle={`${data.title} map`}
                 />
-              </DetailSection>
+              </section>
             ) : null}
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="events"
+              listingName={data.title}
+              currentLanguage={language}
+            />
             <div className={pageStyles.actions}>
               <Link className={pageStyles.primaryAction} to="/events">
                 {t('events.backToList')}
@@ -244,6 +254,17 @@ export function EventDetailPage() {
                 </div>
               </div>
             </section>
+            {resolvedMapEmbedUrl ? (
+              <section className={pageStyles.sidebarCard}>
+                <EmbeddedMapSection
+                  title={t('common.labels.location')}
+                  description={data.address ?? data.venue}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
+                  frameTitle={`${data.title} map`}
+                />
+              </section>
+            ) : null}
             <section className={pageStyles.sidebarCard}>
               <DetailActions
                 compact

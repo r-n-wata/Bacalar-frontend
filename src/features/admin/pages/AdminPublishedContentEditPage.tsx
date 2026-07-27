@@ -27,8 +27,7 @@ import {
 import { prepareRestaurantSubmissionUpload } from '../../restaurants/api/prepareRestaurantSubmissionUpload'
 import { prepareTourSubmissionUpload } from '../../tours/api/prepareTourSubmissionUpload'
 import {
-  formatIncludedItemsInput,
-  parseIncludedItemsInput,
+  normalizeIncludedItems,
 } from '../../tours/lib/includedItems'
 import { updateAdminPublishedContent } from '../api/updateAdminPublishedContent'
 import { useAdminAuth } from '../auth/useAdminAuth'
@@ -113,14 +112,14 @@ type TourFormState = {
     en: {
       name: string
       description: string
-      includedItems: string
+      includedItems: string[]
       whatToBring: string
       operatorDescription: string
     }
     es: {
       name: string
       description: string
-      includedItems: string
+      includedItems: string[]
       whatToBring: string
       operatorDescription: string
     }
@@ -258,18 +257,20 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
           en: {
             name: item.translations.en.name,
             description: item.translations.en.description,
-            includedItems: formatIncludedItemsInput(
-              item.translations.en.includedItems,
-            ),
+            includedItems:
+              (item.translations.en.includedItems ?? []).length > 0
+                ? (item.translations.en.includedItems ?? [])
+                : [''],
             whatToBring: item.translations.en.whatToBring ?? '',
             operatorDescription: item.translations.en.operatorDescription ?? '',
           },
           es: {
             name: item.translations.es.name,
             description: item.translations.es.description,
-            includedItems: formatIncludedItemsInput(
-              item.translations.es.includedItems,
-            ),
+            includedItems:
+              (item.translations.es.includedItems ?? []).length > 0
+                ? (item.translations.es.includedItems ?? [])
+                : [''],
             whatToBring: item.translations.es.whatToBring ?? '',
             operatorDescription: item.translations.es.operatorDescription ?? '',
           },
@@ -596,6 +597,67 @@ export function AdminPublishedContentEditPage() {
     setTextError(String(key))
   }
 
+  function updateTourIncludedItems(
+    localeKey: 'en' | 'es',
+    nextItems: string[],
+  ) {
+    setForm((current) =>
+      current?.type === 'tours'
+        ? {
+            ...current,
+            translations: {
+              ...current.translations,
+              [localeKey]: {
+                ...current.translations[localeKey],
+                includedItems: nextItems,
+              },
+            },
+          }
+        : current,
+    )
+    setTextError(`translations.${localeKey}.includedItems`)
+  }
+
+  function updateTourIncludedItemValue(
+    localeKey: 'en' | 'es',
+    index: number,
+    value: string,
+  ) {
+    if (form?.type !== 'tours') {
+      return
+    }
+
+    updateTourIncludedItems(
+      localeKey,
+      form.translations[localeKey].includedItems.map((item, itemIndex) =>
+        itemIndex === index ? value : item,
+      ),
+    )
+  }
+
+  function addTourIncludedItemField(localeKey: 'en' | 'es') {
+    if (form?.type !== 'tours') {
+      return
+    }
+
+    updateTourIncludedItems(localeKey, [
+      ...form.translations[localeKey].includedItems,
+      '',
+    ])
+  }
+
+  function removeTourIncludedItemField(localeKey: 'en' | 'es', index: number) {
+    if (form?.type !== 'tours') {
+      return
+    }
+
+    const nextItems = form.translations[localeKey].includedItems.filter(
+      (_, itemIndex) => itemIndex !== index,
+    )
+
+    updateTourIncludedItems(localeKey, nextItems.length > 0 ? nextItems : [''])
+  }
+
   function validateFormState(): FieldErrors {
     if (!form) {
       return { form: t('admin.content.edit.error') }
@@ -657,7 +719,16 @@ export function AdminPublishedContentEditPage() {
       Object.assign(
         nextErrors,
         getLocalizedFieldErrors(
-          form.translations as { en: Record<string, string>; es: Record<string, string> },
+          {
+            en: {
+              name: form.translations.en.name,
+              description: form.translations.en.description,
+            },
+            es: {
+              name: form.translations.es.name,
+              description: form.translations.es.description,
+            },
+          },
           {
             name: 2,
             description: 20,
@@ -796,7 +867,7 @@ export function AdminPublishedContentEditPage() {
                   en: {
                     ...form.translations.en,
                     includedItems:
-                      parseIncludedItemsInput(form.translations.en.includedItems),
+                      normalizeIncludedItems(form.translations.en.includedItems),
                     whatToBring: form.translations.en.whatToBring.trim() || undefined,
                     operatorDescription:
                       form.translations.en.operatorDescription.trim() || undefined,
@@ -804,7 +875,7 @@ export function AdminPublishedContentEditPage() {
                   es: {
                     ...form.translations.es,
                     includedItems:
-                      parseIncludedItemsInput(form.translations.es.includedItems),
+                      normalizeIncludedItems(form.translations.es.includedItems),
                     whatToBring: form.translations.es.whatToBring.trim() || undefined,
                     operatorDescription:
                       form.translations.es.operatorDescription.trim() || undefined,
@@ -1231,7 +1302,40 @@ export function AdminPublishedContentEditPage() {
                         {fieldErrors['translations.en.description'] ? <span className={styles.errorText}>{fieldErrors['translations.en.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
-                        <textarea className={styles.textareaSmall} value={form.translations.en.includedItems} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, includedItems: value.target.value } })} />
+                        <div className={styles.repeaterList}>
+                          {form.translations.en.includedItems.map((item, index) => (
+                            <div className={styles.repeaterRow} key={`tour-en-included-${index}`}>
+                              <TextInput
+                                value={item}
+                                onChange={(value) =>
+                                  updateTourIncludedItemValue('en', index, value.target.value)
+                                }
+                                placeholder={t('tours.sections.included')}
+                              />
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                className={styles.repeaterButton}
+                                onClick={() => removeTourIncludedItemField('en', index)}
+                                aria-label={`Remove included item ${index + 1}`}
+                                disabled={
+                                  form.translations.en.includedItems.length === 1 &&
+                                  !item.trim()
+                                }
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ))}
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            className={styles.addRepeaterButton}
+                            onClick={() => addTourIncludedItemField('en')}
+                          >
+                            + Add item
+                          </Button>
+                        </div>
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.whatToBring')}>
                         <textarea className={styles.textareaSmall} value={form.translations.en.whatToBring} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, whatToBring: value.target.value } })} />
@@ -1346,7 +1450,40 @@ export function AdminPublishedContentEditPage() {
                         {fieldErrors['translations.es.description'] ? <span className={styles.errorText}>{fieldErrors['translations.es.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
-                        <textarea className={styles.textareaSmall} value={form.translations.es.includedItems} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, includedItems: value.target.value } })} />
+                        <div className={styles.repeaterList}>
+                          {form.translations.es.includedItems.map((item, index) => (
+                            <div className={styles.repeaterRow} key={`tour-es-included-${index}`}>
+                              <TextInput
+                                value={item}
+                                onChange={(value) =>
+                                  updateTourIncludedItemValue('es', index, value.target.value)
+                                }
+                                placeholder={t('tours.sections.included')}
+                              />
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                className={styles.repeaterButton}
+                                onClick={() => removeTourIncludedItemField('es', index)}
+                                aria-label={`Remove included item ${index + 1}`}
+                                disabled={
+                                  form.translations.es.includedItems.length === 1 &&
+                                  !item.trim()
+                                }
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ))}
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            className={styles.addRepeaterButton}
+                            onClick={() => addTourIncludedItemField('es')}
+                          >
+                            + Add item
+                          </Button>
+                        </div>
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.whatToBring')}>
                         <textarea className={styles.textareaSmall} value={form.translations.es.whatToBring} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, whatToBring: value.target.value } })} />

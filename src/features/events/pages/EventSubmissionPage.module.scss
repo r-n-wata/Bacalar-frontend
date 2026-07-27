@@ -91,6 +91,32 @@
   color: var(--text-muted);
 }
 
+.repeaterList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.repeaterRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.repeaterRow > :first-child {
+  flex: 1 1 auto;
+}
+
+.repeaterButton,
+.addRepeaterButton {
+  min-height: 46px;
+  white-space: nowrap;
+}
+
+.addRepeaterButton {
+  align-self: flex-start;
+}
+
 .removeButton {
   border: 0;
   background: transparent;
@@ -135,7 +161,8 @@
 @media (max-width: 720px) {
   .mediaHeader,
   .actions,
-  .inlineField {
+  .inlineField,
+  .repeaterRow {
     flex-direction: column;
     align-items: stretch;
   }

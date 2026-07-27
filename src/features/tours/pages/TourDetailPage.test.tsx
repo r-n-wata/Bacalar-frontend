@@ -56,6 +56,11 @@ describe('TourDetailPage', () => {
       }),
     ).toBeVisible()
     expect(screen.getAllByText('Laguna Vela').length).toBeGreaterThan(0)
+    expect(
+      screen.getByText(
+        'Contact the operator directly for pricing, availability and questions',
+      ),
+    ).toBeVisible()
     expect(screen.getByText('From MXN 2,800')).toBeVisible()
     expect(screen.getByText('4 hours')).toBeVisible()
     expect(screen.getAllByRole('link', { name: 'WhatsApp' })[0]).toHaveAttribute(
@@ -75,12 +80,14 @@ describe('TourDetailPage', () => {
       'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
     )
     expect(screen.getAllByText('What is included').length).toBeGreaterThan(0)
-    expect(screen.getByText('Meeting point')).toBeVisible()
-    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
+    expect(screen.getAllByText('Meeting point').length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('link', { name: 'View on map' })[0]).toHaveAttribute(
       'href',
       'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
     )
-    expect(screen.getByTitle('Private Sailing at Sunrise map')).toBeVisible()
+    expect(
+      screen.getAllByTitle('Private Sailing at Sunrise map').length,
+    ).toBeGreaterThan(0)
   })
 
   it('handles missing optional contact fields and missing images', async () => {
@@ -119,6 +126,11 @@ describe('TourDetailPage', () => {
     expect(screen.getAllByText('Manglar Guides').length).toBeGreaterThan(0)
     expect(screen.queryByText('WhatsApp')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Contact')).toBeVisible()
+    expect(
+      screen.getByText(
+        'Contact the operator directly for pricing, availability and questions',
+      ),
+    ).toBeVisible()
     expect(
       screen.getAllByRole('img', { name: 'Guided Mangrove Kayak' }).length,
     ).toBeGreaterThan(0)
@@ -174,5 +186,49 @@ describe('TourDetailPage', () => {
           image.getAttribute('src') === 'https://images.example.com/pontoon-gallery.jpg',
         ),
     ).toBe(true)
+  })
+
+  it('falls back to the address for the map widget when map URLs are missing', async () => {
+    server.use(
+      http.get(tourDetailApiPath('tour-address-only'), async () =>
+        jsonSuccess({
+          id: 'tour-address-only',
+          name: 'Lagoon Neighborhood Walk',
+          category: 'Walking Tour',
+          duration: '2 hours',
+          priceFrom: 'From MXN 700',
+          privateOrShared: 'Shared',
+          bestFor: 'Culture',
+          difficulty: 'Easy',
+          suitableForKids: 'Yes',
+          description: 'A route through the neighborhood.',
+          imageUrls: [],
+          operatorName: 'Casa Guia',
+          address: 'calle 40 con 19b',
+          contact: {
+            providerName: 'Casa Guia',
+          },
+          route: '/tours/tour-address-only',
+        }),
+      ),
+    )
+
+    await renderDetailRoute('/tours/tour-address-only')
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Lagoon Neighborhood Walk',
+      }),
+    ).toBeVisible()
+    expect(screen.getAllByText('Meeting point').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('calle 40 con 19b').length).toBeGreaterThan(0)
+    expect(
+      screen.getAllByTitle('Lagoon Neighborhood Walk map').length,
+    ).toBeGreaterThan(0)
+    expect(screen.getAllByRole('link', { name: 'View on map' })[0]).toHaveAttribute(
+      'href',
+      'https://www.google.com/maps?q=calle+40+con+19b',
+    )
   })
 })

@@ -94,6 +94,9 @@ describe('TourSubmissionPage', () => {
 
     await renderToursRouter(['/tours/submit'])
     await fillRequiredFields()
+    await userEvent.type(screen.getByLabelText('What is included 1'), 'Fresh fruit')
+    await userEvent.click(screen.getByRole('button', { name: '+ Add item' }))
+    await userEvent.type(screen.getByLabelText('What is included 2'), 'Snorkel gear')
 
     const file = new File(['mock-image'], 'sunrise-deck.jpg', {
       type: 'image/jpeg',
@@ -115,6 +118,7 @@ describe('TourSubmissionPage', () => {
     expect(capturedBody?.category).toBe('premium')
     expect(capturedBody?.durationHours).toBe(4)
     expect(capturedBody?.priceFrom).toBe(2100)
+    expect(capturedBody?.includedItems).toEqual(['Fresh fruit', 'Snorkel gear'])
     expect(capturedBody?.media).toHaveLength(2)
     expect(capturedBody?.media[0]).toMatchObject({
       kind: 'uploaded',

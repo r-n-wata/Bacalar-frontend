@@ -3,11 +3,14 @@ function normalizeItem(value: string) {
   return normalized.length > 0 ? normalized : null
 }
 
-export function parseIncludedItemsInput(value: string) {
-  return value
-    .split(/\r?\n/)
+export function normalizeIncludedItems(items: string[]) {
+  return items
     .map((item) => normalizeItem(item))
     .filter((item): item is string => item !== null)
+}
+
+export function parseIncludedItemsInput(value: string) {
+  return normalizeIncludedItems(value.split(/\r?\n/))
 }
 
 export function formatIncludedItemsInput(items?: string[]) {

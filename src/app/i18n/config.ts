@@ -40,10 +40,18 @@ export const resources = {
         actions: {
           viewOnMap: 'View on map',
         },
+        gallery: {
+          viewAllPhotos: 'View all photos',
+          close: 'Close gallery',
+          previous: 'Previous image',
+          next: 'Next image',
+          count: '{{current}} / {{total}}',
+        },
         contact: {
           eyebrow: 'Connect with business',
           title: 'Contact',
           provider: 'Contact {{providerName}} directly.',
+          prompt: 'Contact the operator directly for pricing, availability and questions',
           stickyLabel: 'Quick contact actions',
           methods: {
             whatsapp: 'WhatsApp',
@@ -377,7 +385,7 @@ export const resources = {
           'Browse all events by category',
         loadMore: 'Load more events',
         loadingMore: 'Loading more events...',
-        backToList: 'See all events',
+        backToList: 'Back to Events',
         backHome: 'Back to homepage',
         categories: {
           all: 'All',
@@ -501,7 +509,7 @@ export const resources = {
         detailEyebrow: 'Featured restaurant',
         detailMetaAriaLabel: 'Restaurant details',
         galleryAriaLabel: 'Restaurant image gallery',
-        backToList: 'See all restaurants',
+        backToList: 'Back to Restaurants',
         backHome: 'Back to homepage',
         categories: {
           all: 'All',
@@ -612,7 +620,7 @@ export const resources = {
         emptyTitle: 'No tours match this category right now.',
         emptyDescription:
           'Try another category or come back later for more {{category}} options.',
-        backToList: 'See all tours',
+        backToList: 'Back to Tours',
         backHome: 'Back to homepage',
         providedBy: 'Provided by {{operator}}',
         providerEyebrow: 'Provided by',
@@ -701,10 +709,18 @@ export const resources = {
         actions: {
           viewOnMap: 'Ver en el mapa',
         },
+        gallery: {
+          viewAllPhotos: 'Ver todas las fotos',
+          close: 'Cerrar galeria',
+          previous: 'Imagen anterior',
+          next: 'Siguiente imagen',
+          count: '{{current}} / {{total}}',
+        },
         contact: {
           eyebrow: 'Conecta con el negocio',
           title: 'Contacto',
           provider: 'Contacta directamente a {{providerName}}.',
+          prompt: 'Contacta directamente al operador para precios, disponibilidad y preguntas',
           stickyLabel: 'Acciones rapidas de contacto',
           methods: {
             whatsapp: 'WhatsApp',
@@ -1039,7 +1055,7 @@ export const resources = {
           'Explora todos los eventos por categoria',
         loadMore: 'Cargar mas eventos',
         loadingMore: 'Cargando mas eventos...',
-        backToList: 'Ver todos los eventos',
+        backToList: 'Volver a Eventos',
         backHome: 'Volver a inicio',
         categories: {
           all: 'Todos',
@@ -1163,7 +1179,7 @@ export const resources = {
         detailEyebrow: 'Restaurante destacado',
         detailMetaAriaLabel: 'Detalles del restaurante',
         galleryAriaLabel: 'Galeria de imagenes del restaurante',
-        backToList: 'Ver todos los restaurantes',
+        backToList: 'Volver a Restaurantes',
         backHome: 'Volver a inicio',
         categories: {
           all: 'Todos',
@@ -1274,7 +1290,7 @@ export const resources = {
         emptyTitle: 'No hay tours para esta categoria en este momento.',
         emptyDescription:
           'Prueba otra categoria o vuelve despues para ver mas opciones de {{category}}.',
-        backToList: 'Ver todos los tours',
+        backToList: 'Volver a Tours',
         backHome: 'Volver a inicio',
         providedBy: 'Operado por {{operator}}',
         providerEyebrow: 'Operado por',

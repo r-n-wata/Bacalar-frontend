@@ -15,7 +15,7 @@ import posthog from '../../../services/posthog'
 import { createTourSubmission } from '../api/createTourSubmission'
 import { prepareTourSubmissionUpload } from '../api/prepareTourSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
-import { parseIncludedItemsInput } from '../lib/includedItems'
+import { normalizeIncludedItems } from '../lib/includedItems'
 import type { TourCategory } from '../types/tour'
 import {
   MAX_SUBMISSION_IMAGES,
@@ -36,7 +36,7 @@ type SubmissionFormState = {
   mapUrl: string
   mapEmbedUrl: string
   description: string
-  includedItems: string
+  includedItems: string[]
   contactName: string
   contactMethod: string
   instagram: string
@@ -54,7 +54,7 @@ const initialFormState: SubmissionFormState = {
   mapUrl: '',
   mapEmbedUrl: '',
   description: '',
-  includedItems: '',
+  includedItems: [''],
   contactName: '',
   contactMethod: '',
   instagram: '',
@@ -150,6 +150,35 @@ export function TourSubmissionPage() {
       ...current,
       [key]: undefined,
     }))
+  }
+
+  function updateIncludedItem(index: number, value: string) {
+    setForm((current) => ({
+      ...current,
+      includedItems: current.includedItems.map((item, itemIndex) =>
+        itemIndex === index ? value : item,
+      ),
+    }))
+  }
+
+  function addIncludedItemField() {
+    setForm((current) => ({
+      ...current,
+      includedItems: [...current.includedItems, ''],
+    }))
+  }
+
+  function removeIncludedItemField(index: number) {
+    setForm((current) => {
+      const nextItems = current.includedItems.filter(
+        (_, itemIndex) => itemIndex !== index,
+      )
+
+      return {
+        ...current,
+        includedItems: nextItems.length > 0 ? nextItems : [''],
+      }
+    })
   }
 
   function validateForm(): FieldErrors {
@@ -319,7 +348,7 @@ export function TourSubmissionPage() {
         mapUrl: form.mapUrl.trim() || undefined,
         mapEmbedUrl: form.mapEmbedUrl.trim() || undefined,
         description: form.description.trim(),
-        includedItems: parseIncludedItemsInput(form.includedItems),
+        includedItems: normalizeIncludedItems(form.includedItems),
         contactName: form.contactName.trim(),
         contactMethod: form.contactMethod.trim(),
         instagram: form.instagram.trim() || undefined,
@@ -531,13 +560,36 @@ export function TourSubmissionPage() {
             label={t('tours.submit.fields.included')}
             hint={t('tours.submit.optional')}
           >
-            <textarea
-              className={styles.textarea}
-              aria-label={t('tours.submit.fields.included')}
-              value={form.includedItems}
-              onChange={(event) => updateField('includedItems', event.target.value)}
-              rows={4}
-            />
+            <div className={styles.repeaterList}>
+              {form.includedItems.map((item, index) => (
+                <div className={styles.repeaterRow} key={`included-item-${index}`}>
+                  <TextInput
+                    aria-label={`${t('tours.submit.fields.included')} ${index + 1}`}
+                    value={item}
+                    onChange={(event) => updateIncludedItem(index, event.target.value)}
+                    placeholder={t('tours.sections.included')}
+                  />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className={styles.repeaterButton}
+                    onClick={() => removeIncludedItemField(index)}
+                    aria-label={`Remove ${t('tours.submit.fields.included').toLowerCase()} ${index + 1}`}
+                    disabled={form.includedItems.length === 1 && !item.trim()}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="secondary"
+                className={styles.addRepeaterButton}
+                onClick={addIncludedItemField}
+              >
+                + Add item
+              </Button>
+            </div>
           </FormField>
           <ContentPanel compact className={styles.mediaPanel}>
             <div className={styles.mediaHeader}>

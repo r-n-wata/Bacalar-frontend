@@ -55,11 +55,13 @@ describe('RestaurantDetailPage', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Cielo de Maiz' }),
     ).toBeVisible()
-    expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
-      'href',
-      'https://maps.google.com/?q=Avenida+3+210+Bacalar',
-    )
-    expect(screen.getByTitle('Cielo de Maiz map')).toBeVisible()
+    expect(screen.getAllByText('Cielo de Maiz').length).toBeGreaterThan(0)
+    expect(
+      screen.getByText(
+        'Contact the operator directly for pricing, availability and questions',
+      ),
+    ).toBeVisible()
+    expect(screen.getAllByTitle('Cielo de Maiz map').length).toBeGreaterThan(0)
   })
 
   it('renders a placeholder hero image when the restaurant has no image', async () => {
@@ -71,6 +73,5 @@ describe('RestaurantDetailPage', () => {
     expect(
       screen.getAllByRole('img', { name: 'Bruma Azul' }).length,
     ).toBeGreaterThan(0)
-    expect(screen.queryByRole('link', { name: 'View on map' })).not.toBeInTheDocument()
   })
 })

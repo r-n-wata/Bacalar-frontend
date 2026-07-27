@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import arrowLeftIcon from '../../../assets/icons/arrow-left.png'
 import { Seo } from '../../../app/seo/Seo'
 import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
@@ -11,10 +12,15 @@ import { DetailIntro } from '../../../components/molecules/DetailIntro'
 import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
+import bestForRestaurantIcon from '../../../assets/icons/best-for-restaurant.png'
+import cuisineIcon from '../../../assets/icons/cusine.png'
+import startFromIcon from '../../../assets/icons/start-from.png'
+import vibeIcon from '../../../assets/icons/vibe.png'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
 import { DetailPagePlaceholder } from '../../shared/components/DetailPagePlaceholders'
 import { buildContactActions } from '../../shared/lib/contact'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
+import { buildMapEmbedUrl, buildMapUrl } from '../../shared/lib/maps'
 import { useRestaurantDetail } from '../hooks/useRestaurantDetail'
 import { formatRestaurantMoments } from '../lib/formatRestaurantMoments'
 
@@ -61,6 +67,8 @@ export function RestaurantDetailPage() {
   const heroImages = [heroImage]
   const momentsLabel = formatRestaurantMoments(data.moments, t)
   const hasContactActions = buildContactActions(data.contact, language).length > 0
+  const resolvedMapUrl = data.mapUrl ?? buildMapUrl(data.address)
+  const resolvedMapEmbedUrl = data.mapEmbedUrl ?? buildMapEmbedUrl(data.address)
   const backToListAction = {
     label: t('restaurants.backToList'),
     to: '/restaurants',
@@ -90,6 +98,12 @@ export function RestaurantDetailPage() {
       />
       <div className={pageStyles.backLinkRow}>
         <Link className={pageStyles.backLink} to="/restaurants">
+          <img
+            className={pageStyles.backLinkIcon}
+            src={arrowLeftIcon}
+            alt=""
+            aria-hidden="true"
+          />
           {t('restaurants.backToList')}
         </Link>
       </div>
@@ -100,10 +114,7 @@ export function RestaurantDetailPage() {
             eyebrow={t('restaurants.detailEyebrow')}
             images={heroImages}
             galleryAriaLabel={t('restaurants.galleryAriaLabel')}
-            viewAllLabel={t('common.gallery.viewAllPhotos')}
             closeLabel={t('common.gallery.close')}
-            previousLabel={t('common.gallery.previous')}
-            nextLabel={t('common.gallery.next')}
             countLabel={(current, total) =>
               t('common.gallery.count', { current, total })
             }
@@ -117,18 +128,22 @@ export function RestaurantDetailPage() {
               {
                 label: t('restaurants.meta.price'),
                 value: data.priceBand,
+                iconSrc: startFromIcon,
               },
               {
                 label: t('restaurants.meta.moment'),
                 value: momentsLabel,
+                iconSrc: bestForRestaurantIcon,
               },
               {
                 label: t('restaurants.meta.cuisine'),
                 value: data.cuisine,
+                iconSrc: cuisineIcon,
               },
               {
                 label: t('restaurants.meta.vibe'),
                 value: data.vibe,
+                iconSrc: vibeIcon,
               },
             ]}
           />
@@ -147,29 +162,31 @@ export function RestaurantDetailPage() {
                 </div>
               </div>
             </section>
+
           </div>
 
           <article className={pageStyles.bodyCard}>
             <DetailSection title={t('restaurants.sections.about')}>
               <p className={pageStyles.bodyCopy}>{data.description}</p>
             </DetailSection>
-            <ListingContactSection
-              contact={data.contact}
-              listingType="restaurants"
-              currentLanguage={language}
-              title={t('common.contact.title')}
-            />
-            {data.mapEmbedUrl ? (
-              <DetailSection title={t('common.labels.location')}>
+            {resolvedMapEmbedUrl ? (
+              <section className={`${pageStyles.detailSection} ${pageStyles.mobileOnlySection}`}>
                 <EmbeddedMapSection
                   title={t('common.labels.location')}
                   description={data.address}
-                  embedUrl={data.mapEmbedUrl}
-                  mapUrl={data.mapUrl}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
                   frameTitle={`${data.name} map`}
                 />
-              </DetailSection>
+              </section>
             ) : null}
+            <ListingContactSection
+              contact={data.contact}
+              listingId={data.id}
+              listingType="restaurants"
+              listingName={data.name}
+              currentLanguage={language}
+            />
             <div className={pageStyles.actions}>
               <Link className={pageStyles.primaryAction} to="/restaurants">
                 {t('restaurants.backToList')}
@@ -196,6 +213,17 @@ export function RestaurantDetailPage() {
                 </div>
               </div>
             </section>
+            {resolvedMapEmbedUrl ? (
+              <section className={pageStyles.sidebarCard}>
+                <EmbeddedMapSection
+                  title={t('common.labels.location')}
+                  description={data.address}
+                  embedUrl={resolvedMapEmbedUrl}
+                  mapUrl={resolvedMapUrl}
+                  frameTitle={`${data.name} map`}
+                />
+              </section>
+            ) : null}
             <section className={pageStyles.sidebarCard}>
               <DetailActions compact actions={[backToListAction]} />
             </section>
