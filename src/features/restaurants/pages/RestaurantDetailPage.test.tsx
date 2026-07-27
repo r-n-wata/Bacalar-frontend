@@ -43,7 +43,10 @@ describe('RestaurantDetailPage', () => {
     ).toBeVisible()
 
     expect(
-      await screen.findByText('Cielo de Maiz', {}, {
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Cielo de Maiz',
+      }, {
         timeout: defaultMockDelayMs * 4,
       }),
     ).toBeVisible()

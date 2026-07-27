@@ -9,6 +9,11 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { PageIntro } from '../../../components/molecules/PageIntro'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
+import {
+  FeaturedSectionPlaceholder,
+  ListingCardsPlaceholder,
+  PageIntroPlaceholder,
+} from '../../shared/components/ListingPagePlaceholders'
 import { resolveFeatureImage } from '../../shared/lib/featureImage'
 import { getTours, toursQueryKey } from '../api/getTours'
 import { FeaturedToursSection } from '../components/FeaturedToursSection'
@@ -240,9 +245,15 @@ export function ToursPage() {
           title={firstPage.title}
           description={firstPage.description}
         />
+      ) : shouldShowInitialSpinner ? (
+        <PageIntroPlaceholder testId="tours-page-intro-placeholder" />
       ) : null}
 
-      {firstPage && !isError ? <FeaturedToursSection tours={featuredItems} /> : null}
+      {firstPage && !isError ? (
+        <FeaturedToursSection tours={featuredItems} />
+      ) : shouldShowInitialSpinner && !isError ? (
+        <FeaturedSectionPlaceholder testId="tours-featured-placeholder" />
+      ) : null}
 
       {firstPage && !isError ? (
         <TourFiltersBar
@@ -285,6 +296,8 @@ export function ToursPage() {
           isFetchingMore={isFetchingNextPage}
           onLoadMore={() => void fetchNextPage()}
         />
+      ) : shouldShowInitialSpinner && !isError ? (
+        <ListingCardsPlaceholder testId="tours-list-placeholder" />
       ) : null}
       {!shouldShowInitialSpinner &&
       !shouldShowResultsSpinner &&

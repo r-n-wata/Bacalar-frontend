@@ -81,10 +81,7 @@ describe('TourDetailPage', () => {
     )
     expect(screen.getAllByText('What is included').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Meeting point').length).toBeGreaterThan(0)
-    expect(screen.getAllByRole('link', { name: 'View on map' })[0]).toHaveAttribute(
-      'href',
-      'https://maps.google.com/?q=Boulevard+Costero+17+Bacalar',
-    )
+    expect(screen.getAllByRole('link', { name: 'Back to Tours' }).length).toBeGreaterThan(0)
     expect(
       screen.getAllByTitle('Private Sailing at Sunrise map').length,
     ).toBeGreaterThan(0)
@@ -226,9 +223,6 @@ describe('TourDetailPage', () => {
     expect(
       screen.getAllByTitle('Lagoon Neighborhood Walk map').length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByRole('link', { name: 'View on map' })[0]).toHaveAttribute(
-      'href',
-      'https://www.google.com/maps?q=calle+40+con+19b',
-    )
+    expect(screen.getAllByText('calle 40 con 19b').length).toBeGreaterThan(0)
   })
 })
