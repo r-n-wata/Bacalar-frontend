@@ -21,6 +21,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Sunset Jazz by the Lagoon',
         dateLabel: 'Friday, 7:00 PM',
         venue: 'Casa Laguna Deck',
+        description:
+          'An easy, high-reward evening add-on with live music, open air, and a sunset window that works especially well after a lighter afternoon.',
         category: 'music',
         startsAt: '2026-05-29T19:00:00-05:00',
         endsAt: '2026-05-29T21:00:00-05:00',
@@ -60,6 +62,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Local Market Brunch Crawl',
         dateLabel: 'Saturday, 10:30 AM',
         venue: 'Centro Bacalar',
+        description:
+          'A social daytime option for travelers who want to spend one morning in town and fold local flavors into the trip without a fixed formal meal.',
         category: 'food',
         startsAt: '2026-05-30T10:30:00-05:00',
         endsAt: '2026-05-30T13:00:00-05:00',
@@ -93,6 +97,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Lagoon Breathwork Session',
         dateLabel: 'Sunday, 8:00 AM',
         venue: 'Isla Yoga Garden',
+        description:
+          'A softer sunrise plan that leans into Bacalar calm, ideal for visitors who want one restorative moment rather than another packed activity.',
         category: 'wellness',
         startsAt: '2026-05-31T08:00:00-05:00',
         endsAt: '2026-05-31T09:30:00-05:00',
@@ -123,6 +129,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Rooftop DJ Session',
         dateLabel: 'Saturday, 9:30 PM',
         venue: 'Mirador Azul',
+        description:
+          'A later-night music option for travelers who want one energetic window in town without committing the whole evening.',
         category: 'music',
         startsAt: '2026-05-30T21:30:00-05:00',
         endsAt: '2026-05-31T00:00:00-05:00',
@@ -149,6 +157,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Lagoon Taco Walk',
         dateLabel: 'Sunday, 1:00 PM',
         venue: 'Centro Bacalar',
+        description:
+          'A casual food-led town loop that works well after a slower morning and keeps the logistics light.',
         category: 'food',
         startsAt: '2026-05-31T13:00:00-05:00',
         endsAt: '2026-05-31T15:00:00-05:00',
@@ -175,6 +185,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Sunrise Paddle Meditation',
         dateLabel: 'Monday, 6:30 AM',
         venue: 'Laguna Launch Pier',
+        description:
+          'A quieter, reset-style start for guests who want a guided wellness moment on the water.',
         category: 'wellness',
         startsAt: '2026-06-01T06:30:00-05:00',
         endsAt: '2026-06-01T08:00:00-05:00',
@@ -199,6 +211,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Courtyard Vinyl Jam',
         dateLabel: 'New date to be announced',
         venue: 'Casa Centro Courtyard',
+        description:
+          'A softer music pick that is still on the weekly radar, but without a locked timing window yet.',
         category: 'music',
         route: '/events/event-courtyard-jam',
       },
@@ -219,6 +233,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Moonlight Cinema by the Water',
         dateLabel: 'Monday, 8:30 PM',
         venue: 'Lagoon Screen Lawn',
+        description:
+          'An easy evening screening with a more relaxed social pace and a clean after-dinner time slot.',
         category: 'music',
         startsAt: '2026-06-01T20:30:00-05:00',
         endsAt: '2026-06-01T22:30:00-05:00',
@@ -243,6 +259,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Ceviche Lab Pop-Up',
         dateLabel: 'Tuesday, 2:00 PM',
         venue: 'Mercado Patio',
+        description:
+          'A daytime tasting-style stop for travelers who want one food-forward plan without committing to a full dinner.',
         category: 'food',
         startsAt: '2026-06-02T14:00:00-05:00',
         endsAt: '2026-06-02T16:00:00-05:00',
@@ -267,6 +285,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Temazcal Breath Circle',
         dateLabel: 'Wednesday, 6:00 PM',
         venue: 'Jardin Calmado',
+        description:
+          'A guided reset option for visitors looking for one deeper wellness window before dinner.',
         category: 'wellness',
         startsAt: '2026-06-03T18:00:00-05:00',
         endsAt: '2026-06-03T19:30:00-05:00',
@@ -291,6 +311,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Lagoon Salsa Night',
         dateLabel: 'Thursday, 8:00 PM',
         venue: 'Casa del Muelle',
+        description:
+          'A more energetic night option that still fits cleanly into a one-evening Bacalar plan.',
         category: 'music',
         startsAt: '2026-06-04T20:00:00-05:00',
         endsAt: '2026-06-04T23:00:00-05:00',
@@ -315,6 +337,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Cacao and Sound Bath',
         dateLabel: 'Friday, 5:30 PM',
         venue: 'Holistica Terraza',
+        description:
+          'A slower sunset-adjacent wellness plan for travelers who want calm rather than another activity push.',
         category: 'wellness',
         startsAt: '2026-06-05T17:30:00-05:00',
         endsAt: '2026-06-05T19:00:00-05:00',
@@ -341,6 +365,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Jazz al atardecer junto a la laguna',
         dateLabel: 'Viernes, 7:00 PM',
         venue: 'Terraza Casa Laguna',
+        description:
+          'Un extra nocturno facil y muy rendidor con musica en vivo, aire libre y una ventana de atardecer que funciona especialmente bien despues de una tarde ligera.',
         category: 'music',
         startsAt: '2026-05-29T19:00:00-05:00',
         endsAt: '2026-05-29T21:00:00-05:00',
@@ -375,6 +401,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Ruta de brunch por el mercado local',
         dateLabel: 'Sabado, 10:30 AM',
         venue: 'Centro de Bacalar',
+        description:
+          'Una opcion social de dia para quienes quieren pasar una manana en el centro y sumar sabores locales al viaje sin una comida formal cerrada.',
         category: 'food',
         startsAt: '2026-05-30T10:30:00-05:00',
         endsAt: '2026-05-30T13:00:00-05:00',
@@ -405,6 +433,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Sesion de respiracion frente a la laguna',
         dateLabel: 'Domingo, 8:00 AM',
         venue: 'Jardin Isla Yoga',
+        description:
+          'Un plan suave al amanecer que se apoya en la calma de Bacalar, ideal para quienes quieren un momento restaurador en vez de otra actividad cargada.',
         category: 'wellness',
         startsAt: '2026-05-31T08:00:00-05:00',
         endsAt: '2026-05-31T09:30:00-05:00',
@@ -431,6 +461,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Sesion DJ en la azotea',
         dateLabel: 'Sabado, 9:30 PM',
         venue: 'Mirador Azul',
+        description:
+          'Una opcion musical mas nocturna para quienes quieren una sola ventana de energia en el centro sin entregar toda la noche.',
         category: 'music',
         startsAt: '2026-05-30T21:30:00-05:00',
         endsAt: '2026-05-31T00:00:00-05:00',
@@ -457,6 +489,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Recorrido de tacos junto a la laguna',
         dateLabel: 'Domingo, 1:00 PM',
         venue: 'Centro de Bacalar',
+        description:
+          'Una vuelta casual centrada en comida que funciona bien despues de una manana lenta y mantiene la logistica ligera.',
         category: 'food',
         startsAt: '2026-05-31T13:00:00-05:00',
         endsAt: '2026-05-31T15:00:00-05:00',
@@ -483,6 +517,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Meditacion al amanecer en paddle',
         dateLabel: 'Lunes, 6:30 AM',
         venue: 'Muelle Laguna Launch',
+        description:
+          'Un arranque mas tranquilo para quienes quieren un momento guiado de bienestar sobre el agua.',
         category: 'wellness',
         startsAt: '2026-06-01T06:30:00-05:00',
         endsAt: '2026-06-01T08:00:00-05:00',
@@ -507,6 +543,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Sesion de vinilos en el patio',
         dateLabel: 'Nueva fecha por confirmar',
         venue: 'Patio Casa Centro',
+        description:
+          'Una opcion musical mas suave que sigue en el radar de la semana, pero todavia sin horario cerrado.',
         category: 'music',
         route: '/events/event-courtyard-jam',
       },
@@ -527,6 +565,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Cine a la luz de la luna junto al agua',
         dateLabel: 'Lunes, 8:30 PM',
         venue: 'Jardin Pantalla Laguna',
+        description:
+          'Una funcion facil de noche con un ritmo social mas relajado y un horario limpio despues de cenar.',
         category: 'music',
         startsAt: '2026-06-01T20:30:00-05:00',
         endsAt: '2026-06-01T22:30:00-05:00',
@@ -551,6 +591,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Pop-up laboratorio de ceviche',
         dateLabel: 'Martes, 2:00 PM',
         venue: 'Patio del mercado',
+        description:
+          'Una parada de dia pensada para quienes quieren un plan centrado en comida sin convertirlo en una cena completa.',
         category: 'food',
         startsAt: '2026-06-02T14:00:00-05:00',
         endsAt: '2026-06-02T16:00:00-05:00',
@@ -575,6 +617,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Circulo de respiracion temazcal',
         dateLabel: 'Miercoles, 6:00 PM',
         venue: 'Jardin Calmado',
+        description:
+          'Una opcion guiada de reset para quienes buscan una ventana de bienestar mas profunda antes de cenar.',
         category: 'wellness',
         startsAt: '2026-06-03T18:00:00-05:00',
         endsAt: '2026-06-03T19:30:00-05:00',
@@ -599,6 +643,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Noche de salsa en la laguna',
         dateLabel: 'Jueves, 8:00 PM',
         venue: 'Casa del Muelle',
+        description:
+          'Una opcion mas energetica de noche que aun cabe bien como un solo plan nocturno en Bacalar.',
         category: 'music',
         startsAt: '2026-06-04T20:00:00-05:00',
         endsAt: '2026-06-04T23:00:00-05:00',
@@ -623,6 +669,8 @@ const eventSeedsByLanguage: Record<AppLanguage, EventSeed[]> = {
         title: 'Cacao y sound bath',
         dateLabel: 'Viernes, 5:30 PM',
         venue: 'Terraza Holistica',
+        description:
+          'Un plan de bienestar mas lento, cerca del atardecer, para quienes quieren calma en vez de otra actividad cargada.',
         category: 'wellness',
         startsAt: '2026-06-05T17:30:00-05:00',
         endsAt: '2026-06-05T19:00:00-05:00',
@@ -694,16 +742,34 @@ function sortEvents(items: Event[]) {
 function getFilteredItems(
   language: AppLanguage,
   category: EventCategoryFilter = 'all',
+  search = '',
 ) {
   const items = eventSeedsByLanguage[language]
     .filter((entry) => !entry.isFeatured)
     .map((entry) => entry.item)
 
-  return sortEvents(
+  const normalizedSearch = search.trim().toLowerCase()
+  const categoryFilteredItems =
     category === 'all'
       ? items
-      : items.filter((event) => event.category === category),
-  )
+      : items.filter((event) => event.category === category)
+
+  const filteredItems = normalizedSearch
+    ? categoryFilteredItems.filter((event) =>
+        [
+          event.title,
+          event.venue,
+          event.category,
+          event.dateLabel,
+          event.description,
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(normalizedSearch),
+      )
+    : categoryFilteredItems
+
+  return sortEvents(filteredItems)
 }
 
 function getFeaturedItems(
@@ -743,13 +809,14 @@ export function getEventsFixture(
     forceEmpty?: boolean
     forceNoFeatured?: boolean
     featuredCount?: number
+    search?: string
   },
 ): EventsContent {
   const pageSize = options?.limit ?? DEFAULT_PAGE_SIZE
   const content = pageMetadataByLanguage[language]
   const allItems = options?.forceEmpty
     ? []
-    : getFilteredItems(language, options?.category)
+    : getFilteredItems(language, options?.category, options?.search)
   const featuredItems = getFeaturedItems(language, {
     forceNoFeatured: options?.forceNoFeatured,
     featuredCount: options?.featuredCount,
@@ -765,6 +832,7 @@ export function getEventsFixture(
     ...content,
     featuredItems,
     items,
+    totalCount: allItems.length,
     pagination: {
       hasMore: safeStartIndex + items.length < allItems.length,
       nextCursor:

@@ -13,12 +13,14 @@ export const eventsHandlers = [
     const cursor = url.searchParams.get('cursor')
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
     const category = (url.searchParams.get('category') ?? 'all') as EventCategoryFilter
+    const search = url.searchParams.get('search') ?? undefined
 
     return jsonSuccess(
       getEventsFixture(resolveMockLanguage(request), {
         category,
         cursor,
         limit: Number.isFinite(limit) ? limit : 10,
+        search,
       }),
     )
   }),
@@ -79,6 +81,7 @@ export function emptyEventsCategoryHandler(category: EventCategoryFilter) {
     const selectedCategory = (url.searchParams.get('category') ??
       'all') as EventCategoryFilter
     const limit = Number.parseInt(url.searchParams.get('limit') ?? '10', 10)
+    const search = url.searchParams.get('search') ?? undefined
 
     return jsonSuccess(
       getEventsFixture(resolveMockLanguage(request), {
@@ -86,6 +89,7 @@ export function emptyEventsCategoryHandler(category: EventCategoryFilter) {
         cursor: url.searchParams.get('cursor'),
         limit: Number.isFinite(limit) ? limit : 10,
         forceEmpty: selectedCategory === category,
+        search,
       }),
     )
   })

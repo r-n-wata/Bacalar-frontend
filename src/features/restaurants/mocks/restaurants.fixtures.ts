@@ -16,6 +16,8 @@ type GetRestaurantsFixtureOptions = {
   cursor?: string | null
   limit?: number
   forceEmpty?: boolean
+  search?: string
+  priceBand?: '$' | '$$' | '$$$'
 }
 
 const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
@@ -29,6 +31,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Garden breakfast',
         priceBand: '$$',
         moments: ['breakfast'],
+        description:
+          'A relaxed breakfast stop with garden energy, fresh plates, and enough calm to set up a lagoon morning without rushing anyone through it.',
         route: '/restaurants/rest-cielo',
       },
       detail: {
@@ -67,6 +71,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Casual local favorite',
         priceBand: '$$',
         moments: ['lunch'],
+        description:
+          'A dependable lunch option when the day needs something grounded, regional, and easy to say yes to after a morning on the water.',
         route: '/restaurants/rest-ixchel',
       },
       detail: {
@@ -99,6 +105,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Lagoon-facing dinner',
         priceBand: '$$$',
         moments: ['lunch', 'dinner'],
+        description:
+          'An evening pick for when the stay calls for one elevated meal, strong seafood, and a setting that makes sunset feel part of dinner.',
         route: '/restaurants/rest-naao',
       },
       detail: {
@@ -131,6 +139,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Slow mid-morning reset',
         priceBand: '$',
         moments: ['breakfast'],
+        description:
+          'A lighter breakfast or coffee stop when the morning wants something low-lift before heading back toward the lagoon.',
         route: '/restaurants/rest-bruma',
       },
       detail: {
@@ -157,6 +167,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Longer sunset dinner',
         priceBand: '$$$',
         moments: ['dinner'],
+        description:
+          'A slower dinner option when the plan wants one more celebratory meal anchored around sunset and a longer table stay.',
         route: '/restaurants/rest-orilla',
       },
       detail: {
@@ -186,6 +198,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Desayuno en jardin',
         priceBand: '$$',
         moments: ['breakfast'],
+        description:
+          'Un desayuno relajado con ambiente de jardin, platos frescos y la calma suficiente para arrancar una manana de laguna sin prisas.',
         route: '/restaurants/rest-cielo',
       },
       detail: {
@@ -224,6 +238,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Favorito local casual',
         priceBand: '$$',
         moments: ['lunch'],
+        description:
+          'Una opcion confiable para almorzar cuando el dia pide algo regional, cercano y facil de elegir despues de una manana en el agua.',
         route: '/restaurants/rest-ixchel',
       },
       detail: {
@@ -256,6 +272,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Cena frente a la laguna',
         priceBand: '$$$',
         moments: ['lunch', 'dinner'],
+        description:
+          'Una eleccion nocturna para cuando la estancia pide una comida mas especial, buenos mariscos y un entorno donde el atardecer acompana la cena.',
         route: '/restaurants/rest-naao',
       },
       detail: {
@@ -288,6 +306,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Pausa lenta de media manana',
         priceBand: '$',
         moments: ['breakfast'],
+        description:
+          'Una parada ligera para desayuno o cafe cuando la manana pide algo simple antes de volver hacia la laguna.',
         route: '/restaurants/rest-bruma',
       },
       detail: {
@@ -314,6 +334,8 @@ const restaurantSeedsByLanguage: Record<AppLanguage, RestaurantSeed[]> = {
         vibe: 'Cena larga al atardecer',
         priceBand: '$$$',
         moments: ['dinner'],
+        description:
+          'Una cena mas pausada para cuando el plan pide una mesa larga, un mejor final del dia y tiempo para quedarse.',
         route: '/restaurants/rest-orilla',
       },
       detail: {
@@ -357,6 +379,7 @@ function buildRestaurantsContent(
         .slice(0, 3)
         .map((seed) => seed.item),
       items: pageItems,
+      totalCount: allItems.length,
       pagination: {
         hasMore,
         nextCursor,
@@ -374,6 +397,7 @@ function buildRestaurantsContent(
       .slice(0, 3)
       .map((seed) => seed.item),
     items: pageItems,
+    totalCount: allItems.length,
     pagination: {
       hasMore,
       nextCursor,
@@ -388,6 +412,8 @@ export function getRestaurantsFixture(
     cursor = null,
     limit = 10,
     forceEmpty = false,
+    search,
+    priceBand,
   }: GetRestaurantsFixtureOptions = {},
 ) {
   const seeds = restaurantSeedsByLanguage[language]
@@ -396,7 +422,21 @@ export function getRestaurantsFixture(
     : seeds.filter(
         (seed) =>
           seed.featuredOrder >= 3 &&
-          (category === 'all' ? true : seed.item.moments.includes(category)),
+          (category === 'all' ? true : seed.item.moments.includes(category)) &&
+          (priceBand ? seed.item.priceBand === priceBand : true) &&
+          (search?.trim()
+            ? [
+                seed.item.name,
+                seed.item.cuisine,
+                seed.item.vibe,
+                seed.item.description,
+                seed.item.moments.join(' '),
+                seed.item.priceBand,
+              ]
+                .join(' ')
+                .toLowerCase()
+                .includes(search.trim().toLowerCase())
+            : true),
       )
 
   return buildRestaurantsContent(language, filteredSeeds, cursor, limit)

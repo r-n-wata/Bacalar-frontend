@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import styles from './Button.module.scss'
 
 type ButtonVariant =
@@ -16,26 +16,24 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   fullWidth?: boolean
 }
 
-export function Button({
-  children,
-  className,
-  variant = 'secondary',
-  fullWidth = false,
-  type = 'button',
-  ...props
-}: ButtonProps) {
-  const classes = [
-    styles.button,
-    styles[variant],
-    fullWidth ? styles.fullWidth : '',
-    className ?? '',
-  ]
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    children,
+    className,
+    variant = 'secondary',
+    fullWidth = false,
+    type = 'button',
+    ...props
+  },
+  ref,
+) {
+  const classes = [styles.button, styles[variant], fullWidth ? styles.fullWidth : '', className ?? '']
     .filter(Boolean)
     .join(' ')
 
   return (
-    <button type={type} className={classes} {...props}>
+    <button ref={ref} type={type} className={classes} {...props}>
       {children}
     </button>
   )
-}
+})

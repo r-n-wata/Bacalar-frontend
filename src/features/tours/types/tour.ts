@@ -17,8 +17,11 @@ export type Tour = {
   name: string
   category: TourCategory
   duration: string
+  durationHoursValue: number
   priceFrom: string
+  priceFromValue: number
   bestFor: string
+  description: string
   operatorName: string
   route: string
   image?: {

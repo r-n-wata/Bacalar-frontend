@@ -7,29 +7,42 @@ import type { RestaurantCategoryFilter } from '../types/restaurant'
 export const restaurantsApiPath = '/api/restaurants'
 export const RESTAURANTS_PAGE_SIZE = 10
 
+export type RestaurantFilters = {
+  category?: RestaurantCategoryFilter
+  search?: string
+  priceBand?: '$' | '$$' | '$$$'
+}
+
 export const restaurantsQueryKey = (
   language: AppLanguage,
-  category: RestaurantCategoryFilter,
+  filters: RestaurantFilters,
   limit = RESTAURANTS_PAGE_SIZE,
-) => queryKeys.restaurants.list(language, category, limit)
+) => queryKeys.restaurants.list(language, filters, limit)
 
 type GetRestaurantsOptions = {
   cursor?: string | null
   limit?: number
-  category?: RestaurantCategoryFilter
+  filters?: RestaurantFilters
 }
 
 export function getRestaurants(
   language: AppLanguage,
-  {
-    cursor,
-    limit = RESTAURANTS_PAGE_SIZE,
-    category = 'all',
-  }: GetRestaurantsOptions = {},
+  { cursor, limit = RESTAURANTS_PAGE_SIZE, filters = {} }: GetRestaurantsOptions = {},
 ) {
   const params = new URLSearchParams()
   params.set('limit', String(limit))
-  params.set('category', category)
+
+  if (filters.category && filters.category !== 'all') {
+    params.set('category', filters.category)
+  }
+
+  if (filters.search?.trim()) {
+    params.set('search', filters.search.trim())
+  }
+
+  if (filters.priceBand) {
+    params.set('priceBand', filters.priceBand)
+  }
 
   if (cursor) {
     params.set('cursor', cursor)

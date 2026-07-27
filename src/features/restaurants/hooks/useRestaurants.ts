@@ -4,21 +4,21 @@ import {
   RESTAURANTS_PAGE_SIZE,
   getRestaurants,
   restaurantsQueryKey,
+  type RestaurantFilters,
 } from '../api/getRestaurants'
-import type { RestaurantCategoryFilter } from '../types/restaurant'
 
 const RESTAURANTS_STALE_TIME = 1000 * 60 * 8
 
-export function useRestaurants(category: RestaurantCategoryFilter) {
+export function useRestaurants(filters: RestaurantFilters) {
   const language = useAppLanguage()
 
   return useInfiniteQuery({
-    queryKey: restaurantsQueryKey(language, category, RESTAURANTS_PAGE_SIZE),
+    queryKey: restaurantsQueryKey(language, filters, RESTAURANTS_PAGE_SIZE),
     queryFn: ({ pageParam }) =>
       getRestaurants(language, {
         cursor: typeof pageParam === 'string' ? pageParam : undefined,
         limit: RESTAURANTS_PAGE_SIZE,
-        category,
+        filters,
       }),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,

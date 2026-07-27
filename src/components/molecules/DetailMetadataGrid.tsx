@@ -37,7 +37,7 @@ export function DetailMetadataGrid({
                   aria-hidden={item.iconAlt ? undefined : 'true'}
                 />
               ) : null}
-              <span>{item.label}</span>
+              <span className={styles.metaLabel}>{item.label}</span>
             </dt>
             <dd>{item.value}</dd>
           </div>

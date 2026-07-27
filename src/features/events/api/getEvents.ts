@@ -6,25 +6,37 @@ import type { EventCategoryFilter, EventsContent } from '../types/event'
 export const eventsApiPath = '/api/events'
 export const EVENTS_PAGE_SIZE = 10
 
+export type EventFilters = {
+  category?: EventCategoryFilter
+  search?: string
+}
+
 export const eventsQueryKey = (
   language: AppLanguage,
-  category: EventCategoryFilter,
+  filters: EventFilters,
   limit = EVENTS_PAGE_SIZE,
-) => queryKeys.events.list(language, category, limit)
+) => queryKeys.events.list(language, filters, limit)
 
 type GetEventsOptions = {
   cursor?: string | null
   limit?: number
-  category?: EventCategoryFilter
+  filters?: EventFilters
 }
 
 export function getEvents(
   language: AppLanguage,
-  { cursor, limit = EVENTS_PAGE_SIZE, category = 'all' }: GetEventsOptions = {},
+  { cursor, limit = EVENTS_PAGE_SIZE, filters = {} }: GetEventsOptions = {},
 ) {
   const params = new URLSearchParams()
   params.set('limit', String(limit))
-  params.set('category', category)
+
+  if (filters.category && filters.category !== 'all') {
+    params.set('category', filters.category)
+  }
+
+  if (filters.search?.trim()) {
+    params.set('search', filters.search.trim())
+  }
 
   if (cursor) {
     params.set('cursor', cursor)
