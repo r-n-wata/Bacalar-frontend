@@ -34,7 +34,7 @@ const HERO_IMAGE = {
     '/images/home/hero-home-960.jpg 960w, /images/home/hero-home-1600.jpg 1600w',
   webpSrcSet:
     '/images/home/hero-home-960.webp 960w, /images/home/hero-home-1600.webp 1600w',
-  sizes: '(max-width: 920px) 100vw, 42vw',
+  sizes: '(max-width: 920px) 100vw, 65vw',
   width: 3992,
   height: 2242,
 } as const
