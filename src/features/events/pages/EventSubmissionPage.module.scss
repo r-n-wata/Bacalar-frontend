@@ -130,6 +130,21 @@
   font-size: 0.94rem;
 }
 
+.submittingState {
+  display: flex;
+  justify-content: flex-start;
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(31, 127, 130, 0.14);
+  background:
+    linear-gradient(135deg, rgba(232, 248, 247, 0.96), rgba(248, 252, 251, 0.96));
+}
+
+.submittingState :global([role='status']) {
+  justify-content: flex-start;
+  padding: 0;
+}
+
 .primaryLink,
 .secondaryLink {
   display: inline-flex;

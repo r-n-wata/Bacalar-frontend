@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http } from 'msw'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
@@ -115,6 +115,42 @@ describe('EventSubmissionPage', () => {
     })
   })
 
+  it('shows a visible submitting state while the request is in flight', async () => {
+    let releaseSubmission: (() => void) | null = null
+    const submissionGate = new Promise<void>((resolve) => {
+      releaseSubmission = resolve
+    })
+
+    server.use(
+      http.post('https://us.i.posthog.com/e/', () => new Response(null, { status: 200 })),
+      http.post(eventSubmissionsApiPath, async () => {
+        await submissionGate
+
+        return Response.json(
+          {
+            id: 'submission-pending',
+            status: 'PENDING',
+            createdAt: '2026-05-25T12:00:00.000Z',
+          },
+          { status: 201 },
+        )
+      }),
+    )
+
+    await renderEventsRouter(['/events/submit'])
+    await fillRequiredFields()
+    await userEvent.click(screen.getByRole('button', { name: 'Send submission' }))
+
+    expect(await screen.findByRole('status')).toHaveTextContent('Sending submission...')
+    expect(screen.getByRole('button', { name: 'Sending submission...' })).toBeDisabled()
+
+    releaseSubmission?.()
+
+    expect(
+      await screen.findByText('Your submission is pending review and has not been published.'),
+    ).toBeVisible()
+  })
+
   it('shows client and request errors for media problems', async () => {
     server.use(eventSubmissionUploadErrorHandler('Upload service unavailable'))
 
@@ -134,6 +170,18 @@ describe('EventSubmissionPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Send submission' }))
 
     expect(await screen.findByText('This field is required.')).toBeVisible()
+  })
+
+  it('focuses the first invalid field on submit', async () => {
+    await renderEventsRouter(['/events/submit'])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Send submission' }))
+
+    const titleInput = screen.getByLabelText('Event title')
+    expect(await screen.findAllByText('This field is required.')).not.toHaveLength(0)
+    await waitFor(() => {
+      expect(titleInput).toHaveFocus()
+    })
   })
 
   it('renders server-side submission errors when the final save fails', async () => {

@@ -5,6 +5,7 @@ import { Seo } from '../../../app/seo/Seo'
 import { seoContentByLanguage } from '../../../app/seo/seoContent'
 import { Button } from '../../../components/atoms/Button'
 import { ContentPanel } from '../../../components/atoms/ContentPanel'
+import { LoadingSpinner } from '../../../components/atoms/LoadingSpinner'
 import { TextInput } from '../../../components/atoms/TextInput'
 import { FormField } from '../../../components/molecules/FormField'
 import { PageIntro } from '../../../components/molecules/PageIntro'
@@ -12,6 +13,7 @@ import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import pageStyles from '../../../styles/FeaturePage.module.scss'
 import { ApiError } from '../../../services/http'
 import posthog from '../../../services/posthog'
+import { useFocusFirstInvalidField } from '../../shared/lib/useFocusFirstInvalidField'
 import { createTourSubmission } from '../api/createTourSubmission'
 import { prepareTourSubmissionUpload } from '../api/prepareTourSubmissionUpload'
 import { uploadSubmissionImage } from '../api/uploadSubmissionImage'
@@ -44,6 +46,20 @@ type SubmissionFormState = {
 }
 
 type FieldErrors = Partial<Record<string, string>>
+
+const fieldOrder = [
+  'name',
+  'durationHours',
+  'priceFrom',
+  'address',
+  'mapUrl',
+  'mapEmbedUrl',
+  'contactName',
+  'contactMethod',
+  'description',
+  'mediaUrl',
+  'media',
+] as const
 
 const initialFormState: SubmissionFormState = {
   name: '',
@@ -128,6 +144,7 @@ export function TourSubmissionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const registerFieldRef = useFocusFirstInvalidField(fieldErrors, fieldOrder)
 
   const totalMediaCount = selectedFiles.length + externalImageUrls.length
   const mediaSummary = useMemo(
@@ -425,10 +442,11 @@ export function TourSubmissionPage() {
       />
 
       <ContentPanel>
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate aria-busy={isSubmitting}>
           <div className={styles.grid}>
             <FormField label={t('tours.submit.fields.name')}>
               <TextInput
+                ref={registerFieldRef('name')}
                 aria-label={t('tours.submit.fields.name')}
                 value={form.name}
                 onChange={(event) => updateField('name', event.target.value)}
@@ -450,6 +468,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.durationHours')}>
               <TextInput
+                ref={registerFieldRef('durationHours')}
                 aria-label={t('tours.submit.fields.durationHours')}
                 value={form.durationHours}
                 onChange={(event) => updateField('durationHours', event.target.value)}
@@ -462,6 +481,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.priceFrom')}>
               <TextInput
+                ref={registerFieldRef('priceFrom')}
                 aria-label={t('tours.submit.fields.priceFrom')}
                 value={form.priceFrom}
                 onChange={(event) => updateField('priceFrom', event.target.value)}
@@ -474,6 +494,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.address')} hint={t('tours.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('address')}
                 aria-label={t('tours.submit.fields.address')}
                 value={form.address}
                 onChange={(event) => updateField('address', event.target.value)}
@@ -485,6 +506,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.mapUrl')} hint={t('tours.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('mapUrl')}
                 aria-label={t('tours.submit.fields.mapUrl')}
                 value={form.mapUrl}
                 onChange={(event) => updateField('mapUrl', event.target.value)}
@@ -496,6 +518,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.mapEmbedUrl')} hint={t('tours.submit.optional')}>
               <TextInput
+                ref={registerFieldRef('mapEmbedUrl')}
                 aria-label={t('tours.submit.fields.mapEmbedUrl')}
                 value={form.mapEmbedUrl}
                 onChange={(event) => updateField('mapEmbedUrl', event.target.value)}
@@ -507,6 +530,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.contactName')}>
               <TextInput
+                ref={registerFieldRef('contactName')}
                 aria-label={t('tours.submit.fields.contactName')}
                 value={form.contactName}
                 onChange={(event) => updateField('contactName', event.target.value)}
@@ -518,6 +542,7 @@ export function TourSubmissionPage() {
             </FormField>
             <FormField label={t('tours.submit.fields.contactMethod')}>
               <TextInput
+                ref={registerFieldRef('contactMethod')}
                 aria-label={t('tours.submit.fields.contactMethod')}
                 value={form.contactMethod}
                 onChange={(event) => updateField('contactMethod', event.target.value)}
@@ -545,6 +570,7 @@ export function TourSubmissionPage() {
           </div>
           <FormField label={t('tours.submit.fields.description')}>
             <textarea
+              ref={registerFieldRef('description')}
               className={styles.textarea}
               aria-label={t('tours.submit.fields.description')}
               value={form.description}
@@ -610,7 +636,10 @@ export function TourSubmissionPage() {
                 hint={t('tours.submit.media.uploadHint')}
               >
                 <input
-                  ref={fileInputRef}
+                  ref={(element) => {
+                    fileInputRef.current = element
+                    registerFieldRef('media')(element)
+                  }}
                   className={styles.fileInput}
                   type="file"
                   aria-label={t('tours.submit.media.uploadLabel')}
@@ -625,6 +654,9 @@ export function TourSubmissionPage() {
               >
                 <div className={styles.inlineField}>
                   <TextInput
+                    ref={(element) => {
+                      registerFieldRef('mediaUrl')(element)
+                    }}
                     aria-label={t('tours.submit.media.externalUrlLabel')}
                     value={draftExternalUrl}
                     onChange={(event) => {
@@ -683,6 +715,12 @@ export function TourSubmissionPage() {
               </div>
             </div>
           </ContentPanel>
+
+          {isSubmitting ? (
+            <div className={styles.submittingState}>
+              <LoadingSpinner label={t('tours.submit.submitting')} />
+            </div>
+          ) : null}
 
           {requestError ? <p className={styles.error}>{requestError}</p> : null}
 
