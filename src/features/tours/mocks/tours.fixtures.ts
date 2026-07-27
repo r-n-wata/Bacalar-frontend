@@ -1,4 +1,5 @@
 import type { AppLanguage } from '../../../app/i18n/config'
+import { parseIncludedItemsInput } from '../lib/includedItems'
 import type { Tour, TourCategoryFilter, TourDetail } from '../types/tour'
 import type { ToursContent } from '../types/tours-content'
 
@@ -27,6 +28,7 @@ function createTourSeed(input: {
   suitableForKids: string
   description: string
   included?: string
+  includedItems?: string[]
   whatToBring?: string
   meetingPoint?: string
   address?: string
@@ -68,7 +70,8 @@ function createTourSeed(input: {
       difficulty: input.difficulty,
       suitableForKids: input.suitableForKids,
       description: input.description,
-      included: input.included,
+      includedItems:
+        input.includedItems ?? (input.included ? parseIncludedItemsInput(input.included) : undefined),
       whatToBring: input.whatToBring,
       meetingPoint: input.meetingPoint,
       address: input.address,

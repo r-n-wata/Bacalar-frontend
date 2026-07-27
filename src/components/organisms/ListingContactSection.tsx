@@ -12,6 +12,9 @@ type ListingContactSectionProps = {
   contact?: ContactInfo
   listingType: ListingType
   currentLanguage: AppLanguage
+  eyebrow?: string
+  title?: string
+  description?: string
 }
 
 function ContactLink({
@@ -48,11 +51,14 @@ export function ListingContactSection({
   contact,
   listingType,
   currentLanguage,
+  eyebrow,
+  title,
+  description,
 }: ListingContactSectionProps) {
   const { t } = useTranslation()
   const actions = buildContactActions(contact, currentLanguage)
 
-  if (actions.length === 0 || !contact) {
+  if (!contact) {
     return null
   }
 
@@ -72,10 +78,10 @@ export function ListingContactSection({
     <>
       <section className={styles.section} aria-label={t('common.contact.title')}>
         <div className={styles.header}>
-          <p className={styles.eyebrow}>{t('common.contact.eyebrow')}</p>
-          <h2 className={styles.title}>{t('common.contact.title')}</h2>
+          <p className={styles.eyebrow}>{eyebrow ?? t('common.contact.eyebrow')}</p>
+          <h2 className={styles.title}>{title ?? contact.providerName}</h2>
           <p className={styles.provider}>
-            {t('common.contact.provider', { providerName: contact.providerName })}
+            {description ?? t('common.contact.provider', { providerName: contact.providerName })}
           </p>
         </div>
 

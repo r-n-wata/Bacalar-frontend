@@ -5,9 +5,10 @@ import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildRestaurantStructuredData } from '../../../app/seo/structuredDataSchema'
 import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailSection } from '../../../components/molecules/DetailSection'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
-import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
+import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import pageStyles from '../../../styles/FeatureDetailPage.module.scss'
@@ -87,45 +88,79 @@ export function RestaurantDetailPage() {
           image: heroImage,
         })}
       />
-      <DetailHero
-        eyebrow={t('restaurants.detailEyebrow')}
-        images={heroImages}
-        galleryAriaLabel={t('restaurants.galleryAriaLabel')}
-        viewAllLabel={t('common.gallery.viewAllPhotos')}
-        closeLabel={t('common.gallery.close')}
-        previousLabel={t('common.gallery.previous')}
-        nextLabel={t('common.gallery.next')}
-        countLabel={(current, total) =>
-          t('common.gallery.count', { current, total })
-        }
-      />
-
-      <DetailIntro
-        title={data.name}
-        summary={data.description}
-        highlights={[
-          {
-            label: t('restaurants.meta.price'),
-            value: data.priceBand,
-          },
-          {
-            label: t('restaurants.meta.moment'),
-            value: momentsLabel,
-          },
-        ]}
-      />
+      <div className={pageStyles.backLinkRow}>
+        <Link className={pageStyles.backLink} to="/restaurants">
+          {t('restaurants.backToList')}
+        </Link>
+      </div>
 
       <div className={pageStyles.layout}>
         <div className={pageStyles.mainColumn}>
+          <DetailHero
+            eyebrow={t('restaurants.detailEyebrow')}
+            images={heroImages}
+            galleryAriaLabel={t('restaurants.galleryAriaLabel')}
+            viewAllLabel={t('common.gallery.viewAllPhotos')}
+            closeLabel={t('common.gallery.close')}
+            previousLabel={t('common.gallery.previous')}
+            nextLabel={t('common.gallery.next')}
+            countLabel={(current, total) =>
+              t('common.gallery.count', { current, total })
+            }
+          />
+
+          <DetailIntro title={data.name} summary={data.description} />
+
+          <DetailMetadataGrid
+            ariaLabel={t('restaurants.detailMetaAriaLabel')}
+            items={[
+              {
+                label: t('restaurants.meta.price'),
+                value: data.priceBand,
+              },
+              {
+                label: t('restaurants.meta.moment'),
+                value: momentsLabel,
+              },
+              {
+                label: t('restaurants.meta.cuisine'),
+                value: data.cuisine,
+              },
+              {
+                label: t('restaurants.meta.vibe'),
+                value: data.vibe,
+              },
+            ]}
+          />
+
+          <div className={pageStyles.mobileOnlySection}>
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>{t('restaurants.sidebar.title')}</h2>
+              <div className={pageStyles.sidebarFacts}>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('restaurants.meta.price')}</span>
+                  <strong>{data.priceBand}</strong>
+                </div>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('restaurants.meta.moment')}</span>
+                  <strong>{momentsLabel}</strong>
+                </div>
+              </div>
+            </section>
+          </div>
+
           <article className={pageStyles.bodyCard}>
-            <p className={pageStyles.bodyCopy}>{data.description}</p>
+            <DetailSection title={t('restaurants.sections.about')}>
+              <p className={pageStyles.bodyCopy}>{data.description}</p>
+            </DetailSection>
             <ListingContactSection
               contact={data.contact}
               listingType="restaurants"
               currentLanguage={language}
+              title={t('common.contact.title')}
             />
             {data.mapEmbedUrl ? (
-              <section className={pageStyles.detailSection}>
+              <DetailSection title={t('common.labels.location')}>
                 <EmbeddedMapSection
                   title={t('common.labels.location')}
                   description={data.address}
@@ -133,7 +168,7 @@ export function RestaurantDetailPage() {
                   mapUrl={data.mapUrl}
                   frameTitle={`${data.name} map`}
                 />
-              </section>
+              </DetailSection>
             ) : null}
             <div className={pageStyles.actions}>
               <Link className={pageStyles.primaryAction} to="/restaurants">
@@ -146,21 +181,26 @@ export function RestaurantDetailPage() {
           </article>
         </div>
 
-        <div className={pageStyles.hideOnNarrow}>
-          <DetailSidebar title={t('restaurants.sidebar.title')}>
-            <div className={pageStyles.sidebarFacts}>
-              <div className={pageStyles.sidebarFact}>
-                <span>{t('restaurants.meta.price')}</span>
-                <strong>{data.priceBand}</strong>
+        <aside className={`${pageStyles.sidebarColumn} ${pageStyles.hideOnNarrow}`}>
+          <div className={pageStyles.sidebarStickyStack}>
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>{t('restaurants.sidebar.title')}</h2>
+              <div className={pageStyles.sidebarFacts}>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('restaurants.meta.price')}</span>
+                  <strong>{data.priceBand}</strong>
+                </div>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('restaurants.meta.moment')}</span>
+                  <strong>{momentsLabel}</strong>
+                </div>
               </div>
-              <div className={pageStyles.sidebarFact}>
-                <span>{t('restaurants.meta.moment')}</span>
-                <strong>{momentsLabel}</strong>
-              </div>
-            </div>
-            <DetailActions compact actions={[backToListAction]} />
-          </DetailSidebar>
-        </div>
+            </section>
+            <section className={pageStyles.sidebarCard}>
+              <DetailActions compact actions={[backToListAction]} />
+            </section>
+          </div>
+        </aside>
       </div>
     </section>
   )

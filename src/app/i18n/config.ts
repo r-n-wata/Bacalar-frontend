@@ -405,6 +405,9 @@ export const resources = {
           type: 'Type',
           mood: 'Mood',
         },
+        sections: {
+          about: 'About this event',
+        },
         sidebar: {
           title: 'Plan this event',
         },
@@ -512,6 +515,9 @@ export const resources = {
           price: 'Price',
           moment: 'Best for',
         },
+        sections: {
+          about: 'About this restaurant',
+        },
         sidebar: {
           title: 'At a glance',
         },
@@ -553,6 +559,7 @@ export const resources = {
             mapUrl: 'Map URL',
             mapEmbedUrl: 'Google Maps embed URL',
             description: 'Description',
+            included: 'What is included',
             contactName: 'Contact name',
             contactMethod: 'Primary contact method',
             instagram: 'Instagram',
@@ -638,7 +645,10 @@ export const resources = {
           suitableForKids: 'Suitable for kids',
         },
         sections: {
+          about: 'About this tour',
           included: 'What is included',
+          includedFallback:
+            'The tour operator hasn’t provided this information yet. Contact them to confirm what is included in your tour price',
           whatToBring: 'What to bring',
           meetingPoint: 'Meeting point',
           operator: 'Tour operator',
@@ -1057,6 +1067,9 @@ export const resources = {
           type: 'Tipo',
           mood: 'Ambiente',
         },
+        sections: {
+          about: 'Sobre este evento',
+        },
         sidebar: {
           title: 'Planea este evento',
         },
@@ -1164,6 +1177,9 @@ export const resources = {
           price: 'Precio',
           moment: 'Mejor para',
         },
+        sections: {
+          about: 'Sobre este restaurante',
+        },
         sidebar: {
           title: 'De un vistazo',
         },
@@ -1205,6 +1221,7 @@ export const resources = {
             mapUrl: 'URL del mapa',
             mapEmbedUrl: 'URL embebida de Google Maps',
             description: 'Descripcion',
+            included: 'Que incluye',
             contactName: 'Nombre de contacto',
             contactMethod: 'Metodo principal de contacto',
             instagram: 'Instagram',
@@ -1290,7 +1307,10 @@ export const resources = {
           suitableForKids: 'Apto para ninos',
         },
         sections: {
+          about: 'Sobre este tour',
           included: 'Que incluye',
+          includedFallback:
+            'El operador del tour todavia no ha compartido esta informacion. Contactalo para confirmar que incluye el precio de tu tour',
           whatToBring: 'Que llevar',
           meetingPoint: 'Punto de encuentro',
           operator: 'Operador del tour',

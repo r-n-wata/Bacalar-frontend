@@ -52,7 +52,9 @@ describe('RestaurantDetailPage', () => {
   it('renders the embedded map section when map data exists', async () => {
     await renderDetailRoute('/restaurants/rest-cielo')
 
-    expect(await screen.findByText('Cielo de Maiz')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Cielo de Maiz' }),
+    ).toBeVisible()
     expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
       'href',
       'https://maps.google.com/?q=Avenida+3+210+Bacalar',
@@ -63,7 +65,9 @@ describe('RestaurantDetailPage', () => {
   it('renders a placeholder hero image when the restaurant has no image', async () => {
     await renderDetailRoute()
 
-    expect(await screen.findByText('Bruma Azul')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Bruma Azul' }),
+    ).toBeVisible()
     expect(
       screen.getAllByRole('img', { name: 'Bruma Azul' }).length,
     ).toBeGreaterThan(0)

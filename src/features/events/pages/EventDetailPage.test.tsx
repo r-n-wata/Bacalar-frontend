@@ -51,7 +51,12 @@ describe('EventDetailPage', () => {
   it('renders the embedded map section when map data exists', async () => {
     await renderDetailRoute('/events/event-sunset-jazz')
 
-    expect(await screen.findByText('Sunset Jazz by the Lagoon')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Sunset Jazz by the Lagoon',
+      }),
+    ).toBeVisible()
     expect(screen.getByRole('link', { name: 'View on map' })).toHaveAttribute(
       'href',
       'https://maps.google.com/?q=Costera+12+Bacalar',
@@ -62,7 +67,12 @@ describe('EventDetailPage', () => {
   it('renders a placeholder hero image when the event has no image', async () => {
     await renderDetailRoute()
 
-    expect(await screen.findByText('Lagoon Breathwork Session')).toBeVisible()
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Lagoon Breathwork Session',
+      }),
+    ).toBeVisible()
     expect(
       screen.getAllByRole('img', { name: 'Lagoon Breathwork Session' }).length,
     ).toBeGreaterThan(0)
@@ -72,7 +82,7 @@ describe('EventDetailPage', () => {
       ).length,
     ).toBeGreaterThan(0)
     expect(screen.getByText('Sunday, 8:00 AM')).toBeVisible()
-    expect(screen.getByText('Isla Yoga Garden')).toBeVisible()
+    expect(screen.getAllByText('Isla Yoga Garden').length).toBeGreaterThan(0)
   })
 
   it('shows an unavailable state for missing events', async () => {

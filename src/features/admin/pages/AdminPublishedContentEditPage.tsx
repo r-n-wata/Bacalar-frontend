@@ -26,6 +26,10 @@ import {
 } from '../../events/types/submission'
 import { prepareRestaurantSubmissionUpload } from '../../restaurants/api/prepareRestaurantSubmissionUpload'
 import { prepareTourSubmissionUpload } from '../../tours/api/prepareTourSubmissionUpload'
+import {
+  formatIncludedItemsInput,
+  parseIncludedItemsInput,
+} from '../../tours/lib/includedItems'
 import { updateAdminPublishedContent } from '../api/updateAdminPublishedContent'
 import { useAdminAuth } from '../auth/useAdminAuth'
 import { AdminEditPlaceholder } from '../components/AdminPagePlaceholders'
@@ -109,14 +113,14 @@ type TourFormState = {
     en: {
       name: string
       description: string
-      included: string
+      includedItems: string
       whatToBring: string
       operatorDescription: string
     }
     es: {
       name: string
       description: string
-      included: string
+      includedItems: string
       whatToBring: string
       operatorDescription: string
     }
@@ -254,14 +258,18 @@ function toFormState(item: AdminPublishedContentDetail): AdminEditFormState {
           en: {
             name: item.translations.en.name,
             description: item.translations.en.description,
-            included: item.translations.en.included ?? '',
+            includedItems: formatIncludedItemsInput(
+              item.translations.en.includedItems,
+            ),
             whatToBring: item.translations.en.whatToBring ?? '',
             operatorDescription: item.translations.en.operatorDescription ?? '',
           },
           es: {
             name: item.translations.es.name,
             description: item.translations.es.description,
-            included: item.translations.es.included ?? '',
+            includedItems: formatIncludedItemsInput(
+              item.translations.es.includedItems,
+            ),
             whatToBring: item.translations.es.whatToBring ?? '',
             operatorDescription: item.translations.es.operatorDescription ?? '',
           },
@@ -787,14 +795,16 @@ export function AdminPublishedContentEditPage() {
                 translations: {
                   en: {
                     ...form.translations.en,
-                    included: form.translations.en.included.trim() || undefined,
+                    includedItems:
+                      parseIncludedItemsInput(form.translations.en.includedItems),
                     whatToBring: form.translations.en.whatToBring.trim() || undefined,
                     operatorDescription:
                       form.translations.en.operatorDescription.trim() || undefined,
                   },
                   es: {
                     ...form.translations.es,
-                    included: form.translations.es.included.trim() || undefined,
+                    includedItems:
+                      parseIncludedItemsInput(form.translations.es.includedItems),
                     whatToBring: form.translations.es.whatToBring.trim() || undefined,
                     operatorDescription:
                       form.translations.es.operatorDescription.trim() || undefined,
@@ -1221,7 +1231,7 @@ export function AdminPublishedContentEditPage() {
                         {fieldErrors['translations.en.description'] ? <span className={styles.errorText}>{fieldErrors['translations.en.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
-                        <textarea className={styles.textareaSmall} value={form.translations.en.included} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, included: value.target.value } })} />
+                        <textarea className={styles.textareaSmall} value={form.translations.en.includedItems} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, includedItems: value.target.value } })} />
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.whatToBring')}>
                         <textarea className={styles.textareaSmall} value={form.translations.en.whatToBring} onChange={(value) => updateTourField('translations', { ...form.translations, en: { ...form.translations.en, whatToBring: value.target.value } })} />
@@ -1336,7 +1346,7 @@ export function AdminPublishedContentEditPage() {
                         {fieldErrors['translations.es.description'] ? <span className={styles.errorText}>{fieldErrors['translations.es.description']}</span> : null}
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.included')}>
-                        <textarea className={styles.textareaSmall} value={form.translations.es.included} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, included: value.target.value } })} />
+                        <textarea className={styles.textareaSmall} value={form.translations.es.includedItems} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, includedItems: value.target.value } })} />
                       </FormField>
                       <FormField label={t('admin.content.edit.fields.whatToBring')}>
                         <textarea className={styles.textareaSmall} value={form.translations.es.whatToBring} onChange={(value) => updateTourField('translations', { ...form.translations, es: { ...form.translations.es, whatToBring: value.target.value } })} />

@@ -249,6 +249,17 @@ export function AdminSubmissionDetailPage() {
               <p className={styles.description}>{submission.description}</p>
             </ContentPanel>
 
+            {submission.type === 'tours' && submission.includedItems?.length ? (
+              <ContentPanel>
+                <h3 className={styles.sectionTitle}>{t('tours.sections.included')}</h3>
+                <ul className={styles.metaList}>
+                  {submission.includedItems.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </ContentPanel>
+            ) : null}
+
             {submission.images.length > 0 ? (
               <ContentPanel>
                 <h3 className={styles.sectionTitle}>{t('admin.detail.galleryTitle')}</h3>

@@ -39,6 +39,7 @@ export type CreateTourSubmissionRequest = {
   mapUrl?: string
   mapEmbedUrl?: string
   description: string
+  includedItems?: string[]
   contactName: string
   contactMethod: string
   instagram?: string

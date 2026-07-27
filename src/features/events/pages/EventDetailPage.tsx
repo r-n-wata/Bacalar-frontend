@@ -5,9 +5,10 @@ import { StructuredData } from '../../../app/seo/StructuredDataScript'
 import { useAppLanguage } from '../../../app/i18n/useAppLanguage'
 import { buildEventStructuredData } from '../../../app/seo/structuredDataSchema'
 import { DetailActions } from '../../../components/molecules/DetailActions'
+import { DetailSection } from '../../../components/molecules/DetailSection'
 import { DetailHero } from '../../../components/molecules/DetailHero'
 import { DetailIntro } from '../../../components/molecules/DetailIntro'
-import { DetailSidebar } from '../../../components/molecules/DetailSidebar'
+import { DetailMetadataGrid } from '../../../components/molecules/DetailMetadataGrid'
 import { EmbeddedMapSection } from '../../../components/molecules/EmbeddedMapSection'
 import { ListingContactSection } from '../../../components/organisms/ListingContactSection'
 import { PublicStatusPanel } from '../../../components/organisms/PublicStatusPanel'
@@ -123,54 +124,91 @@ export function EventDetailPage() {
           image: heroImage,
         })}
       />
-      <DetailHero
-        eyebrow={t('events.detailEyebrow')}
-        images={heroImages}
-        galleryAriaLabel={t('events.galleryAriaLabel')}
-        viewAllLabel={t('common.gallery.viewAllPhotos')}
-        closeLabel={t('common.gallery.close')}
-        previousLabel={t('common.gallery.previous')}
-        nextLabel={t('common.gallery.next')}
-        countLabel={(current, total) =>
-          t('common.gallery.count', { current, total })
-        }
-      />
-
-      <DetailIntro
-        title={data.title}
-        summary={data.description}
-        badges={[
-          ...(showUpcoming ? [t('events.badges.upcoming')] : []),
-          t(`events.categories.${data.category}`),
-        ]}
-        highlights={[
-          {
-            label: t('events.meta.when'),
-            value: data.dateLabel,
-          },
-          {
-            label: t('events.meta.where'),
-            value: data.venue,
-          },
-        ]}
-      />
+      <div className={pageStyles.backLinkRow}>
+        <Link className={pageStyles.backLink} to="/events">
+          {t('events.backToList')}
+        </Link>
+      </div>
 
       <div className={pageStyles.layout}>
         <div className={pageStyles.mainColumn}>
+          <DetailHero
+            eyebrow={t('events.detailEyebrow')}
+            images={heroImages}
+            galleryAriaLabel={t('events.galleryAriaLabel')}
+            viewAllLabel={t('common.gallery.viewAllPhotos')}
+            closeLabel={t('common.gallery.close')}
+            previousLabel={t('common.gallery.previous')}
+            nextLabel={t('common.gallery.next')}
+            countLabel={(current, total) =>
+              t('common.gallery.count', { current, total })
+            }
+          />
+
+          <DetailIntro
+            title={data.title}
+            summary={data.description}
+            badges={[
+              ...(showUpcoming ? [t('events.badges.upcoming')] : []),
+              t(`events.categories.${data.category}`),
+            ]}
+          />
+
+          <DetailMetadataGrid
+            ariaLabel={t('events.detailMetaAriaLabel')}
+            items={[
+              {
+                label: t('events.meta.when'),
+                value: data.dateLabel,
+              },
+              {
+                label: t('events.meta.where'),
+                value: data.venue,
+              },
+              {
+                label: t('events.meta.type'),
+                value: t(`events.categories.${data.category}`),
+              },
+              {
+                label: t('events.meta.mood'),
+                value: moodLabel,
+              },
+            ]}
+          />
+
+          <div className={pageStyles.mobileOnlySection}>
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>{t('events.sidebar.title')}</h2>
+              <div className={pageStyles.sidebarFacts}>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('events.meta.type')}</span>
+                  <strong>{t(`events.categories.${data.category}`)}</strong>
+                </div>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('events.meta.mood')}</span>
+                  <strong>{moodLabel}</strong>
+                </div>
+              </div>
+            </section>
+          </div>
+
           <article className={pageStyles.bodyCard}>
-            <p className={pageStyles.bodyLead}>
-              {showUpcoming
-                ? t('events.detailNote.upcoming')
-                : t('events.detailNote.thisWeek')}
-            </p>
-            <p className={pageStyles.bodyCopy}>{data.description}</p>
+            <DetailSection title={t('events.sections.about')}>
+              <p className={pageStyles.bodyCopy}>
+                {showUpcoming
+                  ? t('events.detailNote.upcoming')
+                  : t('events.detailNote.thisWeek')}
+              </p>
+              <p className={pageStyles.bodyCopy}>{data.description}</p>
+            </DetailSection>
             <ListingContactSection
               contact={data.contact}
               listingType="events"
               currentLanguage={language}
+              title={t('common.contact.title')}
             />
             {data.mapEmbedUrl ? (
-              <section className={pageStyles.detailSection}>
+              <DetailSection title={t('common.labels.location')}>
                 <EmbeddedMapSection
                   title={t('common.labels.location')}
                   description={data.address ?? data.venue}
@@ -178,7 +216,7 @@ export function EventDetailPage() {
                   mapUrl={data.mapUrl}
                   frameTitle={`${data.title} map`}
                 />
-              </section>
+              </DetailSection>
             ) : null}
             <div className={pageStyles.actions}>
               <Link className={pageStyles.primaryAction} to="/events">
@@ -191,28 +229,35 @@ export function EventDetailPage() {
           </article>
         </div>
 
-        <DetailSidebar title={t('events.sidebar.title')}>
-          <div className={pageStyles.sidebarFacts}>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('events.meta.type')}</span>
-              <strong>{t(`events.categories.${data.category}`)}</strong>
-            </div>
-            <div className={pageStyles.sidebarFact}>
-              <span>{t('events.meta.mood')}</span>
-              <strong>{moodLabel}</strong>
-            </div>
+        <aside className={`${pageStyles.sidebarColumn} ${pageStyles.hideOnNarrow}`}>
+          <div className={pageStyles.sidebarStickyStack}>
+            <section className={pageStyles.sidebarCard}>
+              <h2 className={pageStyles.sidebarTitle}>{t('events.sidebar.title')}</h2>
+              <div className={pageStyles.sidebarFacts}>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('events.meta.type')}</span>
+                  <strong>{t(`events.categories.${data.category}`)}</strong>
+                </div>
+                <div className={pageStyles.sidebarFact}>
+                  <span>{t('events.meta.mood')}</span>
+                  <strong>{moodLabel}</strong>
+                </div>
+              </div>
+            </section>
+            <section className={pageStyles.sidebarCard}>
+              <DetailActions
+                compact
+                actions={[
+                  {
+                    label: t('events.backToList'),
+                    to: '/events',
+                    variant: 'secondary',
+                  },
+                ]}
+              />
+            </section>
           </div>
-          <DetailActions
-            compact
-            actions={[
-              {
-                label: t('events.backToList'),
-                to: '/events',
-                variant: 'secondary',
-              },
-            ]}
-          />
-        </DetailSidebar>
+        </aside>
       </div>
     </section>
   )
